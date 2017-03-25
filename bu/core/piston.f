@@ -31,6 +31,9 @@ _private
     \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
     : wait  eventq e al_wait_for_event ;
     : std
+      etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
+        display al_acknowledge_resize
+      then
       etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  then
       etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer false to alt?  then
       etype ALLEGRO_EVENT_DISPLAY_CLOSE = if  0 ExitProcess  then
