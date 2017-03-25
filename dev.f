@@ -1,4 +1,5 @@
 \ Development environment loader
+empty
 
 include bu/core/preamble         \ base dependencies, incl. Allegro, loaded once per session
 true constant dev
