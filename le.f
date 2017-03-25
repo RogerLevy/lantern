@@ -5,3 +5,5 @@ import mo/image
 include le/autodata
 import mo/pen
 import mo/draw2d
+import mo/glsl
+include le/kb
