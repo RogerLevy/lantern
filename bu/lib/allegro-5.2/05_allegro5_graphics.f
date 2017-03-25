@@ -338,3 +338,44 @@ enum ALLEGRO_LINE_JOIN_BEVEL
 enum ALLEGRO_LINE_JOIN_ROUND
 enum ALLEGRO_LINE_JOIN_MITER
 drop
+
+\ Shader stuff
+
+0
+enum ALLEGRO_SHADER_AUTO \ = 0,
+enum ALLEGRO_SHADER_GLSL \ = 1,
+enum ALLEGRO_SHADER_HLSL \ = 2
+drop
+
+\ /* Shader variable names */
+#define ALLEGRO_SHADER_VAR_COLOR             z" al_color"
+#define ALLEGRO_SHADER_VAR_POS               z" al_pos"
+#define ALLEGRO_SHADER_VAR_PROJVIEW_MATRIX   z" al_projview_matrix"
+#define ALLEGRO_SHADER_VAR_TEX               z" al_tex"
+#define ALLEGRO_SHADER_VAR_TEXCOORD          z" al_texcoord"
+#define ALLEGRO_SHADER_VAR_TEX_MATRIX        z" al_tex_matrix"
+#define ALLEGRO_SHADER_VAR_USER_ATTR         z" al_user_attr_"
+#define ALLEGRO_SHADER_VAR_USE_TEX           z" al_use_tex"
+#define ALLEGRO_SHADER_VAR_USE_TEX_MATRIX    z" al_use_tex_matrix"
+
+function: al_create_shader ( ALLEGRO_SHADER_PLATFORM-platform -- shader )
+function: al_attach_shader_source   ( ALLEGRO_SHADER-*shader  ALLEGRO_SHADER_TYPE-type  const-char-*source -- bool )
+function: al_attach_shader_source_file   ( ALLEGRO_SHADER-*shader  ALLEGRO_SHADER_TYPE-type   const-char-*filename -- bool )
+function: al_build_shader   ( ALLEGRO_SHADER-*shader -- bool   )
+function: al_get_shader_log   ( ALLEGRO_SHADER-shader -- zstr )
+function: al_get_shader_platform   ( ALLEGRO_SHADER-shader -- ALLEGRO_SHADER_PLATFORM )
+function: al_use_shader   ( ALLEGRO_SHADER-shader -- bool   )
+function: al_destroy_shader   ( ALLEGRO_SHADER-shader -- )
+function: al_set_shader_sampler   ( const-char-name   ALLEGRO_BITMAP-bitmap  int-unit -- bool )
+function: al_set_shader_matrix   ( const-char-name  const-ALLEGRO_TRANSFORM-matrix -- bool  )
+function: al_set_shader_int   ( const-char-name   int-i -- bool )
+function: al_set_shader_float   ( const-char-name   float-f -- bool )
+function: al_set_shader_int_vector   ( const-char-name   int-num_components  const-int-i   int-num_elems -- bool )
+function: al_set_shader_float_vector   ( const-char-name   int-num_components     const-float-f   int-num_elems -- bool )
+function: al_set_shader_bool   ( const-char-name   bool-b -- bool )
+function: al_get_default_shader_source   ( ALLEGRO_SHADER_PLATFORM-platform  ALLEGRO_SHADER_TYPE-type -- zstr )
+
+#1
+enum ALLEGRO_VERTEX_SHADER
+enum ALLEGRO_PIXEL_SHADER
+drop

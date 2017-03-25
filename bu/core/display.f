@@ -50,6 +50,7 @@ assertAllegro
     ALLEGRO_WINDOWED or
     ALLEGRO_RESIZABLE or
     ALLEGRO_OPENGL or
+    ALLEGRO_PROGRAMMABLE_PIPELINE or
     al_set_new_display_flags
 
   2i  al_create_display  to display

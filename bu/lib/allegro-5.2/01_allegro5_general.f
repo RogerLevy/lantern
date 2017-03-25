@@ -122,7 +122,7 @@ function:        al_get_joystick_state  ( ALLEGRO_JOYSTICK-* ALLEGRO_JOYSTICK_ST
 #define  ALLEGRO_OPENGL_FORWARD_COMPATIBLE   1 8 lshift
 #define  ALLEGRO_FULLSCREEN_WINDOW        1 9 lshift
 #define  ALLEGRO_MINIMIZED              1 10 lshift
-
+#define  ALLEGRO_PROGRAMMABLE_PIPELINE       1 11 lshift
 \ /* Possible parameters for al_set_display_option.
 \  * Make sure to update ALLEGRO_EXTRA_DISPLAY_SETTINGS if you modify
 \  * anything here.
