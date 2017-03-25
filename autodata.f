@@ -54,6 +54,7 @@ _private
         TYPE_SFX type: wma
         TYPE_SFX type: aif
         TYPE_SFX type: aiff
+        TYPE_SFX type: flac
     ;wordlist
 
     : ext  [char] . scan #1 /string ;
