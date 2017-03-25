@@ -4,10 +4,10 @@ import mo/blend
 import mo/pen
 
 _private
-: push postpone >r ; immediate
-: pop postpone r> ; immediate
-: 2push  postpone push postpone push ; immediate
-: 2pop  postpone pop postpone pop ; immediate
+    : push postpone >r ; immediate
+    : pop postpone r> ; immediate
+    : 2push  postpone push postpone push ; immediate
+    : 2pop  postpone pop postpone pop ; immediate
 _public
 
 create fore 4 cells allot
@@ -17,7 +17,7 @@ create fore 4 cells allot
 ( Graphics 1 - Bitmaps / Display )
 
 : onto  pop  al_get_target_bitmap push  swap al_set_target_bitmap  call  pop al_set_target_bitmap ;
-: blit  ( src sx sy w h ) write-rgba blend at@ 0 al_draw_bitmap ;
+: blit  ( src sx sy w h ) write-rgba blend>  at@ 0 al_draw_bitmap ;
 : bmp   ( w h -- bmp ) 2i al_create_bitmap ;
 : clearbmp  ( r g b a bmp )  onto 4af al_clear_to_color ;
 : backbuf  display al_get_backbuffer ;
@@ -32,7 +32,7 @@ create fore 4 cells allot
 ( Graphics 2 - Sprites )
 : fsprite  ( bmp flip ) push at@ 2af pop al_draw_bitmap ;
 : rfsprite ( bmp cx cy ang flip ) push 3af push at@ 2af pop pop al_draw_rotated_bitmap   ;
-: sfsprite  ( bmp dw dh flip )  push 2push 0 0 third bmpwh at@ 2af 2pop pop al_draw_scaled_bitmap ;
+: sfsprite  ( bmp dw dh flip )  push 2push 0 0 third bmpwh 2af at@ 2af 2pop 2af pop al_draw_scaled_bitmap ;
 : rsfsprite ( bmp cx cy sx sy ang flip ) push push 2push at@ 2af 2push 2af 2pop 2af pop 1af pop al_draw_scaled_rotated_bitmap ;
 : usfsprite  ( bmp scale flip )  push push dup bmpwh 0.5 0.5 2* pop dup 0 pop rsfsprite ;
 : tfsprite  ( bmp flip ) push color@af at@ 2af pop al_draw_tinted_bitmap ;
