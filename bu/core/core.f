@@ -8,3 +8,4 @@ include bu/core/input            \ allegro input support words
 include bu/core/piston           \ the main loop
 include bu/core/gfx
 import bu/core/build            \ executable build tool
+include bu/core/blend

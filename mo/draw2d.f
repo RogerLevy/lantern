@@ -1,6 +1,5 @@
 \ Basic graphics wordset
 [bu] idiom [draw2d]
-import mo/blend
 import mo/pen
 
 _private

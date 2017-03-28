@@ -1,4 +1,3 @@
-[bu] idiom [blend]
 
 create oldblender  6 cells allot
 : blend>  ( op src dest aop asrc adest -- )

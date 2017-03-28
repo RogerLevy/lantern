@@ -3,7 +3,6 @@ requires bu/core/core.f
 
 [bu] idiom [ide]
 import mo/pen
-import mo/blend
 
 [defined] linux [if]
 
