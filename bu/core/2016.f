@@ -92,3 +92,5 @@ fixed
 : 4@  @+ swap @+ swap @+ swap @ ;
 : 4!  >r  r@ 2 cells + 2v!  r> 2v! ;
 
+: kbytes  #1024 * ;
+: megs  #1024 * 1024 * ;
