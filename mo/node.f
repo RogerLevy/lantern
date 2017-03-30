@@ -1,6 +1,6 @@
 decimal
 
-[bu] idiom [nodes]
+[bu] idiom [node]
 import mo/porpoise
 
 object inherit  xvar prev  xvar next  xvar parent    class node
