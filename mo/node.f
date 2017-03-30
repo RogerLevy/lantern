@@ -1,4 +1,3 @@
-decimal
 
 [bu] idiom [node]
 import mo/porpoise
@@ -16,11 +15,10 @@ fixed
   dup next @ if  dup prev @  over next @ prev !  then
   dup prev off  next off ;
 
-: remove  ( node container -- )
-  dup 0= if  2drop exit  then
-  over parent @ 0= if  2drop exit  then  \ not already in any container
-  over parent @ over <> if  2drop exit  then  \ not in given container
-  >r
+: remove  ( node -- )
+  ?dup -exit
+  dup parent @ 0= if  drop exit  then  \ not already in any container
+  dup parent @ >r
   r@ length --
   r@ length @ if
     dup r@ first @ = if  dup next @  r@ first !  then
@@ -33,7 +31,7 @@ fixed
   dup 0= if  2drop exit  then
   over parent @ if
     over parent @ over = if  2drop exit  then  \ already in given container
-    over dup parent @ remove  \ if already in another container, remove it first
+    over remove  \ if already in another container, remove it first
   then
   >r
   r@ over parent !
@@ -76,7 +74,6 @@ fixed
   a ( xt ) LITERAL over itterate drop  \ change the parent of each one
   ;
 
-: popNode  ( container -- node )  dup tail @ dup rot remove ;
 
 
 
