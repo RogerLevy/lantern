@@ -3,12 +3,9 @@
 import mo/porpoise
 
 object inherit  xvar prev  xvar next  xvar parent    class node
-node inherit    xvar length  xvar first  xvar tail   class container
+object inherit  xvar length  xvar first  xvar tail   class container
 
-: list  create  container instance ;
-
-
-fixed
+: nodelist  create  container instance, ;
 
 : (unlink)  ( node -- )
   dup prev @ if  dup next @  over prev @ next !  then
@@ -22,12 +19,12 @@ fixed
   r@ length --
   r@ length @ if
     dup r@ first @ = if  dup next @  r@ first !  then
-    dup r@ tail @ = if  dup prev @  r@ tail !  then
+    dup r@ tail @ =  if  dup prev @  r@ tail !  then
   else
     r@ first off  r@ tail off
   then
   r> ( container ) drop  ( node ) dup parent off  (unlink) ;
-: add  ( node container -- )
+: pushnode  ( node container -- )
   dup 0= if  2drop exit  then
   over parent @ if
     over parent @ over = if  2drop exit  then  \ already in given container
@@ -74,20 +71,21 @@ fixed
   a ( xt ) LITERAL over itterate drop  \ change the parent of each one
   ;
 
-
+: popnode  tail @ dup remove ;
 
 
 \ --- test ---
 
+
 marker dispose
-create a node instance
-create b node instance
-create c node instance
-list l 
-a l add
-b l add
-c l add
-: test   <> abort" list test failed" ;
+create a node instance,
+create b node instance,
+create c node instance,
+nodelist l
+a l pushnode
+b l pushnode
+c l pushnode
+: test   <> abort" nodelist test failed" ;
 
 l length @ 3 test
 l popnode c test
@@ -96,9 +94,10 @@ l popnode c test
 l popnode b test
   l length @ 1 test
     l tail @ a test
+
 l popnode a test
   l length @ 0 test
     l tail @ 0 test
     
-cr .( PASSED: lists )
+cr .( PASSED: nodelists )
 dispose
