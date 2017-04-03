@@ -1,12 +1,28 @@
-[bu] idiom [portion]
-import mo/cellstack
+\ Simple memory management
+\ For now, only supports one memory allocation size and one heap (with a fixed size of 4MB).
+\ Later you'll be able to have more than one heap each with a different allocation size.
 
-[undefined] /portion [if] 64 cells constant /portion [then]
-[undefined] /heap [if] 1 megs constant /heap [then]
-/heap /portion / constant #portions
+[bu] idiom [portion]
+    import mo/cellstack
+
+_public
+
+\ I was going to make these configurable but for simplicity's and future enhancements' sake
+\ they are now going to be fixed. 4/2/2017
+\ [undefined] /portion [if] 64 cells constant /portion [then]
+\ [undefined] /heap [if] 8 megs constant /heap [then]
+\ /heap /portion / constant #portions
+_private
+    64 cells constant /portion
+    8 megs constant /heap
+    /heap /portion / constant #portions
+    #portions cellstack free-portions
+_public
+
+\ Maybe later make this ALLOCATE'd so it doesn't take up disk space?
 create heap /heap /allot
-#portions cellstack free-portions
-: reset-portions  free-portions vacate  heap  #portions 0 do  dup free-portions push  /portion +  loop  drop ;
-: portion  ( -- adr )  free-portions pop ;
-: free  ( adr -- )  free-portions push ;
-reset-portions
+: reset-heap  ( heap -- )  drop
+    free-portions vacate  heap  #portions 0 do  dup free-portions push  /portion +  loop  drop ;
+: portion  ( heap -- adr )  drop  free-portions pop ;
+: recycle  ( adr heap -- )  drop  free-portions push ;
+heap reset-heap
