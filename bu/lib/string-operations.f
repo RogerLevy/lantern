@@ -16,13 +16,8 @@
 create $buffers  16384 allot  \ string concatenation buffer stack (circular)
 variable >s                   \ pointer into $buffers
 
-\ intent: begin a builder-string
-\ usage: <string> s[
-: s[  ( adr c - )  \ begin a string.  NOTE: this component not implemented the best way and is due for a rehaul!
+: s[  ( adr c - )  \ begin a string.
   >s @ 256 + 16383 and >s !  >s @ $buffers + place ;
-
-\ intent: concatenate string to current builder-string (call s[ first)
-\ usage: <string> +s
 : +s  ( adr c - )  \ append a string to current string
   >s @ $buffers + append ;
 
@@ -34,13 +29,16 @@ variable >s                   \ pointer into $buffers
 create $outbufs  16384 allot \ output buffers; circular stack of buffers
 variable >out
 
-\ intent: finish building the string and fetch the finished counted string  (call s[ then +s or c+s first)
+\ intent: finish building the string and fetch the finished counted string
 \ usage: ]s
 : ]s  ( - adr c )  \ fetch finished string
   >s @ $buffers + count >out @ $outbufs + place
   >out @ $outbufs + count
   >out @ 256 + 16383 and >out !
   >s @ 256 - 16383 and >s ! ;
+
+: tempbuf    >out @ $outbufs +   >out @ 256 + 16383 and >out ! ;
+
 
 \ MINI STRING-BUILDING TUTORIAL
 \ If you want to build the string " This is a test" from the four words
@@ -79,4 +77,3 @@ variable >out
   over 1 +  swap accept  swap  c! ;
 
 : <filespec>  ( -- <rol> addr c )  0 parse -trailing bl skip ;                  \ rol=remainder of line
-: <zfilespec> ( -- <rol> addr )  <filespec> zstring ;
