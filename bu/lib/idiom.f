@@ -106,7 +106,7 @@ defer onSetIdiom  ' noop is onSetIdiom
 : .idiom
   cr
   'idiom @ 0= if  ." NO CURRENT IDIOM."  exit  then
-  space ." IDIOM: " 'idiom @ .name
+  ." IDIOM: " 'idiom @ .name
   \ space ." PARENT: " @parent ?dup if  .name  else  ." NONE " then
   space ." IMPORTS: "
   others> @+ ?none  0 ?do  @+ .name  loop
