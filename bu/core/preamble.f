@@ -48,7 +48,7 @@ include bu/lib/fixedp
 \ Import Allegro 5 for graphics, sound, input etc
 include bu/lib/allegro-5.2/allegro-5.2.f
 
-\ RLD dev tool - reload from the top
+\ temporary dev tool - reload from the top
 : rld  ( -- )  s" dev.f" included ;
 
 \ Null personality - disables console output
@@ -76,19 +76,5 @@ create null-personality
 
 : turnkey-starter  null-personality open-personality " include main ok bye" evaluate ;
 : refresh  " eventq al_flush_event_queue  rld  ok" evaluate ;
-
-\ RLD
-create rld$ 256 /allot
-: rld
-    0 parse dup 0= if
-        2drop
-        rld$ c@ 0= if
-            abort" No file set.  Say RLD <name> to set file to reload."
-        else
-            rld$ count included
-        then
-    else
-        rld$ place
-    then ;
 
 gild

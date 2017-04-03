@@ -1,5 +1,4 @@
 empty
-requires bu/core/core.f
 
 [bu] idiom [ide]
 import mo/pen
@@ -244,7 +243,7 @@ publics export-wordlist ide-words
 : go    r> to 'go ;
 : show  r> to 'show ;
 : step  r> to 'step ;
-: empty  old-empty  [ide] /ide   0 to 'go   0 to 'show   0 to 'step ;
+: empty  empty  [ide] /ide   0 to 'go   0 to 'show   0 to 'step ;
 
 
 gild
