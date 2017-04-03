@@ -138,9 +138,12 @@ function: al_draw_bitmap ( ALLEGRO_BITMAP-*bitmap, float-dx, float-dy, int-flags
 function: al_draw_scaled_bitmap ( ALLEGRO_BITMAP-*bitmap, float-sx, float-sy, float-sw, float-sh, float-dx, float-dy, float-dw, float-dh, int-flags -- )
 function: al_draw_rotated_bitmap ( ALLEGRO_BITMAP-*bitmap, float-cx, float-cy, float-dx, float-dy, float-angle, int-flags -- )
 function: al_draw_scaled_rotated_bitmap ( ALLEGRO_BITMAP-*bitmap, float-cx, float-cy, float-dx, float-dy, float-sx, float-sy, float-angle, int-flags -- )
+function: al_draw_bitmap_region ( ALLEGRO_BITMAP-*bitmap, float-sx, float-sy, float-sw, float-sh, float-dx, float-dy, int-flags -- )
 
 function: al_draw_tinted_bitmap ( ALLEGRO_BITMAP-*bitmap, float-r float-g float-b float-a float-dx, float-dy, int-flags -- )
-function: al_draw_bitmap_region ( ALLEGRO_BITMAP-*bitmap, float-sx, float-sy, float-sw, float-sh, float-dx, float-dy, int-flags -- )
+function: al_draw_tinted_scaled_bitmap ( ALLEGRO_BITMAP-*bitmap, float-r float-g float-b float-a float-sx, float-sy, float-sw, float-sh, float-dx, float-dy, float-dw, float-dh, int-flags -- )
+function: al_draw_tinted_rotated_bitmap ( ALLEGRO_BITMAP-*bitmap, float-r float-g float-b float-a float-cx, float-cy, float-dx, float-dy, float-angle, int-flags -- )
+function: al_draw_tinted_scaled_rotated_bitmap ( ALLEGRO_BITMAP-*bitmap, float-r float-g float-b float-a float-cx, float-cy, float-dx, float-dy, float-sx, float-sy, float-angle, int-flags -- )
 function: al_draw_tinted_bitmap_region (  ALLEGRO_BITMAP-*bitmap float-r float-g float-b float-a float-sx float-sy float-sw float-sh float-dx, float-dy, int-flags -- )
 function: al_draw_tinted_scaled_rotated_bitmap_region (  ALLEGRO_BITMAP-*bitmap float-sx float-sy float-sw float-sh float-r float-g float-b float-a float-cx float-cy float-dx float-dy float-xscale float-yscale float-angle int-flags -- )
 
