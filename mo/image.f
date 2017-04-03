@@ -9,7 +9,7 @@ struct /image
 : initImage  ( ALLEGRO_BITMAP image -- ) bmp ! ;
 
 : image  ( -- <name> <path> )
-  create /image allotment <zfilespec> al_load_bitmap swap initImage ;
+  create /image allotment <filespec> zstring al_load_bitmap swap initImage ;
 
 \ dimensions
 : imageW  bmp @ bmpw ;
