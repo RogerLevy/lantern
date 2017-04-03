@@ -95,9 +95,7 @@ fixed
 [then]
 
 \ some meta-compilation systems management stuff
-: old-empty  only forth empty ;
-: teardown  -display ; \ al_uninstall_system ;
-: empty   teardown only forth empty ;
+: empty   only forth empty ;
 
 create native  /ALLEGRO_DISPLAY_MODE /allot
   al_get_num_display_modes #1 -  native  al_get_display_mode
