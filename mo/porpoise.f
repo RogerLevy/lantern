@@ -50,7 +50,7 @@ create object  CLASS_MAGIC , ( sizeof ) , 0 , 100 cells /allot
 
 \ --------------------------------------------------------------------------------------------------
 \ Object instantiation
-: instance   ( class -- )  dup proto @ here rot sizeof @ copy, ;
+: instance,   ( class -- )  dup proto @ swap sizeof @ copy, ;
 : instance!  ( class dest -- )  >r dup proto @ r> swap sizeof @ move ;
 
 \ growable objects - not sure if useful?  3/18
