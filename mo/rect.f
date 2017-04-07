@@ -1,5 +1,4 @@
-[bu]
-idiom [rect]
+[bu] idiom [rect2]
 
 4 cells struct /rect
 : rect  ( x y w h -- <name> ) create  2swap swap , , swap , , ;
@@ -10,9 +9,5 @@ idiom [rect]
 : @xy   2v@ ;                          : !xy   2v! ;
 : @wh   cell+ cell+ 2v@ ;              : !wh   cell+ cell+ 2v! ;
 
-include bubble\modules\rect-generics
-
-marker dispose
-1 2 3 4 rect r
-include bubble\modules\rect-tests
-dispose
+include mo/rect-generics
+include mo/rect-tests

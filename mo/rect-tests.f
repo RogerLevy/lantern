@@ -1,5 +1,6 @@
 \ to use, define R to point to a rect struct containing 1, 2, 3, 4.
 marker dispose
+1 2 3 4 rect r
 : test   <> abort" rect test failed" ;
 r @x r @y r !xy
 r @x 1 test
