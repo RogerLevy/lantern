@@ -1,6 +1,5 @@
-
 [bu] idiom [node]
-import mo/porpoise
+    import mo/porpoise
 
 object inherit  xvar prev  xvar next  xvar parent    class node
 object inherit  xvar length  xvar first  xvar tail   class container
@@ -41,7 +40,6 @@ object inherit  xvar length  xvar first  xvar tail   class container
   then
   r> tail ! ;
 
-
 0 value cxt
 0 value xt
 : thru>  ( ... client-xt first-item -- <code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
@@ -52,10 +50,8 @@ object inherit  xvar length  xvar first  xvar tail   class container
 
 : itterate  ( ... xt container -- ... )   ( ... obj -- ... )
   first @  thru>  next @ ;
-
 : <itterate  ( ... xt container -- ... )   ( ... obj -- ... )
   tail @  thru>  prev @ ;
-
 
 :noname  ( container node -- list )  over swap parent ! ; ( xt )
 
