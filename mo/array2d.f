@@ -77,6 +77,7 @@ marker dispose
 a count2d 5 ifill
 b count2d 10 ifill
 \ quit
+cr .( ARRAY2D tests passed. )
 dispose
 
 
