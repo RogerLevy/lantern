@@ -35,7 +35,7 @@ decimal
 : xfield  create over , + immediate does> @ ?dup if " ?lit + " evaluate then ;  ( total size -- <name> total+size )
 \ : xfield  create over , + does> @ + ;                                         ( total size -- <name> total+size )
 : xvar    cell xfield ;                                                         ( total -- <name> total+cell )
-: struct  constant ;  \ NTS: later i'm gonna change the semantics.  see Developer Guide
+: struct  value ;  \ NTS: later i'm gonna change the semantics.  see Developer Guide
 : 2min  rot min >r min r> ;
 : 2max  rot max >r max r> ;
 : 2+  rot + >r + r> ;
