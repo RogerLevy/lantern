@@ -27,8 +27,8 @@
 \  `set-idiom` takes an idiom and sets the search order (it replaces it.)
 \     the default "current" wordlist for defining words is the idiom's public
 \     one.
-\  `breadth` the variable that stores the maximum # of accesory idioms the next
-\     idiom can have.  it is reset to 10 every time an idiom is created.
+\  `breadth` the value that stores the maximum # of accesory idioms the next
+\     idiom can have.
 \  `public` - set current wordlist for defining to current idiom's "publics"
 \  `private` - set current wordlist for defining to current idiom's "privates"
 
@@ -86,14 +86,14 @@
 
 
 variable 'idiom
-variable breadth  8 breadth !
+64 value breadth  \ wastes memory but i'm too busy to implement a double-link-list...
 variable importing
 variable declared
 
 defer onSetIdiom  ' noop is onSetIdiom
 
 
-: /idiom  5 cells breadth @ cells + ;
+: /idiom  5 cells breadth cells + ;
 : @parent  'idiom @ @ ;
 : @publics 'idiom @ cell+ @ ;
 : >publics  ?dup if  cell+ @  ?dup ?exit  then  forth-wordlist ;
@@ -156,14 +156,14 @@ defer onSetIdiom  ' noop is onSetIdiom
 : extend-idiom  'idiom @ swap ! ;
 
 : (idiom)
-  here  /idiom /allot  8 breadth !
+  here  /idiom /allot  \  8 breadth !
   ( idiom )  dup extend-idiom  dup 'idiom !  declared !
   wordlist 'idiom @ cell+ !
   wordlist 'idiom @ cell+ cell+ !
   'idiom @ set-idiom  _public ;
 
 : idiom
-  >in @  defined  if   nip  >body  importing @ if  declared ! \\ exit              \ already defined, importing     => cancel compilation
+  >in @  defined  if   nip  >body  importing @ if  declared !  \\  exit              \ already defined, importing     => cancel compilation
                                                else  set-idiom  _public  exit  then \ already defined, not importing => enter / don't create
                   else  drop  >in !  then
   create  (idiom)  does>  set-idiom  _public ;                                      \ not defined, create

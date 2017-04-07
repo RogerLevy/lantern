@@ -1,4 +1,4 @@
-global 64 breadth ! idiom [bu]
+global idiom [bu]
 
 include bu/core/2016             \ entitlements
 include bu/core/fixext           \ fixed point extensions
