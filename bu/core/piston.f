@@ -63,9 +63,9 @@ _public
 : ?show  update? if  ?fs 'show try to showerr   al_flip_display  0 to lag   1 +to #frames  then ;
 : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
 
-: show  r>  to 'show ;  ( -- <code> )
-: step  r>  to 'step ;  ( -- <code> )  \ has to be done this way or display update will never fire
-: go  r> to 'go   0 to 'step ;  ( -- <code> )
+: show>  r>  to 'show ;  ( -- <code> )
+: step>  r>  to 'step ;  ( -- <code> )  \ has to be done this way or display update will never fire
+: go>  r> to 'go   0 to 'step ;  ( -- <code> )
 
 : ok
     resetkb  -break  -ide  +timer
