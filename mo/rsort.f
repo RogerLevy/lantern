@@ -1,5 +1,5 @@
-[bu]
-idiom [rsort]
+[bu] idiom [rsort]
+decimal
 
 \ 16-bit positive-integer-fixed-point-identifier optimized radix sort!
 \ supports sorting a range of numbers between and including 0 ~ 65535
@@ -22,8 +22,6 @@ idiom [rsort]
 
 \ $0fff f000 <--- significant bits.
 
-
-
 [undefined] src [if]
     0 value src
     0 value dest
@@ -34,31 +32,27 @@ idiom [rsort]
 _private
   $0000f000 constant nyb0
   nyb0 value radix
-  0 constant pass1shift
+  12 constant pass1shift
   pass1shift value radixShift
 
-  \ TODO: make the table size adaptive.  OR NOT!  ALLOCATE is slooowwww!!!!
-  15 value bucketShift
+  15 constant bucketShift
   8192 constant #max  \ actual max is #MAX - 1, one cell is reserved for bucket count
 
   defer @key  ( item -- key )
 
   create table0  #max cells 16 * allot
   create table1  #max cells 16 * allot
-  \ 0 value table0
-  \ 0 value table1
-
   table0 value table
 
 _private
   : other  table table0 = if  table1  else  table0  then  to table ;
   : radix++  radix 4 << to radix  4 +to radixShift ;
-  : bucket  ( bucket# -- bucket )  1i bucketShift <<  table + ;
-  : !bucket  ( bucket# -- )  bucket dup ++ dup @ cells + ! ;
+  : bucket  ( bucket# -- bucket )  bucketShift <<  table + ;
+  : !bucket  ( n bucket# -- )  bucket 1 over +! dup @ cells + ! ;
   : /buckets  ( -- )  16 0 do  0 i bucket !  loop ;
 
   : irpass  ( first-item count -- )
-    cells bounds ?do  i @ dup @key radix and radixShift >> !bucket  cell +loop ;
+    cells bounds ?do  i @ dup @key  radix and  radixShift >>  !bucket  cell +loop ;
 
   : tablepass  ( -- )
     other /buckets  16 0 do  other i bucket @+ other irpass  loop  radix++ ;
@@ -74,16 +68,15 @@ _private
 _public
 
 : rsort  ( source count xt -- )  \ result is placed in source, XT is @KEY
+    swap 1i swap
     over 0= if 2drop drop exit then
-    \ /radix
     irinit  over src!  irpass  radix++
     tablepass tablepass tablepass
     src dest!  !result
-; \ radix/ ;
-
-
+; 
 
 \ test
+fixed
 marker dispose
 create sortable  4123 , 9 , 5 , 1 , 401 , 234 , 100 , 5 , 99 , 4123 , 23 , 3 , 400 , 50 ,
 : test  <> abort" radix sort test failed!" ;
@@ -106,5 +99,5 @@ sortable
 @+ 4123 test
 @+ 4123 test
 drop
+cr .( RSORT tests passed.)
 dispose
-
