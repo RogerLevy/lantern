@@ -26,7 +26,7 @@ _private
         2>r  " sfx "  2r@ path>sfxname  strjoin  "  " strjoin  2r> strjoin  cr 2dup type evaluate ;
 
     : uncount  s[ ]s drop #1 - ;
-    : lookup   -trailing uncount find 0= if " Asset symbol not found.  Exiting..." alert bye then ;
+    : lookup   -trailing uncount find 0= if  " Asset symbol not found.  Exiting..." alert bye  then ;
 
     : /image  ( path count -- )
         2dup zstring al_load_bitmap -rot  path>imagename lookup >body bmp ! ;
