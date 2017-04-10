@@ -97,8 +97,7 @@ defer onSetIdiom  ' noop is onSetIdiom
 : @privates 'idiom @ cell+ cell+ @ ;
 : others>  'idiom @ cell+ cell+ cell+ ;  \ count , idiom , idiom ....
 
-
-: .name  body> >name count type space ;
+: .name  body> >name count 1 - type space ;
 : ?none  dup ?exit  ." NONE" ;
 : .idiom
   cr
