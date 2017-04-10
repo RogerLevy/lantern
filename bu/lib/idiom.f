@@ -83,15 +83,12 @@
 : included  -trailing ( ?relative ) default.ext included ;
 : include  bl word count included ;
 
-
-
+variable privately
 variable 'idiom
 64 value breadth  \ wastes memory but i'm too busy to implement a double-link-list...
 variable importing
 variable declared
-
 defer onSetIdiom  ' noop is onSetIdiom
-
 
 : /idiom  5 cells breadth cells + ;
 : @parent  'idiom @ @ ;
@@ -116,8 +113,8 @@ defer onSetIdiom  ' noop is onSetIdiom
   @parent 'idiom ! recurse
   r> 'idiom ! ;
 
-: _private  @privates set-current ;
-: _public   @publics  set-current ;
+: _private  privately on   @privates  set-current ;
+: _public   privately off  @publics   set-current ;
 
 : add-idiom  ( idiom idiom-target -- )
   'idiom @ >r   'idiom !
@@ -180,12 +177,15 @@ defer onSetIdiom  ' noop is onSetIdiom
 : +orders  dup >r  reverse  r>  0 ?do  +order  loop ;
 
 : import
-  'idiom @ 0= abort" Can't IMPORT while not inside an idiom!"
-  declared @ >r  strip-order  get-current >r  get-idiom >r  importing @ >r  importing on  ['] include catch  r> importing !  throw  declared @ r@ add-idiom  r> set-idiom  r> set-current  +orders  r> declared ! ;
+  'idiom @ 0= abort" ERROR: Tried to IMPORT a file in the global namespace!"
+  privately @ >r  declared @ >r  strip-order  get-current >r  get-idiom >r  importing @ >r  importing on
+  ['] include catch
+    r> importing !  throw
+  declared @ r@ add-idiom  r> set-idiom  r> set-current  +orders  r> declared !  r> privately ! ;
+
 : include
   'idiom @ 0= if  include  exit then
   declared @ >r  strip-order  get-current >r  get-idiom >r  ( sp@ >r )  include  ( r> sp! )  r> set-idiom r> set-current  +orders  r> declared ! ;
-
 
 \ create an exposed wordlist out of @publics or @privates in the parent's public wordlist.
 \ useful for creating wordlists that can be cherrypicked onto the search order in special cases.
