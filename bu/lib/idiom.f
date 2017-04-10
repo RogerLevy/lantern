@@ -151,14 +151,14 @@ defer onSetIdiom  ' noop is onSetIdiom
   @publics -order  @privates +order  @publics +order
   onSetIdiom ;
 
-: extend-idiom  'idiom @ swap ! ;
+: inherit-idiom  ( parent -- new )
+  here  /idiom /allot  locals| new parent |
+  parent new !  new declared !
+  wordlist new cell+ !
+  wordlist new cell+ cell+ !
+  new ;
 
-: (idiom)
-  here  /idiom /allot  \  8 breadth !
-  ( idiom )  dup extend-idiom  dup 'idiom !  declared !
-  wordlist 'idiom @ cell+ !
-  wordlist 'idiom @ cell+ cell+ !
-  'idiom @ set-idiom  _public ;
+: (idiom)  'idiom @ inherit-idiom  set-idiom  _public ;
 
 : idiom
   >in @  defined  if   nip  >body  importing @ if  declared !  \\  exit              \ already defined, importing     => cancel compilation
