@@ -1,4 +1,4 @@
-[bu] idiom [flood]
+bu: idiom flood:
 
 : ALLEGRO_COLOR  create 4 cells allot ;
 ALLEGRO_COLOR oldClr

@@ -1,4 +1,4 @@
-[bu] idiom [shader]
+bu: idiom shader:
 _private
     0 value s
 _public

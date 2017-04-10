@@ -1,5 +1,4 @@
-[bu]
-idiom [cgrid]
+bu: idiom cgrid:
 
 : extents  0 0 4096 4096 ;
 

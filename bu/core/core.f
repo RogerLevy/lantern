@@ -1,4 +1,4 @@
-global idiom [bu]
+global idiom bu:
 
 include bu/core/2016             \ entitlements
 include bu/core/fixext           \ fixed point extensions

@@ -1,5 +1,4 @@
-[bu]
-idiom [intersect]
+bu: idiom intersect:
 
 : intersect?  ( line-xyxy line-xyxy - flag ) \ line-to-line
   locals| ry2 rx2 ry1 rx1 ly2 lx2 ly1 lx1 |

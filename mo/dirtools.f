@@ -1,4 +1,4 @@
-[bu] idiom [dirtools]
+bu: idiom dirtools:
 [defined] linux [if]
 [else]
     : create-directory   zstring 0 CreateDirectory 0= if GetLastError ERROR_PATH_NOT_FOUND = abort" Path not found." then ;

@@ -1,6 +1,6 @@
 empty
 
-[bu] idiom [ide]
+bu: idiom ide:
 import mo/pen
 
 [defined] linux [if]
@@ -232,18 +232,18 @@ create console-personality
 : autoexec  " autoexec.f" file-exists if  " autoexec.f" included  then ;
 : go-ide  go  ?paused  ide-events  ide-step  ide-show ;
 : /ide  big  console-personality open-personality  autoexec  focus on  go-ide ;
-: ide/  little  close-personality  [bu]  go step ?clearkb show cls game ;
+: ide/  little  close-personality  bu:  go step ?clearkb show cls game ;
 : ide  /ide  ok  ide/ ;  
 
 publics export-wordlist ide-words
 
-[bu]  ide-words +order
+bu:  ide-words +order
 \ redefine all the things; note these 'go and friends are redefined over the piston's.
 : ok  ;
 : go    r> to 'go ;
 : show  r> to 'show ;
 : step  r> to 'step ;
-: empty  empty  [ide] /ide   0 to 'go   0 to 'show   0 to 'step ;
+: empty  empty  ide: /ide   0 to 'go   0 to 'show   0 to 'step ;
 
 
 gild

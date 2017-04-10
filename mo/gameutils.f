@@ -1,5 +1,4 @@
-[bu]
-idiom [gameutils]
+bu: idiom gameutils:
 
 : 4dup  2over 2over ;
 

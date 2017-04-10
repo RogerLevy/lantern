@@ -1,5 +1,5 @@
 \ [ ] overflow checking
-[bu] idiom [stack]
+bu: idiom stack:
 : cellstack  ( max-size -- <name> )  create 0 , cells /allot ;
 : length  @ ;
 : vacate  0 swap ! ;

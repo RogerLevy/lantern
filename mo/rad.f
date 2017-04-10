@@ -1,4 +1,4 @@
-[bu] idiom [rad]
+bu: idiom rad:
 import mo/rect
 
 /rect

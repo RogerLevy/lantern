@@ -6,15 +6,14 @@
 \ deploy only:
 \  create normal exe and execute
 
-[bu] idiom [build]
+bu: idiom build:
 import mo/cellstack
 
-
 _private
-    get-order  dup cellstack order  set-order
+    get-order  dup cellstack Order  set-order
 _public
-: save-order  get-order s>p order swap pushes ;
-: recall-order  order length -exit  order dup length >r r@ pops  r> 1i set-order ;
+: save-order  get-order s>p Order swap pushes ;
+: recall-order  order length -exit  Order dup length >r r@ pops  r> 1i set-order ;
 variable 'boot
 create buildname  256 allot
 _private

@@ -1,7 +1,7 @@
 \ Basic graphics wordset
-[bu]
-    import mo/pen    \ by doing this, the pen module is automatically available to [bu] along with this one.
-    idiom [draw]
+bu:
+    import mo/pen    \ by doing this, the pen module is automatically available to bu: along with this one.
+    idiom draw:
 
 _private
     : push postpone >r ; immediate

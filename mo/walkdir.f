@@ -1,4 +1,4 @@
-[bu] idiom [walkdir]
+bu: idiom walkdir:
 _private
     0 value stop?
 _public

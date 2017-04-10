@@ -10,7 +10,7 @@
 \    ...
 \    <value> class <static var> !
 
-[bu] idiom [porp] _public
+bu: idiom porp:
 
 cell  xvar sizeof  xvar super  xvar proto  struct /class
 $C7A5533 constant CLASS_MAGIC

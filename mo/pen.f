@@ -1,4 +1,4 @@
-[bu] idiom [pen]
+bu: idiom pen:
 
 \ Pen
 create penx  0 ,  here 0 ,  constant peny

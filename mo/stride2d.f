@@ -1,4 +1,4 @@
-[bu] idiom [stride2d]
+bu: idiom stride2d:
 import mo/pen
 
 

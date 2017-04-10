@@ -1,4 +1,4 @@
-[bu] idiom [rect2]
+bu: idiom rect2:
 
 4 cells struct /rect
 : rect  ( x y w h -- <name> ) create  2swap swap , , swap , , ;

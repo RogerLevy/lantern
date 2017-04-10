@@ -1,4 +1,4 @@
-[bu] idiom [rsort]
+bu: idiom rsort:
 decimal
 
 \ 16-bit positive-integer-fixed-point-identifier optimized radix sort!

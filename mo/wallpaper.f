@@ -1,4 +1,4 @@
-[bu] module [wallpaper]
+bu: module wallpaper:
 
 \ repeating image display
 \  image's dimensions must be power of 2.d

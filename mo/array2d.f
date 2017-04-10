@@ -1,5 +1,4 @@
-[bu]
-idiom [array2d]
+bu: idiom array2d:
 
 
 \ ----------------------------- 2d arrays support -----------------------------

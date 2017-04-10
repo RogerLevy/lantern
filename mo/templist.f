@@ -1,4 +1,4 @@
-[bu] idiom [templist]
+bu: idiom templist:
 \ create an expandable list on the system heap
 \   right now turnkeys will crash due to dangling pointers.
 \   ALLOCATE needs to be enhanced to play nice with turnkeys.
