@@ -30,7 +30,7 @@ poppath
 \ floating point - FFL loads fpmath anyway...
 [undefined] f+ [if]
   +opt warning on
-  $ ls  \ ???
+  \ $ ls  \ ???
   requires fpmath
   cr .( loaded: fpmath)
 [then]
