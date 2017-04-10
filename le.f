@@ -9,10 +9,12 @@ import mo/pen
 import mo/draw
 import mo/glsl
 include le/kb
+include le/joy
 import mo/gameutils
 import mo/portion
 import mo/rsort
 import mo/rect
+
 
 \ object-oriented stuff
 import mo/porpoise
