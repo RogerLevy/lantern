@@ -18,7 +18,7 @@ bu: idiom array2d:
 
 node inherit
     xvar numcols  xvar numrows  0 xfield data
-class array2d-class
+subclass array2d-class
 
 : array2d  ( numcols numrows -- <name> )  ( -- data )
   2pfloor 2dup  create array2d-class obj  numcols 2v!  * cells /allot ;
