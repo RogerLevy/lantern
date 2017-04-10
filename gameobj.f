@@ -47,8 +47,9 @@ node inherit  var x  var y  var vx  var vy  var 'show  var 'act  var flags  subc
 value gameobj-flags  drop
 
 \ static vars
-staticvar 'onInit  \ XT executed when gameobj is created
-staticvar 'onStart \ XT executed when gameobj is actually started
+staticvar script   \ game object's private idiom, automatically created when you subclass
+staticvar 'init  \ XT executed when gameobj is created
+staticvar 'start \ XT executed when gameobj is actually started
 
 \ stage management
 : all>  ( n nodelist -- )  ( n -- n )  \ shallow iteration.
@@ -56,7 +57,7 @@ staticvar 'onStart \ XT executed when gameobj is actually started
         me >r
         ( nodelist )  first @  begin  dup while  dup next @ >r  over >r  as  call  r> r> repeat
         2drop
-        r> to me
+        r> as
     drop ;
 : (unload)  \ remove game object from its parent.  persistent objects are not removed or recycled.  static objects are not recycled.
     unl# unset
@@ -71,8 +72,8 @@ staticvar 'onStart \ XT executed when gameobj is actually started
 : #actors  stage length @ ;
 
 \ internal game object logic
-: start              me class @ 'onStart @ execute  rst# unset ;
-: init   rst# unset  me class @ 'onInit @ execute ;
+: start              me class @ 'start @ execute  rst# unset ;
+: init   rst# unset  me class @ 'init @ execute ;
 : ?show  'show @ call ;
 : ?act   rst# set? if  start  then  'act @ call ;
 
@@ -81,11 +82,40 @@ staticvar 'onStart \ XT executed when gameobj is actually started
 : acts>   r> code> 'act ! ;                                                        ( -- <code> )
 : one  ( class -- me=obj )
     heap portion >r
-    r@ instance!  r> dup to me  stage pushnode  at@ x 2v!  ( oneInit )  init ;
-: become  ( class -- )  me class !  init ;
+    r@ instance!  r> dup as
+        stage pushnode  at@ x 2v!  init ;
+: become  ( class -- )  me instance!  init ;
 
+\ --------------------------------------------------------------------------------------------------
+\ Setting up a gameobj 
 
-\ set up gameobj prototype
-\ gameobj proto @ to me
-\     ' noop >code  dup 'show !  'act !
-\     en# set  rst# set
+: script:  dup proto @ as  script @ set-idiom ;
+: :start  :noname   me class @ 'start ! ;
+
+\ create a child idiom of the superclass's idiom.
+0 value (script)
+: gameobj-inherit  ( superclass -- )
+    script @ inherit-idiom to (script)  (script) set-idiom ;
+: gameobj-subclass  ( class -- )
+    (script) swap script ! ;
+
+: dbg  ( gameobj -- )
+    dup as  class @ script @ set-idiom ;
+
+\ redefine `inherit` and `subclass`  to save and restore the current idiom.
+\  NOTE: this cannot be done using the hooks due to when they are executed.
+0 value ('idiom)  0 value (privately)
+: inherit  'idiom @ to ('idiom)  privately @ to (privately)  inherit ;
+: subclass  ('idiom) set-idiom  (privately) dup privately !  if _private else _public then  subclass ;
+
+\ set up the gameobj base class.
+
+gameobj proto @ to me                     \ set up the prototype
+    ' noop >code 'show !
+    ' noop >code 'act !
+
+'idiom @ inherit-idiom gameobj script !   \ create base idiom
+
+' gameobj-inherit gameobj on-inherit !    \ set up the inherit/subclass hooks, to create the idiom tree.
+' gameobj-subclass gameobj on-subclass !
+
