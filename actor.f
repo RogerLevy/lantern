@@ -7,7 +7,9 @@
 \   [ ] - HP/Attack/Defense
 \   [ ] - optional rigid-body physics (Box2D? ODE? Chipmunk2D? Physx???)
 \   [ ] - remember starting position
-gameobj inherit  var boxx  var boxy  var boxw  var boxh  var hp  var maxHP  var atk  var def  var ang  var sx  var sy  var orgx  var orgy  var cflags  var cmask  var 'hit  var startx  var starty  var fr  var fg  var fb  var fa  var bmode  class actor
+gameobj inherit
+    var boxx  var boxy  var boxw  var boxh  var hp  var maxHP  var atk  var def  var ang  var sx  var sy  var orgx  var orgy  var cflags  var cmask  var 'hit  var startx  var starty  var fr  var fg  var fb  var fa  var bmode
+subclass actor
 
 \ add multitasking capability to actor
 include le/task

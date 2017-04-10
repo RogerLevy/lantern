@@ -1,4 +1,4 @@
-[le] _public
+le: _public
 
 0 value mixer
 : init-al-audio

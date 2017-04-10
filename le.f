@@ -1,5 +1,5 @@
 \ Lady Engine for Bubble
-[bu] idiom [le]
+bu: idiom le:
 
 \ support code
 include le/audio

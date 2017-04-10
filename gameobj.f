@@ -40,7 +40,7 @@ stage0 value stage   \ current stage
 \  they don't store any transform info except for position.
 \  physics, collision detection and transformation needs to be done programmatically for each kind of particle.
 \  this is good for performance, since there is no "standard" rendering or collision detection forced on all particles
-node inherit  var x  var y  var vx  var vy  var 'show  var 'act  var flags  class gameobj
+node inherit  var x  var y  var vx  var vy  var 'show  var 'act  var flags  subclass gameobj
 
 0 's flags  #1
     flag hflip#  flag vflip#  flag en#  flag vis#  flag pers#  flag rst#  flag unl#  flag static#
