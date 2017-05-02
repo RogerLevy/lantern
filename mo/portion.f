@@ -14,7 +14,7 @@ public:
 \ /heap /portion / constant #portions
 private:
     128 cells constant /portion
-    8 megs constant /heap
+    16 megs constant /heap
     /heap /portion / constant #portions
     #portions cellstack free-portions
 public:
