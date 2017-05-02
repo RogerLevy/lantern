@@ -13,7 +13,7 @@ _public
 \ [undefined] /heap [if] 8 megs constant /heap [then]
 \ /heap /portion / constant #portions
 _private
-    64 cells constant /portion
+    128 cells constant /portion
     8 megs constant /heap
     /heap /portion / constant #portions
     #portions cellstack free-portions

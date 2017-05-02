@@ -49,7 +49,7 @@ assertAllegro
   0
     ALLEGRO_WINDOWED or
     ALLEGRO_RESIZABLE or
-    ALLEGRO_OPENGL or
+    ALLEGRO_OPENGL_3_0 or
     ALLEGRO_PROGRAMMABLE_PIPELINE or
     al_set_new_display_flags
 

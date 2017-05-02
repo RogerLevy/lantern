@@ -2,7 +2,7 @@
 empty
 
 defined dev 0<> nip not [if]
-    include bu/core/preamble         \ base dependencies, incl. Allegro, loaded once per session
+    include bu/lib/preamble         \ base dependencies, incl. Allegro, loaded once per session
     include bu/dev/ld   including -name workdir place
     true constant dev
     s" envconfig.f" file-exists [if]

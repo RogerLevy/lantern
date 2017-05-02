@@ -1,13 +1,22 @@
 \ Forth Language-level Extensions - load once per session.
 \ This is probably better thought of as a "dialect" and I should come up with a better name for it.
+\ load Idioms, DOM, floating point, string extensions, file wordset, fixed point, Allegro...
 
-\ load Idioms, DOM, floating point, string extensions, file wordset, fixed point, Allegro,
-\
+
+\ compiler progress tool
+: get-cols  get-size drop ;
+: .notice  ( adr c -- )
+    locals| c adr |
+    cr ." [" get-cols 2 - 0 do ." =" loop ." ]"
+    get-xy nip get-cols 2 / c 2 / 2 + - swap at-xy  space  adr c 2dup upcase type  space ;
+
+s" preamble" .notice
 
 \ "O" Register
 0 value o
 &of o constant &o
 : for>  ( val addr -- )  r>  -rot  dup dup >r @ >r  !  call  r> r> ! ;
+
 : reverse   ( ... count -- ... ) 1+ 1 max 1 ?do i 1- roll loop ;
 
 \ Idioms
@@ -32,21 +41,22 @@ poppath
   +opt warning on
   \ $ ls  \ ???
   requires fpmath
-  cr .( loaded: fpmath)
 [then]
+cr .( loaded fpmath )
 
-  
 \ Various extensions
 include bu/lib/fpext
-cr .( loaded: fpext)
+cr .( loaded floating point extension )
 requires rnd \ SwiftForth
 include bu/lib/string-operations
 include bu/lib/files
 include bu/lib/fixedp
+cr .( loaded fixed point extension )
 :noname [ is onSetIdiom ]  ints @ ?fixed ;
 
 \ Import Allegro 5 for graphics, sound, input etc
 include bu/lib/allegro-5.2/allegro-5.2.f
+cr .( loaded allegro 5.2 bindings )
 
 \ temporary dev tool - reload from the top
 : rld  ( -- )  s" dev.f" included ;
@@ -78,3 +88,4 @@ create null-personality
 : refresh  " eventq al_flush_event_queue  rld  ok" evaluate ;
 
 gild
+

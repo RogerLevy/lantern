@@ -144,11 +144,12 @@ defer onSetIdiom  ' noop is onSetIdiom
 
 : unset-idiom  'idiom @ ?dup -exit  wordlists-  @privates -order  'idiom off ;
 
-: set-idiom
+: set-idiom  ( idiom -- ) 
   ?dup 0= if global exit then
   only forth
   'idiom !  'idiom @ wordlists+
   @publics -order  @privates +order  @publics +order
+  _public
   onSetIdiom ;
 
 : inherit-idiom  ( parent -- new )

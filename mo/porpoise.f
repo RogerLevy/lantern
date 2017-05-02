@@ -28,22 +28,26 @@ staticvar on-inherit  ( superclass -- )
 
 wordlist constant classing
 classing +order definitions
-    create p  1024 cells allot
-
+    create p  1024 cells allot  \ the `p` buffer can be used to initialize fields while declaring them.
 porp:
-
 classing +order
 : subclass   ( super sizeof -- <name> )
     here locals| newproto newsize super |
     newsize /allot
     p  newproto  super sizeof @  move
-    super newproto ( class ) !  newsize newproto cell+ ( size ) !
     create  here >r  CLASS_MAGIC ,  newsize ,  super ,  newproto ,
+    r@ newproto ( class ) !  newsize newproto cell+ ( size ) !
     super 4 cells +  /class 4 cells - copy,
+        64 cells /allot  \ safety area
     r> ( class ) dup on-subclass @ execute
     classing -order ;
-: extend  subclass ;  \ improve this?
-\ the `p` buffer can be used to initialize fields while declaring them.
+: extension  ( class sizeof -- )
+    swap locals| c |
+    c sizeof !
+    here  c proto !  c sizeof @ /allot  \ allocate new prototype
+    p  c proto @  c sizeof @  move  \ copy prototype buffer into it
+    c dup on-subclass @ execute
+    classing -order ;
 : inherit  ( class -- super sizeof )
     dup proto @  over sizeof @  p swap  move
     dup sizeof @  classing +order
@@ -75,10 +79,10 @@ object object-proto !  \ initialize prototype class
 
 \ --------------------------------------------------------------------------------------------------
 \ Object instantiation
-: instance,   ( class -- )  dup proto @ swap sizeof @ copy, ;
+: instance,   ( class -- )  proto @ dup size @ copy, ;
 \ : class!     ( class dest -- )  >r dup sizeof @ r@ size ! r> class ! ;
-: instance!  ( class dest -- )  >r dup proto @ r> swap sizeof @ move ;
-\ : instance   ( class -- <name> )  create instance, ;
+: instance!  ( class dest -- )  >r proto @ r> over size @ move ;
+: instance   ( class -- <name> )  create instance, ;
 
 \ growable objects - not sure if useful?  3/18
 \ wordlist constant instancing
@@ -90,3 +94,5 @@ object object-proto !  \ initialize prototype class
 \ previous definitions
 \ : [i  ( object -- object ) instancing +order
 \ : i]  ( object -- )  drop  instancing -order ;
+
+cr .( Loaded Porpoise. )

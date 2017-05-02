@@ -9,7 +9,7 @@
 _private
   0 value 'go
   0 value 'step
-  0 value 'show
+  0 value 'render
 _public
 
 \ Flags
@@ -59,11 +59,26 @@ _public
 
 
 : fsflag  fs @ allowwin @ not or ;
-: ?fs     display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag drop ;
-: ?show  update? if  ?fs 'show try to showerr   al_flip_display  0 to lag   1 +to #frames  then ;
+: ?fserr  0= if fs off  " Fullscreen is not supported by your driver." alert  then ;
+variable winx  variable winy
+: ?poswin   \ save/restore window position when toggling in and out of fullscreen
+    display al_get_display_flags ALLEGRO_FULLSCREEN_WINDOW and if
+        fs @ 0= if  r> call  display winx @ winy @ al_set_window_position  then
+    else
+        fs @ if     display winx winy al_get_window_position  then
+    then ;
+: ?fs     ?poswin  display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag ?fserr ;
+
+\ not sure if this is necessary at all
+16 cells struct /transform
+: transform  create  here  /transform allot  al_identity_transform ;
+transform m0
+: identity  m0 al_use_transform ;
+
+: ?show  update? if  ?fs  identity  'render try to showerr   al_flip_display  0 to lag   1 +to #frames  then ;
 : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
 
-: show>  r>  to 'show ;  ( -- <code> )
+: render>  r>  to 'render ;  ( -- <code> )
 : step>  r>  to 'step ;  ( -- <code> )  \ has to be done this way or display update will never fire
 : go>  r> to 'go   0 to 'step ;  ( -- <code> )
 

@@ -2,6 +2,7 @@
 \ window stuff
 function: al_set_new_window_position ( int-x int-y -- )
 function: al_set_window_position ( ALLEGRO_DISPLAY-*display int-x int-y -- )
+function: al_get_window_position ( ALLEGRO_DISPLAY-*display *int-x *int-y -- )
 function: al_set_new_display_adapter ( int-adapter -- )
 
 \ monitor stuff - note, you have to load bitmaps twice AFAIK, using

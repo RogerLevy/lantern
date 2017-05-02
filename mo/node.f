@@ -4,8 +4,6 @@ bu: idiom node:
 object inherit  xvar prev  xvar next  xvar parent    subclass node
 object inherit  xvar length  xvar first  xvar tail   subclass container
 
-: nodelist  create  container instance, ;
-
 : (unlink)  ( node -- )
   dup prev @ if  dup next @  over prev @ next !  then
   dup next @ if  dup prev @  over next @ prev !  then
@@ -29,7 +27,7 @@ object inherit  xvar length  xvar first  xvar tail   subclass container
     over parent @ over = if  2drop exit  then  \ already in given container
     over remove  \ if already in another container, remove it first
   then
-  >r
+  ( node container ) >r
   r@ over parent !
   r@ length ++
   r@ length @ 1 = if
@@ -77,11 +75,11 @@ marker dispose
 create a node instance,
 create b node instance,
 create c node instance,
-nodelist l
+container instance l
 a l pushnode
 b l pushnode
 c l pushnode
-: test   <> abort" nodelist test failed" ;
+: test   <> abort" container test failed" ;
 
 l length @ 3 test
 l popnode c test
@@ -95,5 +93,5 @@ l popnode a test
   l length @ 0 test
     l tail @ 0 test
     
-cr .( PASSED: nodelists )
+cr .( NODE test passed. )
 dispose

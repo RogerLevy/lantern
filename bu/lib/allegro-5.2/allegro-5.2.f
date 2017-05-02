@@ -79,6 +79,5 @@ include bu/lib/allegro-5.2/tools.f
 
 \ =============================== END ==================================
 
-cr .( loaded: allegro 5.2)
 warning on
 

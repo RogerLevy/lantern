@@ -1,6 +1,6 @@
 bu: idiom cgrid:
 
-: extents  0 0 4096 4096 ;
+\ : extents  0 0 4096 4096 ;
 
 \ Fast collision manager object.  Does efficient collision checks of massive
 \ numbers of AABB (axis-aligned bounding boxes).
@@ -9,24 +9,16 @@ bu: idiom cgrid:
 \ Notes:
 \  - Doesn't support hitboxes bigger than sectw x secth
 
-
-\ Todo:
-\ [ ] add cmask and cflag vars to cbox struct?
-
 0 value cgrid  \ current cgrid
 
 : cgrid-var  create dup , cell+ does> @ cgrid + ;
 
 _private
   0
-    xvar x1
-    xvar y1
-    xvar x2
-    xvar y2
-    xvar s1  \ sector 1
-    xvar s2  \  ...
-    xvar s3  \  ...
-    xvar s4  \  ...
+    xvar x1    xvar y1
+    xvar x2    xvar y2
+    xvar s1    xvar s2  \ sectors
+    xvar s3    xvar s4
   struct /cbox
 
 _public : /cbox /cbox ;

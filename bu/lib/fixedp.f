@@ -56,7 +56,7 @@ fixpointing +order
 \ NTS: keep these as one-liners, I might make them macros...
 : s>p  /FRAC lshift ;
 : 2s>p  s>p swap s>p swap ;
-: 1i  /FRAC rshift ;
+: 1i  pgran / ;
 : 2i  swap 1i swap 1i ;
 : 3i  rot 1i rot 1i rot 1i ;
 : 4i  2i 2swap 2i 2swap ;
