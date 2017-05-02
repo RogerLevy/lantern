@@ -6,11 +6,11 @@
 0 value steperr
 0 value alt?  \ part of fix for alt-enter bug when game doesn't have focus
 
-_private
+private:
   0 value 'go
   0 value 'step
   0 value 'render
-_public
+public:
 
 \ Flags
 variable info  \ enables debugging mode display
@@ -27,7 +27,7 @@ variable fs    \ is fullscreen enabled?
     : try  dup -exit call 0 ;
 \ [then]
 
-_private
+private:
     \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
     : wait  eventq e al_wait_for_event ;
     : std
@@ -55,7 +55,7 @@ _private
         endcase
       then ;
     : update?  lag dup -exit drop  eventq al_is_event_queue_empty  lag 4 >= or ;
-_public
+public:
 
 
 : fsflag  fs @ allowwin @ not or ;

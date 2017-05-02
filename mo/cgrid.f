@@ -13,7 +13,7 @@ bu: idiom cgrid:
 
 : cgrid-var  create dup , cell+ does> @ cgrid + ;
 
-_private
+private:
   0
     xvar x1    xvar y1
     xvar x2    xvar y2
@@ -21,24 +21,24 @@ _private
     xvar s3    xvar s4
   struct /cbox
 
-_public : /cbox /cbox ;
+public: : /cbox /cbox ;
 
 : cbox!  ( x y w h cbox -- )  &o for>  2over 2+  #1 #1 2-  o x2 2v!  o x1 2v! ;
 : cbox@  ( cbox -- x y w h ) dup >r x1 2v@ r> x2 2v@  2over 2-  #1 #1 2+ ;
 : 4@  ( cbox -- x1 y1 x2 y2 ) dup 2v@ rot cell+ cell+ 2v@ ;
 
-_private
+private:
 
   #8 #12 + constant bitshift
 
-_public
+public:
 256 constant sectw
 256 constant secth
 \ the size of each sector is a constant.
 \  use a smaller size if you're going to have lots of small objects.
 \  use a larger size if you're going to have lots of large objects.
 
-_private
+private:
   \ variable topleft
   \ variable topright
   \ variable btmleft
@@ -48,7 +48,7 @@ _private
   defer collide  ( ... true cbox1 cbox2 -- ... keepgoing? )
   \ defer cfilter  ( cbox1 cbox2 ... cbox1 cbox2 flag )  ' true is cfilter
 
-_public
+public:
 
 0
   cgrid-var cols
@@ -59,7 +59,7 @@ _public
 struct /cgrid
 
 
-_private
+private:
 
   decimal
   : sector  ( x y -- addr )
@@ -110,7 +110,7 @@ _private
     \ lastsector @ lastsector2 !
     \ dup  lastsector ! ;
 
-_public
+public:
 
 : resetGrid ( cgrid -- )
   to cgrid

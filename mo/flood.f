@@ -5,12 +5,12 @@ ALLEGRO_COLOR oldClr
 ALLEGRO_COLOR newClr
 ALLEGRO_COLOR retClr
 
-_private
+private:
 decimal
 0 value s  \ stack memory top
 : empty?  sp@ s = ;
 : color=  4 cells dup -rot compare 0= ;
-_public
+public:
 
 : processPoint  ( oldx oldy x y -- x y oldx oldy | oldx oldy )
     locals| y x |

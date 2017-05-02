@@ -7,7 +7,7 @@ bu: idiom templist:
     xvar mem  xvar size  xvar next
 struct /templist
 
-_public
+public:
 
 : >items  mem @ ;
 : #items  next @ cell/ s>p ;
@@ -17,8 +17,8 @@ _public
     16 cells allocate throw  o mem !
     16 cells o size ! ;
 
-_private : (resize)  o mem @ over resize throw o mem !  o size ! ;
-_public
+private: : (resize)  o mem @ over resize throw o mem !  o size ! ;
+public:
 
 : vacate  ( templist -- )  &o for>  16 cells (resize)  0 o next ! ;
 : ?expand  &o for>  o next @  o size @  >= -exit  o size @ 2 * (resize) ;

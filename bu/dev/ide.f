@@ -16,10 +16,10 @@ consolas constant sysfont
 8 constant fw
 16 constant fh
 
-_private
+private:
     0  xvar x  xvar y  4 cells xfield color  struct /cursor
     variable cx variable cy variable cw variable ch
-_public
+public:
 
 \ Values
 0 value 'go     \ game
@@ -56,10 +56,10 @@ create attributes
   1 , 1 , 0 , 1 ,
 
 
-_private
+private:
     : ?call  ?dup -exit call ;
     : ?.catch  ?dup -exit .catch ;
-_public
+public:
 
 : recall  history count testbuffer place ;
 : store   testbuffer count history place ;
@@ -82,10 +82,10 @@ _public
     [char] p of  pause toggle  endof
   endcase ;
 
-_private
+private:
   : ctrl?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_CTRL and ;
   : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
-_public
+public:
 
 : idekeys
   etype case

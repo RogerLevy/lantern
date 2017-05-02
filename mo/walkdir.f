@@ -1,7 +1,7 @@
 bu: idiom walkdir:
-_private
+private:
     0 value stop?
-_public
+public:
 : (walkdir)  ( dir-fsentry xt recursive? -- )  ( fsentry -- stop? )
     locals| recursive? xt dir |
     dir al_open_directory 0= abort" WALKDIR: Could not open directory."

@@ -43,7 +43,7 @@
 \      3) Imported idioms' publics
 \      4) Predecessor idiom's publics
 \  Public/Private:
-\    Call `PUBLIC` and `PRIVATE` to switch between defining public and private words of the current
+\    Call `PUBLIC:` and `PRIVATE:` to switch between defining public and private words of the current
 \    idiom.  Private words won't be available to any other idiom, unless you explicitly export them.
 \  Exit:
 \    There is no explicit word to "exit" an idiom.
@@ -112,8 +112,8 @@ defer onSetIdiom  ' noop is onSetIdiom
   @parent 'idiom ! recurse
   r> 'idiom ! ;
 
-: _private  privately on   @privates  set-current ;
-: _public   privately off  @publics   set-current ;
+: private:  privately on   @privates  set-current ;
+: public:   privately off  @publics   set-current ;
 
 : add-idiom  ( idiom idiom-target -- )
   'idiom @ >r   'idiom !
@@ -149,7 +149,7 @@ defer onSetIdiom  ' noop is onSetIdiom
   only forth
   'idiom !  'idiom @ wordlists+
   @publics -order  @privates +order  @publics +order
-  _public
+  public:
   onSetIdiom ;
 
 : inherit-idiom  ( parent -- new )
@@ -159,13 +159,13 @@ defer onSetIdiom  ' noop is onSetIdiom
   wordlist new cell+ cell+ !
   new ;
 
-: (idiom)  'idiom @ inherit-idiom  set-idiom  _public ;
+: (idiom)  'idiom @ inherit-idiom  set-idiom  public: ;
 
 : idiom
   >in @  defined  if   nip  >body  importing @ if  declared !  \\  exit              \ already defined, importing     => cancel compilation
-                                               else  set-idiom  _public  exit  then \ already defined, not importing => enter / don't create
+                                               else  set-idiom  public:  exit  then \ already defined, not importing => enter / don't create
                   else  drop  >in !  then
-  create  (idiom)  does>  set-idiom  _public ;                                      \ not defined, create
+  create  (idiom)  does>  set-idiom  public: ;                                      \ not defined, create
 
 
 : strip-order  ( -- ... #n )

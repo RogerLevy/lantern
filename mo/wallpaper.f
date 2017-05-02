@@ -3,7 +3,7 @@ bu: module wallpaper:
 \ repeating image display
 \  image's dimensions must be power of 2.d
 
-_private
+private:
     create v
     \ x y z u v r g b a
       0e sf, 0e sf, 0e sf,           0e sf, 0e sf,            1e sf, 1e sf, 1e sf, 1e sf,
@@ -14,7 +14,7 @@ _private
 
     : uv[]  /ALLEGRO_VERTEX * v + ALLEGRO_VERTEX-u ;
     : uv!  uv[]  >r 2af r> 2v! ;
-_public
+public:
 
 : draw-wallpaper  ( image x y -- )
   2dup 0 uv!  2dup gfxw u+ 1 uv!  2dup gfxh + 2 uv!  gfxw gfxh 2+ 3 uv!

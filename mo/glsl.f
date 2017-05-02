@@ -1,7 +1,7 @@
 bu: idiom shader:
-_private
+private:
     0 value s
-_public
+public:
 : ?shader-error  0= if  s al_get_shader_log zcount alert cr quit  then ;
 : attach-shader-file  ( shader shader-type path c -- )
     zstring al_attach_shader_source_file ?shader-error ;

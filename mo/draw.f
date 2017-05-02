@@ -3,12 +3,12 @@ bu:
     import mo/pen    \ by doing this, the pen module is automatically available to bu: along with this one.
     idiom draw:
 
-_private
+private:
     : push postpone >r ; immediate
     : pop postpone r> ; immediate
     : 2push  postpone push postpone push ; immediate
     : 2pop  postpone pop postpone pop ; immediate
-_public
+public:
 
 create fore 4 cells allot
 : color   ( r g b a )  2af 2swap 2af fore 2v! fore 2 cells + 2v! ;

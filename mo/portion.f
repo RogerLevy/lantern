@@ -5,19 +5,19 @@
 bu: idiom portion:
     import mo/cellstack
 
-_public
+public:
 
 \ I was going to make these configurable but for simplicity's and future enhancements' sake
 \ they are now going to be fixed. 4/2/2017
 \ [undefined] /portion [if] 64 cells constant /portion [then]
 \ [undefined] /heap [if] 8 megs constant /heap [then]
 \ /heap /portion / constant #portions
-_private
+private:
     128 cells constant /portion
     8 megs constant /heap
     /heap /portion / constant #portions
     #portions cellstack free-portions
-_public
+public:
 
 \ Maybe later make this ALLOCATE'd so it doesn't take up disk space?
 create heap /heap /allot

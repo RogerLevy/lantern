@@ -29,7 +29,7 @@ decimal
     : dest!  to dest ;
 [then]
 
-_private
+private:
   $0000f000 constant nyb0
   nyb0 value radix
   12 constant pass1shift
@@ -44,7 +44,7 @@ _private
   create table1  #max cells 16 * allot
   table0 value table
 
-_private
+private:
   : other  table table0 = if  table1  else  table0  then  to table ;
   : radix++  radix 4 << to radix  4 +to radixShift ;
   : bucket  ( bucket# -- bucket )  bucketShift <<  table + ;
@@ -65,7 +65,7 @@ _private
   : !result  ( -- )
     16 0 do  i bucket @+ cells dup >r  dest swap move  r> +to dest  loop ;
 
-_public
+public:
 
 : rsort  ( source count xt -- )  \ result is placed in source, XT is @KEY
     swap 1i swap

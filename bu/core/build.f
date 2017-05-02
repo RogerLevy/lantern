@@ -9,14 +9,14 @@
 bu: idiom build:
 import mo/cellstack
 
-_private
+private:
     get-order  dup cellstack Order  set-order
-_public
+public:
 : save-order  get-order s>p Order swap pushes ;
 : recall-order  order length -exit  Order dup length >r r@ pops  r> 1i set-order ;
 variable 'boot
 create buildname  256 allot
-_private
+private:
     : system  ( cr 2dup type ) zstring >process-wait ;
 
     : copy-template  ( dest c -- )
@@ -34,7 +34,7 @@ _private
     : debug-starter  R0 @ RP!  +display  (boot)  ok  interactive ;
     : release-main   R0 @ RP!  +display  (boot)  begin  ok  again ;
 
-_public
+public:
 : build  ( -- <projectpath> <buildname> <starter-word> )
     save-order
     pushpath cd
