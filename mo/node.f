@@ -39,16 +39,18 @@ object inherit  xvar length  xvar first  xvar tail   subclass container
   r> tail ! ;
 
 0 value cxt
-0 value xt
-: thru>  ( ... client-xt first-item -- <code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
-  r>  cxt >r  xt >r   code> to xt  swap to cxt
-  begin  dup while  >r  cxt execute  r> xt execute  repeat
+0 value c
+: thru>  ( ... client-xt first-item -- <advance-code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
+  r>  cxt >r  c >r   to c  swap to cxt
+  begin  dup while  dup >r  cxt execute  r> c call  repeat
   drop
-  r> to xt  r> to cxt ;
+  r> to c  r> to cxt ;
 
 : itterate  ( ... xt container -- ... )   ( ... obj -- ... )
+  dup length @ 0= if 2drop exit then
   first @  thru>  next @ ;
 : <itterate  ( ... xt container -- ... )   ( ... obj -- ... )
+  dup length @ 0= if 2drop exit then
   tail @  thru>  prev @ ;
 
 :noname  ( container node -- list )  over swap parent ! ; ( xt )
