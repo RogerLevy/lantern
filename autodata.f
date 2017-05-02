@@ -3,7 +3,7 @@
 le:
 import mo/walkdir
 
-_private
+private:
     : replace-char ( source n oldch newch -- )
        2swap begin ( old new a n)
           dup while
@@ -79,7 +79,7 @@ _private
         endcase
         0 ;
 
-_public
+public:
 
 \ automatically declare/load data
 : autodata ( -- <path> )  bl parse  ['] (declare) walkdirs ;

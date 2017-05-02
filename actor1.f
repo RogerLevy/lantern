@@ -30,15 +30,15 @@ include le/script
 : show>  r> 'show !  vis# set ;                                             ( -- <code> )
 : act>   r> 'act ! ;                                                        ( -- <code> )
 : become  ( class -- )  me instance!  init ;
-: dbg  ( particle -- ) dup be  class @ script @ set-idiom  _private ;
-: :start  ( class -- ) :noname  over 'start !  script @ set-idiom _private ;
+: dbg  ( particle -- ) dup be  class @ script @ set-idiom  private: ;
+: :start  ( class -- ) :noname  over 'start !  script @ set-idiom private: ;
 
 \ redefine `inherit` and `subclass`  to save and restore the current idiom.
 \  NOTE: this cannot be done using the hooks due to when they are executed.
 0 value ('idiom)  0 value (privately)
 : inherit  'idiom @ to ('idiom)  privately @ to (privately)  inherit ;
-: subclass  ('idiom) set-idiom  (privately) dup privately !  if _private else _public then  subclass ;
-: extension  ('idiom) set-idiom  (privately) dup privately !  if _private else _public then
+: subclass  ('idiom) set-idiom  (privately) dup privately !  if private: else public: then  subclass ;
+: extension  ('idiom) set-idiom  (privately) dup privately !  if private: else public: then
     extension ;
 
 \ set up the particle base class.
