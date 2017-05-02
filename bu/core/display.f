@@ -2,7 +2,7 @@
 \   need only one
 \   if in the future we need more ... i don't think there's much kus from supporting them
 
-0 value defaultFont
+0 value default-font
 0 value displaytimer
 0 value fps
 0 value allegro?
@@ -55,7 +55,7 @@ assertAllegro
 
   2i  al_create_display  to display
   display #0 #0 al_set_window_position
-  al_create_builtin_font to defaultFont
+  al_create_builtin_font to default-font
   eventq  display       al_get_display_event_source  al_register_event_source
 
   displaytimer not if
