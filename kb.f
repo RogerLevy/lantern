@@ -1,3 +1,4 @@
+le:
 decimal
 : klast  kblast swap al_key_down  ;
 : kstate kbstate swap al_key_down ;
