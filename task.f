@@ -7,5 +7,7 @@
 \  - Console output (this might be able to be worked around)
 \  - EXIT or ; from the "root" (the definition containing PERFORM> )
 
+le:
 include le/taskdata
-include le/taskverbs
+actor script:
+    include le/taskverbs
