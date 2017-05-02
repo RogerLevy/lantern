@@ -4,12 +4,12 @@
 \  to add and assign static vars,
 \    <superclass> INHERIT
 \      xvar foo  123 p foo !  \ init prototype the short way
-\      STATICVAR <name>
+\      quality <name>
 \    SUBCLASS <name>
-\    STATICVAR <name>         \ you don't have to declare static vars inside the class definition
+\    quality <name>         \ you don't have to declare static vars inside the class definition
 \    <value> class <static var> !
 \    <value> class proto @ <field> !  \ init prototype the long way
-\    XMESSAGE <name>  ( [stuff] -- [stuff] )         \ works similar to STATICVAR, make sure to document the stack effect.
+\    XMESSAGE <name>  ( [stuff] -- [stuff] )         \ works similar to quality, make sure to document the stack effect.
 \    <class> :M  ( [stuff] -- [stuff] )  ... ;       \ program a class's response to a message.
 
 bu: idiom porp:
@@ -21,10 +21,10 @@ $C7A5533 constant CLASS_MAGIC
 
 \ --------------------------------------------------------------------------------------------------
 \ Class definition
-: staticvar  ( -- <name> )  /class xvar to /class ;
+: quality  ( -- <name> )  /class xvar to /class ;
 
-staticvar on-subclass ( class -- )
-staticvar on-inherit  ( superclass -- )
+quality on-subclass ( class -- )
+quality on-inherit  ( superclass -- )
 
 wordlist constant classing
 classing +order definitions
