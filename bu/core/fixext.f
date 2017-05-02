@@ -36,3 +36,8 @@
 : radians  1f  d>r  f>p ;
 : c>p  ( c - n )  \ convert from 0...255 (byte) to 0...1.0 (fixed)
   4 <<  1 $ff0 */ ;
+: byt  dup $ff and c>p swap 8 >> ;
+: 4reverse   drop swap 2swap swap ;
+: 3reverse   drop swap rot ;
+: hex>color  byt byt byt byt 4reverse ;
+: 3hex>color  byt byt byt 3reverse ;
