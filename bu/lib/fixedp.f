@@ -210,3 +210,6 @@ previous definitions
 : included  ints @ >r  fixed included  r> ?fixed ;
 : import    ints @ >r  fixed import   r> ?fixed ;
 : idiom     ints @ >r  idiom   r> ?fixed ;
+[defined] /only [if]
+    :noname [ is /only ] only forth ints @ not if fixpointing +order then ;
+[then]

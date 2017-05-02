@@ -2,7 +2,7 @@
 \ This is probably better thought of as a "dialect" and I should come up with a better name for it.
 \ load Idioms, DOM, floating point, string extensions, file wordset, fixed point, Allegro...
 
-
+cr .( Loading the preamble )
 \ compiler progress tool
 : get-cols  get-size drop ;
 : .notice  ( adr c -- )

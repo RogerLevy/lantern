@@ -161,11 +161,19 @@ defer onSetIdiom  ' noop is onSetIdiom
 
 : (idiom)  'idiom @ inherit-idiom  set-idiom  public: ;
 
+: drops  0 do drop loop ;
+: !order    get-order get-current r> call if set-current set-order else drop drops then ;
+
+defer /only
+:noname [ is /only ] only forth ;
+
 : idiom
-  >in @  defined  if   nip  >body  importing @ if  declared !  \\  exit              \ already defined, importing     => cancel compilation
-                                               else  set-idiom  public:  exit  then \ already defined, not importing => enter / don't create
+  !order  /only
+  >in @  defined  if   nip  >body  importing @ if    declared !  \\  true exit             \ already defined, importing     => cancel compilation
+                                               else  set-idiom  public:  false exit  then  \ already defined, not importing => enter / don't create
                   else  drop  >in !  then
-  create  (idiom)  does>  set-idiom  public: ;                                      \ not defined, create
+  forth-wordlist set-current
+  create  (idiom)  false  does>  set-idiom  public: ;                                  \ not defined, create
 
 
 : strip-order  ( -- ... #n )
@@ -178,14 +186,14 @@ defer onSetIdiom  ' noop is onSetIdiom
 
 : +orders  dup >r  reverse  r>  0 ?do  +order  loop ;
 
-: import
+: import  ( -- <path> )
   'idiom @ 0= abort" ERROR: Tried to IMPORT a file in the global namespace!"
   privately @ >r  declared @ >r  strip-order  get-current >r  get-idiom >r  importing @ >r  importing on
   ['] include catch
     r> importing !  throw
   declared @ r@ add-idiom  r> set-idiom  r> set-current  +orders  r> declared !  r> privately ! ;
 
-: include
+: include  ( -- <path> )
   'idiom @ 0= if  include  exit then
   declared @ >r  strip-order  get-current >r  get-idiom >r  ( sp@ >r )  include  ( r> sp! )  r> set-idiom r> set-current  +orders  r> declared ! ;
 
