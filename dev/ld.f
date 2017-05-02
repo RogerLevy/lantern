@@ -19,7 +19,7 @@ create lastld  256 allot
     cr ." Press Enter to reload the following file, or any other key to cancel:"
     cr lastld count type
     key #13 = -exit
-    " empty" evaluate  lastld count included ;
+    lastld count included ;
 
 create workdir 256 allot
 : make  workdir count " \make.bat" strjoin >shell ;
