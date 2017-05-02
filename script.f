@@ -1,7 +1,7 @@
 \ private game object idioms
 le:
 
-staticvar script   \ game object's private idiom, automatically created when you subclass
+quality script   \ game object's private idiom, automatically created when you subclass
 : script:  dup proto @ be   script @ set-idiom  private: ;
 
 \ create a child idiom of the superclass's idiom.

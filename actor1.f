@@ -14,8 +14,8 @@ subclass particle
 value particle-flags  drop
 
 \ static vars
-staticvar 'init    \ XT executed when particle is created
-staticvar 'start   \ XT executed when particle is actually started
+quality 'init    \ XT executed when particle is created
+quality 'start   \ XT executed when particle is actually started
 include le/script
 : particle-inherit  script-inherit ;
 : particle-subclass  script-subclass ;
