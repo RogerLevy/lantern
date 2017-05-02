@@ -73,7 +73,6 @@ actor script:
     \ color tinting tools
     create fcolor 4 cells allot
     : !color   ( r g b a -- )  1af swap 1af 2swap 1af swap 1af fcolor ~!+ ~!+ ~!+ ! ;
-    : byt  dup $ff and c>p ;
-    : hex>color  byt >r 8 >> byt >r 8 >> byt >r 8 >> byt nip r> r> r> ;
-    : !hex    ( i -- )  hex>color !color ;
+    : !color32    ( i -- )  hex>color !color ;
+    : !color24    ( i -- )  3hex>color 1 !color ;
 
