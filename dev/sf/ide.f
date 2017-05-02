@@ -10,7 +10,7 @@ import mo/pen
     requires bu/lib/win-clipboard.f
 [then]
 
-z" bu/dev/data/consolas16.png" al_load_bitmap_font constant consolas
+z" dev//data/consolas16.png" al_load_bitmap_font constant consolas
 
 consolas constant sysfont
 8 constant fw
