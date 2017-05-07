@@ -9,11 +9,24 @@ function: al_get_allegro_acodec_version ( -- n )
 #define ALLEGRO_EVENT_AUDIO_STREAM_FRAGMENT  513
 #define ALLEGRO_EVENT_AUDIO_STREAM_FINISHED  514
 
+\   /* Sample depth and type, and signedness. Mixers only use 32-bit signed
+\    * float (-1..+1). The unsigned value is a bit-flag applied to the depth
+\    * value.
+\    */
+#define ALLEGRO_AUDIO_DEPTH_INT8      $00
+#define ALLEGRO_AUDIO_DEPTH_INT16     $01
+#define ALLEGRO_AUDIO_DEPTH_INT24     $02
+#define ALLEGRO_AUDIO_DEPTH_FLOAT32   $03
+#define ALLEGRO_AUDIO_DEPTH_UNSIGNED  $08
+ALLEGRO_AUDIO_DEPTH_INT8  ALLEGRO_AUDIO_DEPTH_UNSIGNED or constant ALLEGRO_AUDIO_DEPTH_UINT8
+ALLEGRO_AUDIO_DEPTH_INT16 ALLEGRO_AUDIO_DEPTH_UNSIGNED or constant ALLEGRO_AUDIO_DEPTH_UINT16
+ALLEGRO_AUDIO_DEPTH_INT24 ALLEGRO_AUDIO_DEPTH_UNSIGNED or constant ALLEGRO_AUDIO_DEPTH_UINT24 
+
 #define   ALLEGRO_PLAYMODE_ONCE    $100
 #define   ALLEGRO_PLAYMODE_LOOP    $101
 #define   ALLEGRO_PLAYMODE_BIDIR   $102
-#define   _ALLEGRO_PLAYMODE_STREAM_ONCE    $103   /* internal-*/
-#define   _ALLEGRO_PLAYMODE_STREAM_ONEDIR  $104    /* internal-*/
+#define   _ALLEGRO_PLAYMODE_STREAM_ONCE    $103   \ /* internal-*/
+#define   _ALLEGRO_PLAYMODE_STREAM_ONEDIR  $104   \  /* internal-*/
 
 #define   ALLEGRO_MIXER_QUALITY_POINT    $110
 #define   ALLEGRO_MIXER_QUALITY_LINEAR   $111
@@ -119,15 +132,15 @@ function: al_set_mixer_postprocess_callback (  ALLEGRO_MIXER-*mixer, callback[bu
 
 function: al_get_mixer_frequency ( const-ALLEGRO_MIXER-*mixer -- n )
 \ function: ALLEGRO_CHANNEL_CONF, al_get_mixer_channels ( const-ALLEGRO_MIXER-*mixer -- )
-\ function: ALLEGRO_AUDIO_DEPTH, al_get_mixer_depth ( const-ALLEGRO_MIXER-*mixer -- )
+function: al_get_mixer_depth ( const-ALLEGRO_MIXER-*mixer -- depth )
 \ function: ALLEGRO_MIXER_QUALITY, al_get_mixer_quality ( const-ALLEGRO_MIXER-*mixer -- )
 \ function: float, al_get_mixer_gain ( const-ALLEGRO_MIXER-*mixer -- )
 \ function: al_get_mixer_playing ( const-ALLEGRO_MIXER-*mixer -- )
 \ function: al_get_mixer_attached ( const-ALLEGRO_MIXER-*mixer -- )
 function: al_set_mixer_frequency ( ALLEGRO_MIXER-*mixer, unsigned-int-val -- bool )
-function: al_set_mixer_quality ( ALLEGRO_MIXER-*mixer, ALLEGRO_MIXER_QUALITY val -- bool )
+function: al_set_mixer_quality ( ALLEGRO_MIXER-*mixer, ALLEGRO_MIXER_QUALITY-val -- bool )
 function: al_set_mixer_gain ( ALLEGRO_MIXER-*mixer, float-gain -- bool )
-function: al_set_mixer_playing ( ALLEGRO_MIXER-*mixer, bool val -- bool )
+function: al_set_mixer_playing ( ALLEGRO_MIXER-*mixer, bool-val -- bool )
 function: al_detach_mixer ( ALLEGRO_MIXER-*mixer -- bool )
 
 \ voice
