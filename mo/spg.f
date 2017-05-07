@@ -22,7 +22,7 @@ private:
     : +y  dup peny +!  pitch * +to pxl ;
     : y+  1 peny +!  pitch +to pxl ;
 public:
-\ optimization opportunity: if we can eliminate the per-pixel clipping code, we can probably shave 30-40% off of GARBAGE
+\ --------------------------------------------------------------------------------------------------
 : dot    ( adr -- adr )  penx @ dup 0 >= swap 256 < and -exit  dup c@ cells pal + @ pxl ! ;
 : ?dot    ( adr -- adr ) penx @ dup 0 >= swap 256 < and -exit  dup c@ ?dup -exit  cells pal + @ pxl ! ;
 : drawing  ( -- )
@@ -33,7 +33,7 @@ public:
     r ALLEGRO_LOCKED_REGION-pitch @ to pitch
     0 0 at ;
 : present  ( -- )
-    0 to r  b al_unlock_bitmap  0 0 0 clear-to-color  b 2.0 udraw
+    0 to r  b al_unlock_bitmap  b 2.0 udraw
     drawing ;
 : /spg  ( -- )
     ALLEGRO_VIDEO_BITMAP al_set_new_bitmap_flags
@@ -41,6 +41,7 @@ public:
     256 256 al_create_bitmap to b
     drawing ;
 
+\ --------------------------------------------------------------------------------------------------
 private:
     : ?early  ( adr -- adr |  )
         penx @ -7 >= if
@@ -67,6 +68,7 @@ private:
         else  peny @ 233 >= if peny @ 232 - -  then
         then ;
 
+\ --------------------------------------------------------------------------------------------------
 public:
 : transparent  ['] ?dot >code 'dot ! ;  transparent
 : opaque       ['] dot >code 'dot ! ;
@@ -147,53 +149,50 @@ public:
 \  [ ] drawing tilemaps, with flip and multiple palette support
 \  [ ] painting: convert address,x,y in image space to address,x,y in tile space
 
+[defined] dev [if]
 \ --------------------------------------------------------------------------------------------------
 \ Test
+decimal
 
-[defined] dev [if]
-    create testpal
-        0 , $FFFF0000 , $FF0000FF , $FF00FF00 ,
-        0 , $FF404040 , $FF808080 , $FFFFFFFF ,
-        0 , $FF802000 , $FFFF8000 , $FFFFFF00 ,
-        0 , $FFFF00FF , $FF808000 , $FF00FFFF ,
+    create testpal  \ note that alpha has an effect when the pixel buffer is presented.
+        $ff000000 , $FFFF0000 , $FF0000FF , $FF00FF00 ,
+        $ff000000 , $FF404040 , $FF808080 , $FFFFFFFF ,
+        $ff000000 , $FF802000 , $FFFF8000 , $FFFFFF00 ,
+        $ff000000 , $FFFF00FF , $FF808000 , $FF00FFFF ,
 
     " temp/chr000.raw"
     create vrom file,
-
-\        $00 c, $00 c, $01 c, $01 c, $01 c, $01 c, $00 c, $00 c,  128 8 - allot
-\        $00 c, $01 c, $02 c, $02 c, $02 c, $02 c, $01 c, $00 c,  128 8 - allot
-\        $01 c, $02 c, $00 c, $03 c, $03 c, $00 c, $02 c, $01 c,  128 8 - allot
-\        $01 c, $02 c, $03 c, $03 c, $03 c, $03 c, $02 c, $01 c,  128 8 - allot
-\        $01 c, $02 c, $03 c, $03 c, $03 c, $03 c, $02 c, $01 c,  128 8 - allot
-\        $01 c, $02 c, $00 c, $00 c, $00 c, $00 c, $02 c, $01 c,  128 8 - allot
-\        $01 c, $02 c, $02 c, $02 c, $02 c, $02 c, $02 c, $01 c,  128 8 - allot
-\        $01 c, $01 c, $01 c, $01 c, $01 c, $01 c, $01 c, $01 c,  128 8 - allot
-
-    \ --------------------------------------------------------------------------------------------
-    fixed
     /spg
     testpal !pal
+
     create lays  ' lay , ' layh , ' layv , ' layhv ,
     : layf  ( adr flip -- )  cells lays + @ execute ;
 
+    : tile  ( n -- )
+        dup $3000 and 8 >> testpal + !pal
+            vrom over $ff and >tile
+                swap $300 and 8 >> layf ;
+                
+    0 value a
     variable x  variable y
     : garbage
+        clear
+        ['] spg: >body to a
         x @ y @ 2i at
         30 0 do
             32 0 do
-                \ #4 rnd s>p 4 cells * testpal + !pal  vrom #7 >tile  lay \ 4 rnd layf
-                #4 rnd s>p 4 cells * testpal + !pal  vrom #64 rnd >tile  4 rnd layf
+                a h@ tile  2 +to a
             loop
             #-256 #8  +at
         loop ;
 
+    fixed
     : at  2i at ;
     : +at  2i +at ;
 
-
     : test
         go>
-        render> clear garbage present
+        render>  0.25 0 0.75 clear-to-color  garbage present
         step>
             pollkb
             <left> kstate if x -- then
