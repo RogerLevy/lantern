@@ -51,22 +51,27 @@ private:
                 then
             then
         then
-        r> drop  drop  8 +x ;
+        r> drop  drop  8 +y ;
 
     variable 'dot  \ DEFER (as SwiftForth implements it) is REALLY slow!!!!!!!!!!!!
     : (dot)  " 'dot @ call" evaluate ; immediate
 
+    variable tempy
     : vclip  ( adr #rows -- adr #rows )
+        peny @ tempy !
         peny @ 0<
         if  peny @ dup 128 * negate swap 2+  penx @ 0 at
         else  peny @ 233 >= if peny @ 232 - -  then
-        then ;
+        then
+        r> call penx @ tempy @ 8 + at ;
 
     : vclip<  ( adr #rows -- adr #rows )  \ for vflip
+        peny @ tempy !
         peny @ 0<
         if  peny @ dup 128 * swap 2+  penx @ 0 at
         else  peny @ 233 >= if peny @ 232 - -  then
-        then ;
+        then
+        r> call penx @ tempy @ 8 + at ;
 
 \ --------------------------------------------------------------------------------------------------
 public:
@@ -74,10 +79,9 @@ public:
 : opaque       ['] dot >code 'dot ! ;
 
 
-\ all "lay" routines leave the pen 8 pixels to the right from when they were called.
+\ all "lay" routines leave the pen 8 pixels down from when they were called.
 : lay ( adr -- )  \ draws an 8x8 tile.  assumes source pitch is 128 bytes.
-    ?early
-    penx 2v@ 2>r  8  vclip
+    ?early  8  vclip
     0 do  \ further unrolling has no effect.
         (dot)  1 +  x+
         (dot)  1 +  x+
@@ -88,12 +92,10 @@ public:
         (dot)  1 +  x+
         (dot)
         121 +  -7 +x  y+
-    loop  drop
-    2r> 8 u+ at ;
+    loop  drop ;
 
 : layh ( adr -- )  \ draws an 8x8 tile.  assumes source pitch is 128 bytes.
-    ?early
-    penx 2v@ 2>r  7 +  8  vclip
+    ?early  7 +  8  vclip
     0 do  \ further unrolling has no effect.
         (dot)  1 -  x+
         (dot)  1 -  x+
@@ -104,12 +106,10 @@ public:
         (dot)  1 -  x+
         (dot)
         135 +  -7 +x  y+
-    loop  drop
-    2r> 8 u+ at ;
+    loop  drop ;
 
 : layv ( adr -- )  \ draws an 8x8 tile.  assumes source pitch is 128 bytes.
-    ?early
-    penx 2v@ 2>r  [ 7 128 * ]# +  8  vclip<
+    ?early  [ 7 128 * ]# +  8  vclip<
     0 do  \ further unrolling has no effect.
         (dot)  1 +  x+
         (dot)  1 +  x+
@@ -120,12 +120,10 @@ public:
         (dot)  1 +  x+
         (dot)
         135 -  -7 +x  y+
-    loop  drop
-    2r> 8 u+ at ;
+    loop  drop ;
 
 : layhv ( adr -- )  \ draws an 8x8 tile.  assumes source pitch is 128 bytes.
-    ?early
-    penx 2v@ 2>r  [ 7 128 * ]# + 7 +   8  vclip<
+    ?early  [ 7 128 * ]# + 7 +   8  vclip<
     0 do  \ further unrolling has no effect.
         (dot)  1 -  x+
         (dot)  1 -  x+
@@ -136,8 +134,7 @@ public:
         (dot)  1 -  x+
         (dot)
         121 -  -7 +x  y+
-    loop  drop
-    2r> 8 u+ at ;
+    loop  drop ;
 
 : !pal  ( adr -- )  pal 4 cells move ;
 : clear  ( -- )  drawing  buf 256 240 * cells erase ;
@@ -179,11 +176,11 @@ decimal
         clear
         ['] spg: >body to a
         x @ y @ 2i at
-        30 0 do
-            32 0 do
+        32 0 do
+            30 0 do
                 a h@ tile  2 +to a
             loop
-            #-256 #8  +at
+            #8 #-240   +at
         loop ;
 
     fixed
