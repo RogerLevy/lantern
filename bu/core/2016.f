@@ -94,3 +94,6 @@ fixed
 
 : kbytes  #1024 * ;
 : megs  #1024 * 1024 * ;
+
+: udup  over swap ;
+
