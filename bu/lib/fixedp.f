@@ -53,10 +53,25 @@ fixpointing +order
 : hex     fixpointing -order  ints on  hex ;
 : octal   fixpointing -order  ints on  octal ;
 
+
+\ private
+    \ SwiftForth/X86 only - arithmetic shift
+    ICODE ARSHIFT ( x1 n -- x2 )
+       EBX ECX MOV                      \ shift count in ecx
+       POP(EBX)                         \ get new tos
+       EBX CL SAR                       \ and shift bits right
+       RET   END-CODE
+    ICODE ALSHIFT ( x1 n -- x2 )
+       EBX ECX MOV                      \ shift count in ecx
+       POP(EBX)                         \ get new tos
+       EBX CL SHL                       \ and shift bits right
+       RET   END-CODE
+
 \ NTS: keep these as one-liners, I might make them macros...
-: s>p  /FRAC lshift ;
+: s>p  " /FRAC alshift" evaluate ; immediate
 : 2s>p  s>p swap s>p swap ;
-: 1i  pgran / ;
+\ : 1i  pgran / ;
+: 1i  " /frac arshift" evaluate ; immediate
 : 2i  swap 1i swap 1i ;
 : 3i  rot 1i rot 1i rot 1i ;
 : 4i  2i 2swap 2i 2swap ;
