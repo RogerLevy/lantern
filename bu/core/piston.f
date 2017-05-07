@@ -1,12 +1,12 @@
 \ Values
 0 value #frames \ frame counter.
-0 value lag  \ completed ticks
-0 value breaking?
-0 value showerr
+0 value renderr
 0 value steperr
 0 value alt?  \ part of fix for alt-enter bug when game doesn't have focus
 
 private:
+  0 value breaking?
+  0 value lag  \ completed ticks
   0 value 'go
   0 value 'step
   0 value 'render
@@ -75,19 +75,20 @@ variable winx  variable winy
 transform m0
 : identity  m0 al_use_transform ;
 
-: ?show  update? if  ?fs  identity  'render try to showerr   al_flip_display  0 to lag   1 +to #frames  then ;
+: render  ?fs  identity  'render try to renderr   al_flip_display  0 to lag ;
+: ?render  update? -exit  1 +to #frames  render ;
 : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
 
-: render>  r>  to 'render ;  ( -- <code> )
-: step>  r>  to 'step ;  ( -- <code> )  \ has to be done this way or display update will never fire
-: go>  r> to 'go   0 to 'step ;  ( -- <code> )
+: render>  r>  to 'render ;  ( -- <code> )  ( -- )
+: step>  r>  to 'step ;  ( -- <code> )  ( -- )
+: go>  r> to 'go   0 to 'step ;  ( -- <code> )  ( -- )
 
 : ok
-    resetkb  -break  -ide  +timer
+    resetkb  -break  -ide  +timer  render
     begin
         wait  begin
-            std  'go try drop  ?step  ?show  eventq e al_get_next_event not  breaking? or
-        until  ?show  \ again for sans timer
+            std  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
+        until  ?render  \ again for sans timer
     breaking? until
     -timer ide  -break ;
 
