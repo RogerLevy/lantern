@@ -1,7 +1,6 @@
 \ software paletted graphics, version 1
 \  8-bit 128-byte-pitch graphics format, but the palette is a maximum of 4 colors (3 if transparency is used)
 bu: idiom spg:
-import mo/pen
 import mo/draw
 include temp/kb
 
@@ -17,10 +16,10 @@ private:
     create penx 0 , here 0 , constant peny  \ note this pen uses integers.
     : at  2dup penx 2v!    pitch * swap     cells + buf + to pxl ;
     : +at  2dup penx 2v+!  pitch * +to pxl  cells  +to pxl ;
-    : +x  dup penx +!    cells +to pxl ;
-    : x+  1 penx +!  cell +to pxl ;
+    : +x  dup penx +!  cells +to pxl ;
+    : x+  1 penx +!    cell +to pxl ;
     : +y  dup peny +!  pitch * +to pxl ;
-    : y+  1 peny +!  pitch +to pxl ;
+    : y+  1 peny +!    pitch +to pxl ;
 public:
 \ --------------------------------------------------------------------------------------------------
 : dot    ( adr -- adr )  penx @ dup 0 >= swap 256 < and -exit  dup c@ cells pal + @ pxl ! ;
@@ -149,6 +148,7 @@ public:
 [defined] dev [if]
 \ --------------------------------------------------------------------------------------------------
 \ Test
+private:
 decimal
 
     create testpal  \ note that alpha has an effect when the pixel buffer is presented.
@@ -159,29 +159,21 @@ decimal
 
     " temp/chr000.raw"
     create vrom file,
-    /spg
     testpal !pal
 
     create lays  ' lay , ' layh , ' layv , ' layhv ,
     : layf  ( adr flip -- )  cells lays + @ execute ;
 
-    : tile  ( n -- )
-        dup $3000 and 8 >> testpal + !pal
+    : tile  ( n -- )  \ pppp00ff tttttttt
+        dup $f000 and 12 >> 4 << testpal + !pal
             vrom over $ff and >tile
                 swap $300 and 8 >> layf ;
-                
-    0 value a
+
+    : tiles  0 do  dup h@ tile  2 +  loop ;
+    : source  ['] spg: >body ;
+
     variable x  variable y
-    : garbage
-        clear
-        ['] spg: >body to a
-        x @ y @ 2i at
-        32 0 do
-            30 0 do
-                a h@ tile  2 +to a
-            loop
-            #8 #-240   +at
-        loop ;
+    : garbage  clear  x @ y @ 2i at  source  32 0 do  30 tiles  #8 #-240 +at  loop  drop ;
 
     fixed
     : at  2i at ;
@@ -197,6 +189,9 @@ decimal
             <up> kstate if y -- then
             <down> kstate if y ++ then
             ;
-
-    garbage test ok
 [then]
+
+privates export-wordlist spg-words
+
+\ automatically initialize the renderer
+/spg
