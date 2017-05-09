@@ -132,8 +132,8 @@ defer onSetIdiom  ' noop is onSetIdiom
 : wordlists+  ( idiom -- )
   'idiom @ >r  'idiom !
   @parent ?dup if  recurse  then  \ add parents' stuff first!
-  others> @+ ?dup if  cells bounds swap cell-
-                        do  i @ >publics +order  -cell +loop
+  others> @+ ?dup if  cells bounds
+                        do  i @ >publics +order  cell +loop
                   else  drop  then
   @publics +order
   r> 'idiom ! ;
