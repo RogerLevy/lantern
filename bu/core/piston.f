@@ -92,3 +92,4 @@ transform m0
     breaking? until
     -timer ide  -break ;
 
+: wait  -timer  1 to lag ;
