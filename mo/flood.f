@@ -1,15 +1,16 @@
 bu: idiom flood:
 
+decimal
+
 : ALLEGRO_COLOR  create 4 cells allot ;
 ALLEGRO_COLOR oldClr
 ALLEGRO_COLOR newClr
 ALLEGRO_COLOR retClr
 
 private:
-decimal
-0 value s  \ stack memory top
-: empty?  sp@ s = ;
-: color=  4 cells dup -rot compare 0= ;
+    0 value s  \ stack memory top
+    : empty?  sp@ s = ;
+    : color=  4 cells dup -rot compare 0= ;
 public:
 
 : processPoint  ( oldx oldy x y -- x y oldx oldy | oldx oldy )
