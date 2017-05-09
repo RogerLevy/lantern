@@ -1,2 +1,2 @@
-ld mo/spg
+ld spg/spg
    test ok
