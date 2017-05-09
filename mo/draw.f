@@ -11,6 +11,7 @@ private:
 public:
 
 create fore 4 cells allot
+: colorf  ( f: r g b a )  4sf 2swap fore 2v! fore 2 cells + 2v! ;
 : color   ( r g b a )  2af 2swap 2af fore 2v! fore 2 cells + 2v! ;
 : color@af  fore @+ swap @+ swap @+ swap @ ;
 
@@ -100,3 +101,4 @@ variable fnt
 : ellipsef ( rx ry ) at@ 2swap 4af color@af al_draw_filled_ellipse ;
 : arc  ( r a1 a2 )  push at@ 2swap 4af pop 1af color@af -1e 1sf al_draw_arc ;
 
+: untinted  white ;
