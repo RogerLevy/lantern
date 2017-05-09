@@ -1,5 +1,14 @@
 decimal
+
+\ Cleaner strings
 : "  postpone s" ; immediate
+
+\ Random numbers
+HERE VALUE seed
+: /rnd  ucounter drop to seed ;
+: random ( -- u ) seed $107465 * $234567 + DUP TO seed ;
+: rnd ( n -- 0..n-1 ) random um* nip ;
+
 \ -----------------------------------------------------------------------------
 [defined] linux [if]
     : alert  type ;

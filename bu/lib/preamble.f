@@ -47,7 +47,6 @@ cr .( loaded fpmath )
 \ Various extensions
 include bu/lib/fpext
 cr .( loaded floating point extension )
-requires rnd \ SwiftForth
 include bu/lib/string-operations
 include bu/lib/files
 include bu/lib/fixedp
