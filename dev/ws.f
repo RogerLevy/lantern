@@ -55,7 +55,6 @@ bu: idiom ws:
 import mo/porpoise
 import mo/node
 import mo/draw
-import mo/pen
 import mo/rect
 import mo/portion
 

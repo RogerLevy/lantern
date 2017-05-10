@@ -2,7 +2,6 @@
 empty
 
 bu: idiom ide:
-import mo/pen
 
 [defined] linux [if]
 

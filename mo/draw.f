@@ -1,6 +1,7 @@
 \ Basic graphics wordset
 bu:
-    import mo/pen    \ by doing this, the pen module is automatically available to bu: along with this one.
+    import mo/pen    \ by doing this, the Pen module is available to Bubble with no extra work
+                     \ (and Draw inherits the imported Pen.)
     idiom draw:
 
 private:
