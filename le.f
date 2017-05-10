@@ -5,7 +5,6 @@ bu: idiom le:
 
 \ import modules
 import mo/image
-import mo/pen
 import mo/draw
 import mo/glsl
 import mo/gameutils
