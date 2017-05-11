@@ -1,5 +1,4 @@
 bu: idiom stride2d:
-import mo/pen
 
 
 0 value xt
