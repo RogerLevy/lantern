@@ -104,4 +104,7 @@ fixed
 : kbytes  #1024 * ;
 : megs  #1024 * 1024 * ;
 
-: udup  over swap ; 
+: udup  over swap ;
+: 2,  swap , , ;
+: 3,  rot , swap , , ;
+: 4,  2swap swap , , swap , , ;
