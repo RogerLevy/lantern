@@ -14,6 +14,7 @@ defined dev 0<> nip not [if]
 
 [defined] NO_IDE [if]
     include bu/core/core.f ide
+    gild
     /autoexec
 [else]
 \    include dev//ide.f ide
