@@ -15,6 +15,7 @@ create fore 4 cells allot
 : colorf  ( f: r g b a )  4sf 2swap fore 2v! fore 2 cells + 2v! ;
 : color   ( r g b a )  2af 2swap 2af fore 2v! fore 2 cells + 2v! ;
 : color@af  fore @+ swap @+ swap @+ swap @ ;
+: color32   ( $AARRGGBB -- )  hex>color color ;
 
 \ Bitmaps, backbuffer
 : onto  pop  al_get_target_bitmap push  swap al_set_target_bitmap  call  pop al_set_target_bitmap ;
