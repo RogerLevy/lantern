@@ -1,3 +1,3 @@
 # Bubble
 
-A Forth game development platform.
+A game development framework for ANS-compliant Forth systems.
