@@ -42,7 +42,7 @@ object inherit  xvar length  xvar first  xvar tail   subclass container
 0 value c
 : thru>  ( ... client-xt first-item -- <advance-code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
   r>  cxt >r  c >r   to c  swap to cxt
-  begin  dup while  dup >r  cxt execute  r> c call  repeat
+  begin  dup while  dup c call >r  cxt execute  r> repeat
   drop
   r> to c  r> to cxt ;
 

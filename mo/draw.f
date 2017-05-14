@@ -15,6 +15,7 @@ create fore 4 cells allot
 : colorf  ( f: r g b a )  4sf 2swap fore 2v! fore 2 cells + 2v! ;
 : color   ( r g b a )  2af 2swap 2af fore 2v! fore 2 cells + 2v! ;
 : color@af  fore @+ swap @+ swap @+ swap @ ;
+: color32   ( $AARRGGBB -- )  hex>color color ;
 
 \ Bitmaps, backbuffer
 : onto  pop  al_get_target_bitmap push  swap al_set_target_bitmap  call  pop al_set_target_bitmap ;
@@ -25,7 +26,7 @@ create fore 4 cells allot
 : loadbmp  zstring al_load_bitmap ;
 : savebmp  push zstring pop al_save_bitmap ;
 : subbmp   ( bmp w h ) at@ 2i 2swap 2i al_create_sub_bitmap ;
-: screen  backbuf onto  color@af al_clear_to_color ;
+: backdrop  backbuf onto  color@af al_clear_to_color ;
 
 \ Predefined Colors
 fixed
