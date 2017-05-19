@@ -3,14 +3,11 @@
 0 value renderr
 0 value steperr
 0 value alt?  \ part of fix for alt-enter bug when game doesn't have focus
-
-private:
-  0 value breaking?
-  0 value lag  \ completed ticks
-  0 value 'go
-  0 value 'step
-  0 value 'render
-public:
+0 value breaking?
+0 value lag  \ completed ticks
+0 value 'go
+0 value 'step
+0 value 'render
 
 \ Flags
 variable info  \ enables debugging mode display
