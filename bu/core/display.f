@@ -94,9 +94,6 @@ fixed
     ide
 [then]
 
-\ some meta-compilation systems management stuff
-: empty   only forth empty ;
-
 create native  /ALLEGRO_DISPLAY_MODE /allot
   al_get_num_display_modes #1 -  native  al_get_display_mode
 
