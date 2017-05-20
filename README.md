@@ -1,6 +1,6 @@
 # Lady Engine
 
-A Forth game engine built on the Bubble platform.
+A game engine for Bubble, a game development platform for ANS Forth.
 
 ## Features
 
