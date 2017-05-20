@@ -1,14 +1,13 @@
 # Lady Engine
 
-A game engine for Bubble, a game development platform for ANS Forth.
+A 2D game engine for Bubble, a game development platform for ANS Forth.
 
 ## Features
 
-- Suitable for basic 2D games with minimal physics, such as point-and-clicks, arcade, and platformers
-- By default, adaptive resolution and bilinear filtering
-- Automatic static asset loading
+- Suitable for 2D games
+- Adaptive resolution (optional)
+- Automatic static asset loading (no need to declare assets in source)
 - Planned: Basic sound support with samples and streaming of one music file
-- Planned: Basic particle systems
+- Planned: Particle engine
 - Planned: Mappable joystick support
 - Planned: Spriter support
--
