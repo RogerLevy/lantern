@@ -164,9 +164,9 @@ create hoverpos 0 , 0 ,
 : overlap? ( xyxy xyxy - flag )  2swap 2rot rot > -rot <= and >r rot >= -rot < and r> and ;
 : >relspan  ( element -- x y x y ) span @xywh 2>r at@ 2+ 2r> 2over 2+ ;
 : (/hover)  ( element -- )
-    for>
+    &o for>
     emousexy 2dup  o >relspan 4i
-        overlap? if  o to hovering  emousexy o span @xy 2- hoverpos 2v! then
+        overlap? if  o to hovering  emousexy o span @xy 2- 2s>p hoverpos 2v! then
     o [ LAST @ NAME> ] literal ?nest
     drop ;
 : /hover  0 0 at  screen to hovering  screen ['] (/hover) ?nest drop ;
@@ -207,7 +207,7 @@ rectangle make constant r
 imagearea inherit subclass clickme
 clickme :m respond  ?mdown ?dup if  cr ." HELLO WORLD!!!!!!! " h.  mx . my . then ;
 clickme make constant b
-z" le/test/data/images/testcard.png" al_load_bitmap dup bmpwh b !bmp
+z" ws/data/images/testcard.png" al_load_bitmap dup bmpwh b !bmp
 
 
 ws ok
