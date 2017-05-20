@@ -95,4 +95,4 @@ object object-proto !  \ initialize prototype class
 \ : [i  ( object -- object ) instancing +order
 \ : i]  ( object -- )  drop  instancing -order ;
 
-cr .( Loaded Porpoise. )
+cr .( loaded Porpoise )
