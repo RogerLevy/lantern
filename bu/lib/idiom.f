@@ -167,14 +167,28 @@ defer onSetIdiom  ' noop is onSetIdiom
 defer /only
 :noname [ is /only ] only forth ;
 
-: idiom
-  !order  /only
-  >in @  defined  if   nip  >body  importing @ if    declared !  \\  true exit             \ already defined, importing     => cancel compilation
-                                               else  set-idiom  public:  false exit  then  \ already defined, not importing => enter / don't create
-                  else  drop  >in !  then
-  forth-wordlist set-current
-  create  (idiom)  false  does>  set-idiom  public: ;                                  \ not defined, create
+\ if you import an idiom that's already defined, the file will be skipped.
+\ if you INCLUDE an idiom that's already defined, it will be extended or redefined, depending on the file contents.  (tentative feature as of 5/12/2017)
+: idiom  ( -- <name:> )
+    !order  /only
+    >in @  defined  if
+        nip  >body  importing @ if
+            cr dup body> >name count 2dup upcase #1 - type ."  already loaded, skipping... "
+            declared !  \\  true
+            exit             \ already defined, importing     => cancel compilation
+        else  set-idiom  public:  false exit
+        then  \ already defined, not importing => enter / don't create
+    else  drop  >in !  then
+    forth-wordlist set-current
+    create  (idiom)  false  does>  set-idiom  public: ;                                  \ not defined, create
 
+\ Mixins:
+\ like regular idioms only it doesn't early-out if already defined.
+\ you cannot extend existing idioms this way.
+\ mixins are not forced to be global either.
+\ typically you don't have to call a parent idiom because you want to be able to compile the mixin anywhere.
+: mixin  ( -- <name:> )
+  /only  create  (idiom)  does>  set-idiom  public: ;
 
 : strip-order  ( -- ... #n )
     get-idiom >r

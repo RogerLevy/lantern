@@ -1,7 +1,5 @@
 \ wavey render effect.  render a bitmap row-by-row with sine based offset
 
-
-
 \ this version performs the wavey effect on the destination X
 : draw-bitmap-wavey  ( bitmap sx sy sw sh dx dy angle speed strength -- )
     locals| strength speed angle dy dx sh sw sy sx bitmap |
