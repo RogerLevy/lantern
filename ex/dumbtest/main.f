@@ -32,10 +32,6 @@ variable y
 : dumb  go  logic  show  0.004 r 0 0.014 b clear-to-color  orb ;
 
 
-create m  16 cells /allot
-  m al_identity_transform
-  m al_use_transform
-
 cr .( Just some little instructions: )
 cr .( left-up-right-down moves the circly guy )
 cr .( - and + makes him grow and shrink )

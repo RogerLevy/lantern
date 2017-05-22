@@ -66,13 +66,7 @@ variable winx  variable winy
     then ;
 : ?fs     ?poswin  display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag ?fserr ;
 
-\ not sure if this is necessary at all
-16 cells struct /transform
-: transform  create  here  /transform allot  al_identity_transform ;
-transform m0
-: identity  m0 al_use_transform ;
-
-: render  ?fs  identity  'render try to renderr   al_flip_display  0 to lag ;
+: render  ?fs  1-1  'render try to renderr   al_flip_display  0 to lag ;
 : ?render  update? -exit  1 +to #frames  render ;
 : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
 

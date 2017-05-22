@@ -14,6 +14,8 @@
   al_set_new_bitmap_flags ;
 16 cells struct /transform
 : transform  create  here  /transform allot  al_identity_transform ;
+transform m0
+: 1-1  m0 al_use_transform ;
 
 decimal
 : hold  1 al_hold_bitmap_drawing  r> call  0 al_hold_bitmap_drawing ;
