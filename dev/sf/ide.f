@@ -28,7 +28,7 @@ public:
 \ Flags
 variable pause
 variable focus   \ true = CLI has focus
-variable scrolling  scrolling on
+variable scrolling
 
 \ Buffers
 create testbuffer #256 /allot
@@ -41,7 +41,7 @@ create ch  0 c, 0 c,
 : bm  displayh dup fh mod -   fh - fh - ;
 
 \ Cursor
-create cursor  cursor /allot  lm cursor x !
+create cursor  /cursor /allot  lm cursor x !
 1 1 1 1 cursor color ~!+ ~!+ ~!+ ~!+ drop
 nativew nativeh 2i al_create_bitmap value output
 transform baseline
@@ -68,10 +68,7 @@ public:
 : rub       testbuffer c@  #-1 +  0 max  testbuffer c! ;
 : obey     store  ['] interp catch ?.catch testbuffer off  ;
 : paste     clpb testbuffer append ;
-
-\ 11/24/16 lag ++ because ?show won't fire if lag is 0.
 : ?paused  pause @ if  -timer  0 +to lag   else  +timer  then ;
-
 : keycode  e ALLEGRO_KEYBOARD_EVENT-keycode @ ;
 : unichar  e ALLEGRO_KEYBOARD_EVENT-unichar @ ;
 
@@ -197,10 +194,6 @@ create console-personality
 \     lag @ -exit  update? -exit  'render @ ?call  0 lag !
 \   then ;
 
-: /baseline
-  baseline  al_identity_transform
-\  baseline  factor @ dup 2af  al_scale_transform
-  baseline  al_use_transform  ;
 
 : ?_  focus @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
 
@@ -211,7 +204,7 @@ create console-personality
   sysfont  0 ?half dup 1 4af  at@ 2af  ALLEGRO_ALIGN_RIGHT  'idiom @ body> >name count zstring al_draw_text ;
 
 : ui
-  /baseline
+  1-1
   0 0 at  console
   640  nativeh fh -  at  commandline
   stack
@@ -225,14 +218,14 @@ create console-personality
 : ide-step  step  ?clearkb  'step ?call ;
 : ide-events  thru? if  'go ?call  then  idekeys ;
 : game  framed  'render ?call ;
-: ide-show  show  cls  game  ui ;
+: ide-render  render>   cls  game  ui ;
 
-: big  ( display #1280 #960 al_resize_display drop ) fs on  allowwin off  ?fs ;
-: little  fs off  allowwin on  ?fs  display #640 #480 al_resize_display drop  ;
+: big     fs on  allowwin off  ?fs ;
+: little  fs off  allowwin on  ?fs  ; \ display #640 #480 al_resize_display drop  ;
 : autoexec  " autoexec.f" file-exists if  " autoexec.f" included  then ;
-: go-ide  go  ?paused  ide-events  ide-step  ide-show ;
+: go-ide  go  ?paused  ide-events  ide-step  ide-render ;
 : /ide  big  console-personality open-personality  autoexec  focus on  go-ide ;
-: ide/  little  close-personality  bu:  go step ?clearkb show cls game ;
+: ide/  little  close-personality  bu:  go> step ?clearkb  render> cls game ;
 : ide  /ide  ok  ide/ ;  
 
 publics export-wordlist ide-words
@@ -243,7 +236,7 @@ bu:  ide-words +order
 : go    r> to 'go ;
 : show  r> to 'render ;
 : step  r> to 'step ;
-: empty  empty  ide: /ide   0 to 'go   0 to 'render   0 to 'step ;
+: empty  ide: /ide   0 to 'go   0 to 'render   0 to 'step  only forth definitions  empty ;
 
 
 gild
