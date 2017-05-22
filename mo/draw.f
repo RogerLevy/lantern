@@ -104,3 +104,12 @@ variable fnt
 : arc  ( r a1 a2 )  push at@ 2swap 4af pop 1af color@af -1e 1sf al_draw_arc ;
 
 : untinted  white ;
+
+\ Clipping rectangle
+private: variable cx variable cy variable cw variable ch
+public:
+: clip>  ( x y w h -- <code> )
+    cx cy cw ch al_get_clipping_rectangle
+    4i al_set_clipping_rectangle   r> call
+    cx @ cy @ cw @ ch @ al_set_clipping_rectangle ;
+
