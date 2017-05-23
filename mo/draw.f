@@ -81,9 +81,8 @@ fixed
 
 \ Text
 variable fnt
-: text  ( str count -- )  zstring push  color@af fnt @ at@ 2af ALLEGRO_ALIGN_LEFT pop al_draw_text ;
-: rtext ( str count -- )  zstring push  color@af fnt @ at@ 2af ALLEGRO_ALIGN_RIGHT pop al_draw_text ;
-: ctext ( str count -- )  zstring push  color@af fnt @ at@ 2af ALLEGRO_ALIGN_CENTER pop al_draw_text ;
+: aprint ( str count alignment -- )  push zstring push  color@af fnt @ at@ 2af pop pop swap al_draw_text ;
+: print  ( str count -- )  ALLEGRO_ALIGN_LEFT aprint ;
 
 \ Primitives
 \ -1 = hairline thickness
