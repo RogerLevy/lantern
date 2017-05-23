@@ -10,8 +10,10 @@
 \   .CMDLINE  ( -- )  displays the commandline at given pen position and font, including the current idiom and the stack
 \   .OUTPUT  ( -- )  displays commandline output
 \ misc words:
-\   CMDFONT  a VALUE containing the current font for the commandline
-\   /CMDLINE  ( -- )  initializes the commandline.
+\   GO  ( -- )  starts the default REPL interface, no game displayed.  calls RASA
+\   RASA  ( -- )  establishes the default REPL interface.  is called by GO
+\   CMDFONT  ( -- adr )  a VARIABLE containing the current font for the commandline
+\   /CMDLINE  ( -- )  initializes the commandline.  is called by GO
 \   MARGINS  ( -- rect )  dimensions for the command history.  defaults to the entire screen, minus 40 pixels at the bottom
 \   TABBED  ( -- adr )  variable, when set to ON, the commandline is active.
 
@@ -22,11 +24,11 @@ import mo/rect
 
 variable consolas
 consolas constant cmdfont
-private:  0  xvar x  xvar y  4 cells xfield color  struct /cursor
+private:  0  xvar x  xvar y  4 cells xfield colour  struct /cursor
 public:
 create cursor  /cursor /allot
 variable scrolling  scrolling on
-create testbuffer #256 /allot
+create cmdbuf #256 /allot
 create history  #256 /allot
 create ch  0 c, 0 c,
 create margins  0 , 0 , 0 , 0 ,   \ margins for the command history
@@ -40,8 +42,8 @@ transform baseline
 variable output   \ output bitmap
 variable tabbed   \ if on, cmdline will receive keys.  check if false before doing game input, if needed.
 
-: fontw  z" A" al_get_text_width s>p ;
-: fonth  al_get_font_line_height s>p ;
+\ --------------------------------------------------------------------------------------------------
+\ low-level stuff
 : fw  cmdfont @ fontw ;
 : fh  cmdfont @ fonth ;
 : cols  fw * ;
@@ -53,11 +55,11 @@ variable tabbed   \ if on, cmdline will receive keys.  check if false before doi
 : tm  margins @y  displayh >= if  0  else  margins @y  then ;
 : ?call  ?dup -exit call ;
 : ?.catch  ?dup -exit .catch ;
-: recall  history count testbuffer place ;
-: store   testbuffer count history place ;
-: typechar  testbuffer count + c!  #1 testbuffer c+! ;
-: rub       testbuffer c@  #-1 +  0 max  testbuffer c! ;
-: paste     clpb testbuffer append ;
+: recall  history count cmdbuf place ;
+: store   cmdbuf count history place ;
+: typechar  cmdbuf count + c!  #1 cmdbuf c+! ;
+: rub       cmdbuf c@  #-1 +  0 max  cmdbuf c! ;
+: paste     clpb cmdbuf append ;
 : ?paused  pause @ if  -timer  0 +to lag   else  +timer  then ;
 : keycode  e ALLEGRO_KEYBOARD_EVENT-keycode @ ;
 : unichar  e ALLEGRO_KEYBOARD_EVENT-unichar @ ;
@@ -73,7 +75,7 @@ private:
     : at-xy   ( #col #row -- )  2s>p fw fh 2*  lm tm 2+  cursor x 2v! ;
     : clear  ( x y w h )
       write-rgba blend>
-      output onto  2over 2+ 1 1 2+ 4af   0 1af dup dup dup  al_draw_filled_rectangle
+      output @ onto  2over 2+ 1 1 2+ 4af   0 1af dup dup dup  al_draw_filled_rectangle
     ;
     : outputw  rm lm - ;
     : outputh  bm tm - ;
@@ -85,8 +87,7 @@ private:
     ;
     : scroll
       lm  bm   rm lm -  outputh third - clear
-      write-rgba blend>
-      output onto  output  0  fh negate  2af  0  al_draw_bitmap
+      write-rgba blend>  output onto  0 fh negate at  output @ blit
       fh negate cursor y +!
     ;
     : cr
@@ -97,18 +98,18 @@ private:
     ;
     : 4@af  @+ swap @+ swap @+ swap @+ nip 4af ;
     : (emit)
-        ch c!  0 ch #1 + c!
-        cmdfont  cursor color 4@af  cursor x 2v@ 2af  0  ch al_draw_text
+        ch c!
+        cmdfont @ font>  cursor colour 4@ color  cursor x 2v@ at  ch #1 print
         fw cursor x +!
         cursor x @ rm >= if  cr  then
     ;
-    : emit  output onto  (emit) ;
+    : emit  output @ onto  (emit) ;
     decimal
-        : type  output onto  bounds  do  i c@ (emit)  loop ;
+        : type  output @ onto  bounds  do  i c@ (emit)  loop ;
         : ?type  ?dup if type else 2drop then ;
     fixed
-    : attribute  s>p 4 cells * attributes +  cursor color  4 cells move ;
-    : page  output onto  0 0 0 0 backdrop  0 0 at-xy ;
+    : attribute  s>p 4 cells * attributes +  cursor colour  4 imove ;
+    : page  output @ onto  0 0 0 0 backdrop  0 0 at-xy ;
 
     create console-personality
       4 cells , #19 , 0 , 0 ,
@@ -136,10 +137,10 @@ public:
 \ --------------------------------------------------------------------------------------------------
 \ Command management
 
-: cancel   testbuffer off ;
-: echo     cursor color 4@  #4 attribute  cr  testbuffer count type space  cursor color 4! ;
-: interp   echo  testbuffer count evaluate ;
-: obey     store  ['] interp catch ?.catch  cancel ;
+: cancel   cmdbuf off ;
+: echo     cursor colour 4@  #4 attribute  cr  cmdbuf count type space  cursor colour 4! ;
+: interp   echo  cmdbuf count evaluate ;
+: obey     store  ['] interp catch ?.catch  cancel  >display ;
 
 \ --------------------------------------------------------------------------------------------------
 \ Input handling
@@ -179,25 +180,33 @@ public:
 \ --------------------------------------------------------------------------------------------------
 \ Rendering
 private:
-: ?_  focus @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
-
-
-: current-idiom
-  sysfont  0 ?half dup 1 4af  at@ 2af  ALLEGRO_ALIGN_RIGHT  'idiom @ body> >name count zstring al_draw_text ;
-
+    : +blinker  tabbed @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
+    : .idiom  cmdfont @ font>  cyan  'idiom @ body> >name count print ;
+    : .cmdbuf  white  cmdbuf count +blinker print ;
 public:
+
+\ --------------------------------------------------------------------------------------------------
+\ redefined STEP> ... makes keyboard state be automatically cleared every frame when TABBED is on.
+0 value 'idestep
+: ?clearkb  tabbed @ if clearkb then ;
+: step>  ( -- <code> )  r> to 'idestep  step>  ?clearkb 'idestep call ;
 
 \ --------------------------------------------------------------------------------------------------
 \ "API"
 
-: bottom  0  bm 2 rows - ;
-: .cmdline  cmdfont  1 1 1 1 4af  at@ 2af  0  testbuffer count ?_ zstring  al_draw_text ;
-: .output  untinted  output blit ;
+: bottom  0  displayh 2 rows - ;
+: .cmdline  cmdfont @ font>  at@ 2>r  .stack  2r> 0 fh 2+ at  .idiom  .cmdbuf ;
+: .output  untinted  output @ blit ;
 : /cmdline
     z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
     nativew nativeh 2i al_create_bitmap  output !
-    1 1 1 1 cursor color ~!+ ~!+ ~!+ ~!+ drop
+    1 1 1 1 cursor colour ~!+ ~!+ ~!+ ~!+ drop
     0 0 displayw displayh 40 - margins !xywh
-
-;  /cmdline
+;
 : repl  idekeys ;
+
+: rasa
+    tabbed on
+    ['] >display is >ide  \ >IDE is redefined to take us to the display
+    go>  repl  render>  dblue backdrop  0 0 at  .output   bottom at  .cmdline ;
+: go  /cmdline  console-personality open-personality  rasa  begin ok again ;
