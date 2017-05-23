@@ -107,7 +107,7 @@ lineseg :m paint ( obj -- obj )
     ?color1  dup span @xy2 line ;
 
 imagearea :m paint ( obj -- obj )
-    ?color1  dup bmp @  over span @wh  0 sdrawf ;
+    ?color1  dup bmp @  over span @wh  0 sblitf ;
 
 textarea :m paint ( obj -- obj )
     dup ustr @ -exit

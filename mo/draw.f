@@ -58,26 +58,26 @@ fixed
 \  or use sub bitmaps (see subbmp).
 \  After each call to one of these words, the current color is reset to white.
 
-: drawf  ( bmp flip )  push  color@af  at@ 2af  pop al_draw_tinted_bitmap  white ;
-: rdrawf ( bmp ang flip )
+: blitf  ( bmp flip )  push  color@af  at@ 2af  pop al_draw_tinted_bitmap  white ;
+: rblitf ( bmp ang flip )
     locals| flip ang bmp |
     bmp  color@af  0 0 ang 3af  flip  al_draw_tinted_rotated_bitmap  white ;
-: sdrawf  ( bmp dw dh flip )
+: sblitf  ( bmp dw dh flip )
     locals| flip dh dw bmp |
     bmp  color@af  0 0 bmp bmpwh 4af  at@ dw dh 4af  flip  al_draw_tinted_scaled_bitmap white ;
-: srdrawf ( bmp sx sy ang flip )
+: srblitf ( bmp sx sy ang flip )
     locals| flip ang sy sx bmp |
     bmp  0 0 bmp bmpwh 4af  color@af  0 0 at@ 4af  sx sy ang 3af  flip  al_draw_tinted_scaled_rotated_bitmap  white ;
-: udrawf  ( bmp scale flip )
+: ublitf  ( bmp scale flip )
     locals| flip scale bmp |
     bmp  color@af  0 0 bmp bmpwh 4af  at@ bmp bmpwh scale dup 2* 4af  flip  al_draw_tinted_scaled_bitmap  white ;
 
-: draw   ( bmp ) 0 drawf ;
-: rdraw  ( bmp ang )  0 rdrawf ;
-: sdraw  ( bmp dw dh )  0 sdrawf ;
-: srdraw  ( bmp sx sy ang )  0 srdrawf ;
-: nudraw  ( bmp sx sy )  0 dup srdrawf ;
-: udraw  ( bmp scale )  0 udrawf ;
+: blit   ( bmp ) 0 blitf ;
+: rblit  ( bmp ang )  0 rblitf ;
+: sblit  ( bmp dw dh )  0 sblitf ;
+: srblit  ( bmp sx sy ang )  0 srblitf ;
+: nublit  ( bmp sx sy )  0 dup srblitf ;
+: ublit  ( bmp scale )  0 ublitf ;
 
 \ Text
 variable fnt
