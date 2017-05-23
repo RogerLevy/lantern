@@ -1,1 +1,1 @@
-ld ws/ws
+ld dev/sf/ide2
