@@ -12,7 +12,7 @@ defined dev 0<> nip not [if]
     gild
 [then]
 
-include bu/core/core.f ide
+include bu/core/core.f  >ide
 gild
 /autoexec
 

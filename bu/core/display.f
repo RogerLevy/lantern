@@ -85,13 +85,14 @@ fixed
 \ ------------------------ words for switching windows ------------------------
 [defined] linux [if]
     : focus  drop ;
-    : -ide ;  : ide ;
+    : >display ;  : >ide ;
 [else]
     : focus  ( winapi-window - )                                                    \ force window via handle to be the active window
       dup #1 ShowWindow drop  dup BringWindowToTop drop  SetForegroundWindow drop ;
-    : -ide  ( - )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
-    : ide  ( - )  HWND focus ;                                                     \ force the Forth prompt to take focus
-    ide
+    : >display  ( -- )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
+    defer >ide
+    :noname [ is >ide ]  ( -- )  HWND focus ;                                                     \ force the Forth prompt to take focus
+    >ide
 [then]
 
 create native  /ALLEGRO_DISPLAY_MODE /allot

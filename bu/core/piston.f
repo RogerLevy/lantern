@@ -75,12 +75,12 @@ variable winx  variable winy
 : go>  r> to 'go   0 to 'step ;  ( -- <code> )  ( -- )
 
 : ok
-    resetkb  -break  -ide  +timer  render
+    resetkb  -break  >display  +timer  render
     begin
         wait  begin
             std  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
         until  ?render  \ again for sans timer
     breaking? until
-    -timer ide  -break ;
+    -timer  >ide  -break ;
 
 : wait  -timer  1 to lag ;
