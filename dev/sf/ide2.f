@@ -22,8 +22,7 @@ import mo/rect
 
 variable consolas
 consolas constant cmdfont
-private:
-    0  xvar x  xvar y  4 cells xfield color  struct /cursor
+private:  0  xvar x  xvar y  4 cells xfield color  struct /cursor
 public:
 create cursor  /cursor /allot
 variable scrolling  scrolling on
@@ -39,6 +38,7 @@ create attributes
   1 , 1 , 0 , 1 ,
 transform baseline
 variable output   \ output bitmap
+variable tabbed   \ if on, cmdline will receive keys.  check if false before doing game input, if needed.
 
 : fontw  z" A" al_get_text_width s>p ;
 : fonth  al_get_font_line_height s>p ;
@@ -67,46 +67,12 @@ private:
 public:
 
 \ --------------------------------------------------------------------------------------------------
-\ Input handling
-: special
-  case
-    [char] v of  paste  endof
-    [char] p of  pause toggle  endof
-  endcase ;
-: idekeys
-    \ always processed...
-    etype ALLEGRO_EVENT_KEY_DOWN = if
-        keycode dup #37 < if  drop exit  then
-            case
-                <tab> of  tabbed toggle  endof
-            endcase
-    then
-
-    \ only when cmdline has tabbed...
-    tabbed @ -exit
-    etype ALLEGRO_EVENT_KEY_CHAR = if
-        ctrl? if
-            unichar $60 + special
-        else
-            unichar #32 >= unichar #126 <= and if
-            unichar typechar  exit
-        then
-        keycode case
-            <up> of  recall  endof
-            <down> of  cancel  endof
-            <enter> of  alt? ?exit  obey  endof
-            <backspace> of  rub  endof
-        endcase
-    then
-;
-
-\ --------------------------------------------------------------------------------------------------
 \ Output words
 private:
     : get-xy  ( -- #col #row )  cursor x 2v@  lm tm 2-  fw fh 2/ 2i ;
     : at-xy   ( #col #row -- )  2s>p fw fh 2*  lm tm 2+  cursor x 2v! ;
     : clear  ( x y w h )
-      write-rgba blend
+      write-rgba blend>
       output onto  2over 2+ 1 1 2+ 4af   0 1af dup dup dup  al_draw_filled_rectangle
     ;
     : outputw  rm lm - ;
@@ -119,7 +85,7 @@ private:
     ;
     : scroll
       lm  bm   rm lm -  outputh third - clear
-      write-rgba blend
+      write-rgba blend>
       output onto  output  0  fh negate  2af  0  al_draw_bitmap
       fh negate cursor y +!
     ;
@@ -132,7 +98,7 @@ private:
     : 4@af  @+ swap @+ swap @+ swap @+ nip 4af ;
     : (emit)
         ch c!  0 ch #1 + c!
-        sysfont  cursor color 4@af  cursor x 2v@ 2af  0  ch al_draw_text
+        cmdfont  cursor color 4@af  cursor x 2v@ 2af  0  ch al_draw_text
         fw cursor x +!
         cursor x @ rm >= if  cr  then
     ;
@@ -166,19 +132,67 @@ private:
       ' 2dup , \ GET-SIZE  ( -- x y )
       ' drop , \ ACCEPT    ( addr u1 -- u2)  \ not yet supported
 public:
-\ --------------------------------------------------------------------------------------------------
 
+\ --------------------------------------------------------------------------------------------------
+\ Command management
 
 : cancel   testbuffer off ;
 : echo     cursor color 4@  #4 attribute  cr  testbuffer count type space  cursor color 4! ;
 : interp   echo  testbuffer count evaluate ;
 : obey     store  ['] interp catch ?.catch  cancel ;
 
+\ --------------------------------------------------------------------------------------------------
+\ Input handling
+: special
+  case
+    [char] v of  paste  endof
+    [char] p of  pause toggle  endof
+  endcase ;
+: idekeys
+    \ always processed...
+    etype ALLEGRO_EVENT_KEY_DOWN = if
+        keycode dup #37 < if  drop exit  then
+            case
+                <tab> of  tabbed toggle  endof
+            endcase
+    then
+
+    \ only when cmdline has tabbed...
+    tabbed @ -exit
+    etype ALLEGRO_EVENT_KEY_CHAR = if
+        ctrl? if
+            unichar $60 + special
+        else
+            unichar #32 >= unichar #126 <= and if
+                unichar typechar  exit
+            then
+        then
+        keycode case
+            <up> of  recall  endof
+            <down> of  cancel  endof
+            <enter> of  alt? ?exit  obey  endof
+            <backspace> of  rub  endof
+        endcase
+    then
+;
+
+\ --------------------------------------------------------------------------------------------------
+\ Rendering
+private:
+: ?_  focus @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
+
+
+: current-idiom
+  sysfont  0 ?half dup 1 4af  at@ 2af  ALLEGRO_ALIGN_RIGHT  'idiom @ body> >name count zstring al_draw_text ;
+
+public:
+
+\ --------------------------------------------------------------------------------------------------
+\ "API"
+
 : bottom  0  bm 2 rows - ;
-
-: ?half  tabbed @ if 1 else 0.5 then ;
-: .output  output  1 1 1 ?half 4af  outputw outputh 2af  0  al_draw_tinted_bitmap ;
-
+: .cmdline  cmdfont  1 1 1 1 4af  at@ 2af  0  testbuffer count ?_ zstring  al_draw_text ;
+: .output  untinted  output blit ;
 : /cmdline
     z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
     nativew nativeh 2i al_create_bitmap  output !
@@ -186,5 +200,4 @@ public:
     0 0 displayw displayh 40 - margins !xywh
 
 ;  /cmdline
-
 : repl  idekeys ;
