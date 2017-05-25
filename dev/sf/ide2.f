@@ -145,8 +145,9 @@ public:
   endcase ;
 : idekeys
     \ always processed...
-    etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
-        /margins  /output
+    etype ALLEGRO_EVENT_DISPLAY_RESIZE =
+    etype EVENT_FULLSCREEN = or if
+        /margins  \ /output
     then
     etype ALLEGRO_EVENT_KEY_DOWN = if
         keycode dup #37 < if  drop exit  then
@@ -203,8 +204,12 @@ public:
 \ "API"
 
 : bottom  0  displayh 3 rows - 16 - ;
-: .output  untinted  output @ blit ;
-: .cmdline  get-xy 2>r  at@ cursor x 2v!  bar  scrolling off  .s2  ( cr  .idiom  .cmdbuf )  scrolling on   2r> at-xy   ;
+: .output   untinted  output @ blit ;
+: .cmdline
+    output @ >r  display al_get_backbuffer output !
+    get-xy 2>r  at@ cursor x 2v!  bar  scrolling off  .s2  cr  .idiom  .cmdbuf  scrolling on   2r> at-xy
+    r> output !
+;
 : /cmdline
     z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
     /output
