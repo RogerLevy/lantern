@@ -14,6 +14,9 @@ variable info  \ enables debugging mode display
 variable allowwin  allowwin on
 variable fs    \ is fullscreen enabled?
 
+create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
+#999 constant EVENT_FULLSCREEN 
+
 : poll  pollKB  pollJoys  [defined] dev [if] pause [then] ;
 : break  true to breaking? ;
 : -break  false to breaking? ;
@@ -29,7 +32,8 @@ private:
     : wait  eventq e al_wait_for_event ;
     : std
       etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
-        display al_acknowledge_resize
+        -timer  display al_acknowledge_resize  +timer  \ we have to turn off the timer to avoid a race condition
+                                                       \ where bitmaps aren't recreated before trying to draw to them
       then
       etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  then
       etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer false to alt?  then
@@ -64,7 +68,14 @@ variable winx  variable winy
     else
         fs @ if     display winx winy al_get_window_position  then
     then ;
-: ?fs     ?poswin  display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag ?fserr ;
+
+variable newfs
+: ?fs
+    ?poswin  display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag ?fserr
+    fs @  newfs @ 0= and if
+        fse EVENT_FULLSCREEN emit-user-event
+    then
+    fs @ newfs ! ;
 
 : render  ?fs  1-1  'render try to renderr   al_flip_display  0 to lag ;
 : ?render  update? -exit  1 +to #frames  render ;
