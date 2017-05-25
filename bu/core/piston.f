@@ -72,7 +72,7 @@ variable winx  variable winy
 variable newfs
 : ?fs
     ?poswin  display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag ?fserr
-    fs @  newfs @ 0= and if
+    fs @  newfs @  <> if
         fse EVENT_FULLSCREEN emit-user-event
     then
     fs @ newfs ! ;
