@@ -33,11 +33,11 @@ create history  #256 /allot
 create ch  0 c, 0 c,
 create margins  0 , 0 , 0 , 0 ,   \ margins for the command history
 create attributes
-  1 , 1 , 1 , 1 ,
-  0 , 0 , 0 , 1 ,
-  0.3 , 1 , 0.3 , 1 ,
-  1 , 1 , 0.3 , 1 ,
-  1 , 1 , 0 , 1 ,
+  1 , 1 , 1 , 1 ,      \ white
+  0 , 0 , 0 ,     1 ,  \ black
+  0.3 , 1 , 0.3 , 1 ,  \ green
+  1 , 1 , 0.3 ,   1 ,  \ light yellow
+  0 , 1 , 1 ,     1 ,  \ cyan
 transform baseline
 variable output   \ output bitmap
 variable tabbed   \ if on, cmdline will receive keys.  check if false before doing game input, if needed.
@@ -48,7 +48,7 @@ variable tabbed   \ if on, cmdline will receive keys.  check if false before doi
 : fh  cmdfont @ fonth ;
 : cols  fw * ;
 : rows  fh * ;
-: #cmdrows  margins @h 1 - fh / pfloor ;
+\ : #cmdrows  margins @h 1 - fh / pfloor ;
 : rm  margins @x2  displayw min ;
 : bm  margins @y2  displayh min ;
 : lm  margins @x  displayw >= if  0  else  margins @x  then ;
@@ -59,7 +59,7 @@ variable tabbed   \ if on, cmdline will receive keys.  check if false before doi
 : store   cmdbuf count history place ;
 : typechar  cmdbuf count + c!  #1 cmdbuf c+! ;
 : rub       cmdbuf c@  #-1 +  0 max  cmdbuf c! ;
-: paste     clpb cmdbuf append ;
+: paste     clipb cmdbuf append ;
 : ?paused  pause @ if  -timer  0 +to lag   else  +timer  then ;
 : keycode  e ALLEGRO_KEYBOARD_EVENT-keycode @ ;
 : unichar  e ALLEGRO_KEYBOARD_EVENT-unichar @ ;
@@ -67,36 +67,30 @@ private:
   : ctrl?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_CTRL and ;
   : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
 public:
+: /margins 0 0 displayw displayh fh 2 * - margins !xywh ;
+: 4@af  4@ 4af ;
+: /output  nativew nativeh 2i al_create_bitmap  output ! ;
 
 \ --------------------------------------------------------------------------------------------------
 \ Output words
 private:
     : get-xy  ( -- #col #row )  cursor x 2v@  lm tm 2-  fw fh 2/ 2i ;
     : at-xy   ( #col #row -- )  2s>p fw fh 2*  lm tm 2+  cursor x 2v! ;
-    : clear  ( x y w h )
-      write-rgba blend>
-      output @ onto  2over 2+ 1 1 2+ 4af   0 1af dup dup dup  al_draw_filled_rectangle
-    ;
+    : fill  ( w h bitmap -- )  onto  write-rgba blend>  rectf ;
+    : clear  ( w h bitmap -- )  0 0 0 0 color  fill ;
     : outputw  rm lm - ;
     : outputh  bm tm - ;
-    : .stack
-      lm  outputh fh / 3 - fh *   rm lm - fh 2 *  clear
-        scrolling off
-            get-xy 2>r  0 outputh fh / 3 - 2i at-xy  .s  2r> at-xy
-        scrolling on
-    ;
     : scroll
-      lm  bm   rm lm -  outputh third - clear
-      write-rgba blend>  output onto  0 fh negate at  output @ blit
-      fh negate cursor y +!
+        write-rgba blend>  output @ onto  0 -1 rows at  output @ blit
+        lm bm at   outputw  fonth   output @ clear
+        -1 rows  cursor y +!
     ;
     : cr
         lm cursor x !
-        fh cursor y +!
+        1 rows cursor y +!
         scrolling @ -exit
         cursor y @ bm >= if  scroll  then
     ;
-    : 4@af  @+ swap @+ swap @+ swap @+ nip 4af ;
     : (emit)
         ch c!
         cmdfont @ font>  cursor colour 4@ color  cursor x 2v@ at  ch #1 print
@@ -109,7 +103,7 @@ private:
         : ?type  ?dup if type else 2drop then ;
     fixed
     : attribute  s>p 4 cells * attributes +  cursor colour  4 imove ;
-    : page  output @ onto  0 0 0 0 backdrop  0 0 at-xy ;
+    : page  output @ onto  0 0 0 backdrop  0 0 at-xy ;
 
     create console-personality
       4 cells , #19 , 0 , 0 ,
@@ -151,6 +145,9 @@ public:
   endcase ;
 : idekeys
     \ always processed...
+    etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
+        /margins  /output
+    then
     etype ALLEGRO_EVENT_KEY_DOWN = if
         keycode dup #37 < if  drop exit  then
             case
@@ -180,9 +177,20 @@ public:
 \ --------------------------------------------------------------------------------------------------
 \ Rendering
 private:
-    : +blinker  tabbed @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
-    : .idiom  cmdfont @ font>  cyan  'idiom @ body> >name count print ;
-    : .cmdbuf  white  cmdbuf count +blinker print ;
+    : .S2 ( ? -- ? )
+      #3 attribute
+      DEPTH 0> IF DEPTH s>p  0 ?DO S0 @ I 1 + CELLS - @ . LOOP THEN
+      DEPTH 0< ABORT" Underflow"
+      FDEPTH ?DUP IF
+        ."  F: "
+        0  DO  I' I - #1 - FPICK N.  #1 +LOOP
+      THEN ;
+    : +blinker tabbed @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
+    : .idiom   #4 attribute  'idiom @ body> >name count #1 - type  [char] > emit ;
+    : .cmdbuf  #0 attribute  cmdfont @ font>  white  cmdbuf count +blinker print ;
+    : bar      outputw  3 rows  black  output @ fill ;
+    : .output  untinted  output @ blit ;
+
 public:
 
 \ --------------------------------------------------------------------------------------------------
@@ -194,19 +202,17 @@ public:
 \ --------------------------------------------------------------------------------------------------
 \ "API"
 
-: bottom  0  displayh 2 rows - ;
-: .cmdline  cmdfont @ font>  at@ 2>r  .stack  2r> 0 fh 2+ at  .idiom  .cmdbuf ;
+: bottom  0  displayh 3 rows - 16 - ;
 : .output  untinted  output @ blit ;
+: .cmdline  get-xy 2>r  at@ cursor x 2v!  bar  scrolling off  .s2  ( cr  .idiom  .cmdbuf )  scrolling on   2r> at-xy   ;
 : /cmdline
     z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
-    nativew nativeh 2i al_create_bitmap  output !
-    1 1 1 1 cursor colour ~!+ ~!+ ~!+ ~!+ drop
-    0 0 displayw displayh 40 - margins !xywh
+    /output
+    1 1 1 1 cursor colour 4!
+    /margins
+    ['] >display is >ide  \ >IDE is redefined to take us to the display
+    tabbed on
 ;
 : repl  idekeys ;
-
-: rasa
-    tabbed on
-    ['] >display is >ide  \ >IDE is redefined to take us to the display
-    go>  repl  render>  dblue backdrop  0 0 at  .output   bottom at  .cmdline ;
+: rasa  go>  repl  render>  dblue backdrop  0 0 at  .output   bottom at  .cmdline ;
 : go  /cmdline  console-personality open-personality  rasa  begin ok again ;
