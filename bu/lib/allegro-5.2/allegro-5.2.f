@@ -31,8 +31,8 @@ decimal
 
 #define ALLEGRO_VERSION          5
 #define ALLEGRO_SUB_VERSION      2
-#define ALLEGRO_WIP_VERSION      0
-
+#define ALLEGRO_WIP_VERSION      2
+#define ALLEGRO_RELEASE_NUMBER   0
 
 
 [defined] linux [if]
@@ -47,20 +47,21 @@ decimal
     library /usr/lib/i386-linux-gnu/liballegro_image.so.5.2
     library /usr/lib/i386-linux-gnu/liballegro_font.so.5.2
 [else]
+    cd bu/lib/allegro-5.2
     : linux-library  0 parse 2drop ;
     [defined] allegro5-debug [if]
-      library bu/lib/allegro-5.2/allegro_monolith-debug-5.2.dll
+      library allegro_monolith-debug-5.2.dll
     [else]
-      library bu/lib/allegro-5.2/allegro_monolith-5.2.dll
+      library allegro_monolith-5.2.2.dll
     [then]
-
+    cd ../../..
     warning off
 [then]
 
 ALLEGRO_VERSION 24 lshift
 ALLEGRO_SUB_VERSION 16 lshift or
 ALLEGRO_WIP_VERSION 8 lshift or
-\ ALLEGRO_RELEASE_NUMBER or
+ALLEGRO_RELEASE_NUMBER or
 constant ALLEGRO_VERSION_INT
 
 : void ;
