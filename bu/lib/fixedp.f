@@ -100,8 +100,9 @@ definitions
 : 2*  rot * >r * r> ;
 : 2/  rot swap / >r / r> ;
 
-: i.  . ; 
+: i.  . ;
 : .   ints @ if  .  else  1f f.  then ;
+: p.  . ;
 : ?   @ . ;
 : 2.  swap . . ;
 : 3.  rot . 2. ;
