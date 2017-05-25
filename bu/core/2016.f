@@ -99,7 +99,7 @@ fixed
 : 4af  1f 1f 1f 1f 1sf 1sf 1sf 1sf ;
 
 : 4@  @+ swap @+ swap @+ swap @ ;
-: 4!  >r  r@ 2 cells + 2v!  r> 2v! ;
+: 4!  ~!+ ~!+ ~!+ ~!+ drop ;
 
 : kbytes  #1024 * ;
 : megs  #1024 * 1024 * ;
