@@ -9,6 +9,13 @@
 0 value eventq
 0 value display
 
+create ues  32 cells /allot  \ user event source
+
+: emit-user-event  ( event type -- )
+    over ALLEGRO_EVENT_TYPE-type !
+    ues swap 0 al_emit_user_event drop 
+;
+
 \ --------------------------- initializing allegro ----------------------------
 
 : assertAllegro
@@ -28,6 +35,7 @@
   not if  " Allegro: Couldn't initialize keyboard." alert         -1 abort then
   al_install_joystick
   not if  " Allegro: Couldn't initialize joystick." alert         -1 abort then
+  ues al_init_user_event_source
 ;
 
 assertAllegro
@@ -43,6 +51,7 @@ assertAllegro
 : initDisplay  ( w h -- )
   assertAllegro
   al_create_event_queue  to eventq
+  eventq ues al_register_event_source
   ALLEGRO_VSYNC #1 ALLEGRO_SUGGEST  al_set_new_display_option
   #0 #40 al_set_new_window_position
 
