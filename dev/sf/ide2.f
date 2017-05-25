@@ -67,7 +67,7 @@ private:
   : ctrl?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_CTRL and ;
   : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
 public:
-: /margins 0 0 displayw displayh fh 2 * - margins !xywh ;
+: /margins 0 0 displayw displayh 3 rows - margins !xywh ;
 : 4@af  4@ 4af ;
 : /output  nativew nativeh 2i al_create_bitmap  output ! ;
 
@@ -82,8 +82,8 @@ private:
     : outputh  bm tm - ;
     : scroll
         write-rgba blend>  output @ onto  0 -1 rows at  output @ blit
-        lm bm at   outputw  fonth   output @ clear
-        -1 rows  cursor y +!
+        \ lm bm 1 rows - at   outputw 1 rows output @ clear
+        -1 rows cursor y +!
     ;
     : cr
         lm cursor x !
@@ -189,7 +189,7 @@ private:
     : +blinker tabbed @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
     : .idiom   #4 attribute  'idiom @ body> >name count #1 - type  [char] > emit ;
     : .cmdbuf  #0 attribute  cmdfont @ font>  white  cmdbuf count +blinker print ;
-    : bar      outputw  3 rows  black  output @ fill ;
+    : bar      outputw  displayh bm -  black  output @ fill ;
     : .output  untinted  output @ blit ;
 
 public:
@@ -203,7 +203,7 @@ public:
 \ --------------------------------------------------------------------------------------------------
 \ "API"
 
-: bottom  0  displayh 3 rows - 16 - ;
+: bottom  lm bm ;
 : .output   untinted  output @ blit ;
 : .cmdline
     output @ >r  display al_get_backbuffer output !
