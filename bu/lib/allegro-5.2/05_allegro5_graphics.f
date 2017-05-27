@@ -241,6 +241,7 @@ function: al_draw_filled_rounded_rectangle ( float-x1 float-y1 float-x2 float-y2
 \ font addon
 linux-library /usr/lib/i386-linux-gnu/liballegro_font.so.5.2
 
+function: al_init_ttf_addon ( -- bool )
 function: al_init_font_addon ( -- bool )
 function: al_shutdown_font_addon ( -- )
 \ function: al_get_allegro_font_version ( -- int )

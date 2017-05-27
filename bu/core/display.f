@@ -29,6 +29,8 @@ create ues  32 cells /allot  \ user event source
   not if  " Allegro: Couldn't initialize primitives addon." alert -1 abort then
   al_init_font_addon
   not if  " Allegro: Couldn't initialize font addon." alert       -1 abort then
+  al_init_ttf_addon
+  not if  " Allegro: Couldn't initialize TTF addon." alert       -1 abort then
   al_install_mouse
   not if  " Allegro: Couldn't initialize mouse." alert            -1 abort then
   al_install_keyboard
