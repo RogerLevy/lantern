@@ -6,7 +6,6 @@
 \ go> words:
 \   REPL  ( -- )  processes commandline events.
 \ render> words:
-\   BOTTOM  ( -- x y )  gives x,y where commandline should be positioned for it to appear at the bottom of the screen.
 \   .CMDLINE  ( -- )  displays the commandline at given pen position and font, including the current idiom and the stack
 \   .OUTPUT  ( -- )  displays commandline output
 \ misc words:
@@ -14,7 +13,8 @@
 \   RASA  ( -- )  establishes the default REPL interface.  is called by GO
 \   CMDFONT  ( -- adr )  a VARIABLE containing the current font for the commandline
 \   /CMDLINE  ( -- )  initializes the commandline.  is called by GO
-\   MARGINS  ( -- rect )  dimensions for the command history.  defaults to the entire screen, minus 40 pixels at the bottom
+\   MARGINS  ( -- rect )  dimensions for the command history.  defaults to the entire screen, minus 3 rows at the bottom
+\       you can redefine them by direct manipulation, just make sure to also do it at resize and fullscreen events.
 \   TABBED  ( -- adr )  variable, when set to ON, the commandline is active.
 
 bu: idiom ide2:
@@ -23,7 +23,7 @@ import mo/draw
 import mo/rect
 
 variable consolas
-consolas constant cmdfont
+consolas value cmdfont
 private:  0  xvar x  xvar y  4 cells xfield colour  struct /cursor
 public:
 create cursor  /cursor /allot
