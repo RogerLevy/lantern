@@ -1,4 +1,4 @@
-# Lady Engine
+# Lantern Engine
 
 A 2D game engine for Bubble, a game development platform for ANS Forth.
 
