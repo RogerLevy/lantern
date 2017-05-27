@@ -205,6 +205,7 @@ public:
 
 function: al_load_ttf_font  ( zfilename size flags -- font )
 #1 constant ALLEGRO_TTF_NO_KERNING
+#2 constant ALLEGRO_TTF_MONOCHROME
 
 : bottom  lm bm ;
 : .output   untinted  output @ blit ;
@@ -215,7 +216,7 @@ function: al_load_ttf_font  ( zfilename size flags -- font )
 ;
 : /cmdline
     \ z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
-    z" dev/data/dev/consola.ttf" #20 ALLEGRO_TTF_NO_KERNING al_load_ttf_font  consolas !
+    z" dev/data/dev/consolab.ttf" #20 ALLEGRO_TTF_NO_KERNING al_load_ttf_font  consolas !
     /output
     1 1 1 1 cursor colour 4!
     /margins
