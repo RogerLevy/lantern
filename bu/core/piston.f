@@ -72,7 +72,7 @@ variable winx  variable winy
 variable newfs
 : ?fs
     ?poswin  display ALLEGRO_FULLSCREEN_WINDOW fsflag al_toggle_display_flag ?fserr
-    fs @  newfs @ 0= and if
+    fs @  newfs @  <> if
         fse EVENT_FULLSCREEN emit-user-event
     then
     fs @ newfs ! ;
@@ -86,12 +86,12 @@ variable newfs
 : go>  r> to 'go   0 to 'step ;  ( -- <code> )  ( -- )
 
 : ok
-    resetkb  -break  -ide  +timer  render
+    resetkb  -break  >display  +timer  render
     begin
         wait  begin
             std  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
         until  ?render  \ again for sans timer
     breaking? until
-    -timer ide  -break ;
+    -timer  >ide  -break ;
 
 : wait  -timer  1 to lag ;

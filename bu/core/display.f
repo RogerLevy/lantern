@@ -29,6 +29,8 @@ create ues  32 cells /allot  \ user event source
   not if  " Allegro: Couldn't initialize primitives addon." alert -1 abort then
   al_init_font_addon
   not if  " Allegro: Couldn't initialize font addon." alert       -1 abort then
+  al_init_ttf_addon
+  not if  " Allegro: Couldn't initialize TTF addon." alert       -1 abort then
   al_install_mouse
   not if  " Allegro: Couldn't initialize mouse." alert            -1 abort then
   al_install_keyboard
@@ -94,13 +96,14 @@ fixed
 \ ------------------------ words for switching windows ------------------------
 [defined] linux [if]
     : focus  drop ;
-    : -ide ;  : ide ;
+    : >display ;  : >ide ;
 [else]
     : focus  ( winapi-window - )                                                    \ force window via handle to be the active window
       dup #1 ShowWindow drop  dup BringWindowToTop drop  SetForegroundWindow drop ;
-    : -ide  ( - )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
-    : ide  ( - )  HWND focus ;                                                     \ force the Forth prompt to take focus
-    ide
+    : >display  ( -- )  display al_get_win_window_handle focus ;                         \ force allegro display window to take focus
+    defer >ide
+    :noname [ is >ide ]  ( -- )  HWND focus ;                                                     \ force the Forth prompt to take focus
+    >ide
 [then]
 
 create native  /ALLEGRO_DISPLAY_MODE /allot
