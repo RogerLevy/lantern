@@ -11,8 +11,8 @@ A 2D game engine for Bubble, a game development platform for ANS Forth.
 - Planned: Basic sound support with samples and streaming of one music file
 - Planned: Particle engine
 - Planned: Mappable joystick support
-- Planned: Spriter support
+- Planned: [Spriter](https://brashmonkey.com/) support
 - Planned: Tilemap support with collision detection
 - Planned: Fast ABAB / "Early Phase" collision detection
 - Planned: GUI system for tool-building based on new "Workspaces" paradigm
-- Planned: Tiled map format support
+- Planned: [Tiled](http://www.mapeditor.org/) map format support
