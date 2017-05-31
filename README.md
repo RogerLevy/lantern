@@ -15,3 +15,4 @@ A 2D game engine for Bubble, a game development platform for ANS Forth.
 - Planned: Tilemap support with collision detection
 - Planned: Fast ABAB / "Early Phase" collision detection
 - Planned: GUI system for tool-building based on new "Workspaces" paradigm
+- Planned: Tiled map format support
