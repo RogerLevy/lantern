@@ -21,5 +21,4 @@ create lastld  256 allot
     key #13 = -exit
     lastld count included ;
 
-create workdir 256 allot
-: make  workdir count " \make.bat" strjoin >shell ;
+: make  " make.bat" >shell ;
