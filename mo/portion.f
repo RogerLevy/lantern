@@ -18,9 +18,8 @@ private:
     /heap /portion / constant #portions
     #portions cellstack free-portions
 public:
-
 \ Maybe later make this ALLOCATE'd so it doesn't take up disk space?
-create heap /heap /allot
+create heap /heap allot \ SwiftForth's /allot can't handle counts that are too large!
 : reset-heap  ( heap -- )  drop
     free-portions vacate  heap  #portions 0 do  dup free-portions push  /portion +  loop  drop ;
 : portion  ( heap -- adr )  drop  free-portions pop ;
