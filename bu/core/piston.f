@@ -20,6 +20,7 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
 : poll  pollKB  pollJoys  [defined] dev [if] pause [then] ;
 : break  true to breaking? ;
 : -break  false to breaking? ;
+: unmount  ( -- )   1-1   0 0 displayw displayh al_set_clipping_rectangle ;
 
 \ [defined] dev [if]
 \     : try  dup -exit ['] call catch ;
@@ -77,21 +78,30 @@ variable newfs
     then
     fs @ newfs ! ;
 
-: render  ?fs  1-1  'render try to renderr   al_flip_display  0 to lag ;
-: ?render  update? -exit  1 +to #frames  render ;
-: ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
+defer ?overlay  ' noop is ?overlay  \ render ide
+defer ?system   ' noop is ?system   \ system events
+
+private:
+    : render  ?fs  unmount 'render try to renderr   unmount ?overlay  al_flip_display  0 to lag ;
+    : ?render  update? -exit  1 +to #frames  render ;
+    : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
+    : /ok  resetkb  -break  >display  +timer  render ;
+    : ok/  -timer  >ide  -break ;
+public:
 
 : render>  r>  to 'render ;  ( -- <code> )  ( -- )
 : step>  r>  to 'step ;  ( -- <code> )  ( -- )
 : go>  r> to 'go   0 to 'step ;  ( -- <code> )  ( -- )
 
 : ok
-    resetkb  -break  >display  +timer  render
+    /ok
     begin
         wait  begin
-            std  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
+            std  ?system  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
         until  ?render  \ again for sans timer
     breaking? until
-    -timer  >ide  -break ;
+    ok/ ;
 
-: wait  -timer  1 to lag ;
+: wait  -timer  1 to lag ;  \ broken??
+
+:noname  0 0 0.5 clear-to-color ; >code  to 'render
