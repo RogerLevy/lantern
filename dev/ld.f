@@ -18,7 +18,7 @@ create lastld  256 allot
 : rld
     cr ." Press Enter to reload the following file, or any other key to cancel:"
     cr lastld count type
-    key #13 = -exit
+    key dup 0 =  swap #13 =  or  -exit
     lastld count included ;
 
 : make  " make.bat" >shell ;
