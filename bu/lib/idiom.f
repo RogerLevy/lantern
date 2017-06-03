@@ -217,7 +217,9 @@ defer /only
   get-current >r  @parent >publics set-current  constant
   r> set-current ;
 
-: empty  global empty ;
+: empty
+    previous-personality @ dup if  close-personality  then  global empty
+        if open-personality then ;
 
 : privates  @privates ;
 : publics   @publics ;
