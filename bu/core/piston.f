@@ -1,3 +1,14 @@
+\ Universal main loop
+\  Skips rendering frames if logic takes too long (up to 4 frames are skipped)
+\  You can disable the frame timer to save CPU when making editors etc
+\  When the window is switched away from the timer will be disabled, and re-enabled when
+\    it regains focus.
+\  The loop has some common controls:
+\    F12 - break the loop
+\    F4 - quit the process
+\    ALT-ENTER - toggle fullscreen
+\    TILDE - toggles a flag called INFO, doesn't do anything on its own.
+
 \ Values
 0 value #frames \ frame counter.
 0 value renderr
