@@ -41,7 +41,6 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
 
 private:
     \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
-    : wait  eventq e al_wait_for_event ;
     : std
       etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
         -timer  display al_acknowledge_resize  +timer  \ we have to turn off the timer to avoid a race condition
@@ -67,7 +66,6 @@ private:
           <altgr>  of  false to alt?  endof
         endcase
       then ;
-    : update?  lag dup -exit drop  eventq al_is_event_queue_empty  lag 4 >= or ;
 public:
 
 
@@ -93,11 +91,15 @@ defer ?overlay  ' noop is ?overlay  \ render ide
 defer ?system   ' noop is ?system   \ system events
 
 private:
+    : lazy  begin eventq e al_get_next_event 0= while #100 Sleep drop repeat ;
+    : alert  eventq e al_wait_for_event ;
+    : wait  timer? if  alert  else  lazy  then ;
     : render  ?fs  unmount 'render try to renderr   unmount ?overlay  al_flip_display  0 to lag ;
+    : update?  timer? if  lag dup -exit drop  then  eventq al_is_event_queue_empty  lag 4 >= or ;
     : ?render  update? -exit  1 +to #frames  render ;
     : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
     : /ok  resetkb  -break  >display  +timer  render ;
-    : ok/  -timer  >ide  -break ;
+    : ok/  eventq al_flush_event_queue -timer  >ide  -break ;
 public:
 
 : render>  r>  to 'render ;  ( -- <code> )  ( -- )
@@ -107,8 +109,10 @@ public:
 : ok
     /ok
     begin
-        wait  begin
-            std  ?system  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
+        wait
+        begin
+            std  ?system  'go try drop  ?step  ?render
+            eventq e al_get_next_event 0=  breaking? or
         until  ?render  \ again for sans timer
     breaking? until
     ok/ ;
