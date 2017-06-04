@@ -79,6 +79,8 @@
 \    extend the idiom.
 
 
+\ : wl  wordlist create , does> @ ;  \ enables us to see idiom names with ORDER
+
 \ : ?relative  over c@ [char] $ = if including dup if -name 2swap s" $" replace else 2drop [char] . third c! then then ;
 : included  -trailing ( ?relative ) default.ext included ;
 : include  bl word count included ;
@@ -148,7 +150,7 @@ defer onSetIdiom  ' noop is onSetIdiom
   ?dup 0= if global exit then
   only forth
   'idiom !  'idiom @ wordlists+
-  @publics -order  @privates +order  @publics +order
+  @publics -order  @publics +order  @privates +order   \ PRIVATES TAKE PRECEDENCE!!!
   public:
   onSetIdiom ;
 
