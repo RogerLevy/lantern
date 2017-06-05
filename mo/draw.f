@@ -1,8 +1,7 @@
 \ Basic graphics wordset
-bu:
-    import mo/pen    \ by doing this, the Pen module is available to Bubble with no extra work
-                     \ (and Draw inherits the imported Pen.)
-    idiom draw:
+import mo/pen        \ parent should also import the pen
+bu: idiom draw:      \ do this first so early-out works
+import mo/pen
 
 private:
     : push postpone >r ; immediate

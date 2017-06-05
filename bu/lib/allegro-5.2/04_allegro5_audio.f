@@ -121,6 +121,7 @@ function: al_get_sample_instance_frequency ( const-ALLEGRO_SAMPLE_INSTANCE-*spl 
 
 \ mixer
 function: al_get_default_mixer ( -- mixer )
+function: al_set_default_mixer ( mixer -- bool )
 function: al_restore_default_mixer ( -- )
 
 function: al_create_mixer ( unsigned-int-freq, ALLEGRO_AUDIO_DEPTH-depth, ALLEGRO_CHANNEL_CONF-chan_conf -- ALLEGRO_MIXER* )
@@ -152,3 +153,5 @@ function: al_attach_mixer_to_voice ( ALLEGRO_MIXER-*mixer, ALLEGRO_VOICE-*voice 
 \ function: al_detach_voice ( ALLEGRO_VOICE-*voice -- )
 
 function: al_set_voice_position ( ALLEGRO_VOICE-*voice, unsigned-int-val -- bool )
+function: al_set_default_voice  ( voice -- bool )
+function: al_get_default_voice  ( -- voice )

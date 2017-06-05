@@ -1,3 +1,14 @@
+\ Universal main loop
+\  Skips rendering frames if logic takes too long (up to 4 frames are skipped)
+\  You can disable the frame timer to save CPU when making editors etc
+\  When the window is switched away from the timer will be disabled, and re-enabled when
+\    it regains focus.
+\  The loop has some common controls:
+\    F12 - break the loop
+\    F4 - quit the process
+\    ALT-ENTER - toggle fullscreen
+\    TILDE - toggles a flag called INFO, doesn't do anything on its own.
+
 \ Values
 0 value #frames \ frame counter.
 0 value renderr
@@ -20,23 +31,25 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
 : poll  pollKB  pollJoys  [defined] dev [if] pause [then] ;
 : break  true to breaking? ;
 : -break  false to breaking? ;
+: unmount  ( -- )   1-1   0 0 displayw displayh al_set_clipping_rectangle ;
 
-\ [defined] dev [if]
-\     : try  dup -exit ['] call catch ;
-\ [else]
+[defined] dev [if]
+    variable (sp)
+    : try  dup -exit  sp@ >r  ['] call catch (sp) !  r> sp!  (sp) @ ;
+[else]
     : try  dup -exit call 0 ;
-\ [then]
+[then]
+    : try  dup -exit call 0 ;
 
 private:
     \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
-    : wait  eventq e al_wait_for_event ;
     : std
       etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
         -timer  display al_acknowledge_resize  +timer  \ we have to turn off the timer to avoid a race condition
                                                        \ where bitmaps aren't recreated before trying to draw to them
       then
-      etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  then
-      etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer false to alt?  then
+      etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  -audio  then
+      etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer   +audio  false to alt?  then
       etype ALLEGRO_EVENT_DISPLAY_CLOSE = if  0 ExitProcess  then
       etype ALLEGRO_EVENT_KEY_DOWN = if
         e ALLEGRO_KEYBOARD_EVENT-keycode @ case
@@ -55,7 +68,6 @@ private:
           <altgr>  of  false to alt?  endof
         endcase
       then ;
-    : update?  lag dup -exit drop  eventq al_is_event_queue_empty  lag 4 >= or ;
 public:
 
 
@@ -77,21 +89,34 @@ variable newfs
     then
     fs @ newfs ! ;
 
-: render  ?fs  1-1  'render try to renderr   al_flip_display  0 to lag ;
-: ?render  update? -exit  1 +to #frames  render ;
-: ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
+defer ?overlay  ' noop is ?overlay  \ render ide
+defer ?system   ' noop is ?system   \ system events
+
+private:
+    : update?  timer? if  lag dup -exit drop  then  eventq al_is_event_queue_empty  lag 4 >= or ;
+    : wait  eventq e al_wait_for_event ;
+    : render  ?fs  unmount  'render try to renderr  unmount  ?overlay  al_flip_display  0 to lag ;
+    : ?render  update? -exit  1 +to #frames  render ;
+    : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
+    : /ok  resetkb  -break  >display  +timer  render ;
+    : ok/  eventq al_flush_event_queue -timer  >ide  -break ;
+public:
 
 : render>  r>  to 'render ;  ( -- <code> )  ( -- )
 : step>  r>  to 'step ;  ( -- <code> )  ( -- )
 : go>  r> to 'go   0 to 'step ;  ( -- <code> )  ( -- )
 
 : ok
-    resetkb  -break  >display  +timer  render
+    /ok
     begin
-        wait  begin
-            std  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
+        wait
+        begin
+            std  ?system  'go try drop  ?step  ?render
+            eventq e al_get_next_event 0=  breaking? or
         until  ?render  \ again for sans timer
     breaking? until
-    -timer  >ide  -break ;
+    ok/ ;
 
-: wait  -timer  1 to lag ;
+: wait  -timer  1 to lag ;  \ broken??
+
+:noname  0 0 0.5 clear-to-color ; >code  to 'render
