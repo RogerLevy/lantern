@@ -95,6 +95,7 @@ defer ?system   ' noop is ?system   \ system events
 private:
     : update?  timer? if  lag dup -exit drop  then  eventq al_is_event_queue_empty  lag 4 >= or ;
     : wait  eventq e al_wait_for_event ;
+    : render  ?fs  unmount  'render try to renderr  unmount  ?overlay  al_flip_display  0 to lag ;
     : ?render  update? -exit  1 +to #frames  render ;
     : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
     : /ok  resetkb  -break  >display  +timer  render ;
