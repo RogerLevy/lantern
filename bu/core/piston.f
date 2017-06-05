@@ -93,13 +93,12 @@ defer ?overlay  ' noop is ?overlay  \ render ide
 defer ?system   ' noop is ?system   \ system events
 
 private:
+    : update?  timer? if  lag dup -exit drop  then  eventq al_is_event_queue_empty  lag 4 >= or ;
     : wait  eventq e al_wait_for_event ;
-    : update?  lag dup -exit drop  eventq al_is_event_queue_empty  lag 4 >= or ;
-    : render  ?fs  unmount  'render try to renderr  unmount  ?overlay  al_flip_display  0 to lag ;
     : ?render  update? -exit  1 +to #frames  render ;
     : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
     : /ok  resetkb  -break  >display  +timer  render ;
-    : ok/  -timer  >ide  -break ;
+    : ok/  eventq al_flush_event_queue -timer  >ide  -break ;
 public:
 
 : render>  r>  to 'render ;  ( -- <code> )  ( -- )
@@ -109,8 +108,10 @@ public:
 : ok
     /ok
     begin
-        wait  begin
-            std  ?system  'go try drop  ?step  ?render  eventq e al_get_next_event not  breaking? or
+        wait
+        begin
+            std  ?system  'go try drop  ?step  ?render
+            eventq e al_get_next_event 0=  breaking? or
         until  ?render  \ again for sans timer
     breaking? until
     ok/ ;

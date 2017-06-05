@@ -47,6 +47,7 @@ assertAllegro
 : +timer  displaytimer al_get_timer_started ?exit
           al_flip_display  displaytimer al_start_timer ;
 : -timer  displaytimer al_stop_timer ;
+: timer?  displaytimer al_get_timer_started 0<> ;
 
 \ ----------------------- initializing the display ----------------------------
 
