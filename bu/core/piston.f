@@ -48,8 +48,8 @@ private:
         -timer  display al_acknowledge_resize  +timer  \ we have to turn off the timer to avoid a race condition
                                                        \ where bitmaps aren't recreated before trying to draw to them
       then
-      etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  then
-      etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer false to alt?  then
+      etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  -audio  then
+      etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer   +audio  false to alt?  then
       etype ALLEGRO_EVENT_DISPLAY_CLOSE = if  0 ExitProcess  then
       etype ALLEGRO_EVENT_KEY_DOWN = if
         e ALLEGRO_KEYBOARD_EVENT-keycode @ case

@@ -8,6 +8,7 @@
 0 value allegro?
 0 value eventq
 0 value display
+0 value mixer
 
 create ues  32 cells /allot  \ user event source
 
@@ -17,6 +18,23 @@ create ues  32 cells /allot  \ user event source
 ;
 
 \ --------------------------- initializing allegro ----------------------------
+
+: -audio
+    mixer 0 al_set_mixer_playing drop
+    0 al_set_default_voice drop
+    cr ." Audio disabled" ;
+
+: +audio
+    #16 al_reserve_samples not if  " Allegro: Error reserving samples." alert -1 abort  then
+    al_get_default_mixer to mixer
+    mixer #1 al_set_mixer_playing drop
+    cr ." Audio enabled" ;
+
+: init-audio
+    al_install_audio not if  " Allegro: Couldn't initialize audio." alert -1 abort  then
+    al_init_acodec_addon not if  " Allegro: Couldn't initialize audio codec addon." alert -1 abort  then
+    +audio
+;
 
 : assertAllegro
   allegro? ?exit
@@ -38,6 +56,7 @@ create ues  32 cells /allot  \ user event source
   al_install_joystick
   not if  " Allegro: Couldn't initialize joystick." alert         -1 abort then
   ues al_init_user_event_source
+  init-audio
 ;
 
 assertAllegro
