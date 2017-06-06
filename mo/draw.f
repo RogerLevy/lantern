@@ -25,7 +25,7 @@ create fore 4 cells allot
 : loadbmp  zstring al_load_bitmap ;
 : savebmp  push zstring pop al_save_bitmap ;
 : subbmp   ( bmp w h ) at@ 2i 2swap 2i al_create_sub_bitmap ;
-: backdrop  backbuf onto  color@af al_clear_to_color ;
+: backdrop  color@af al_clear_to_color ;
 
 \ Predefined Colors
 fixed

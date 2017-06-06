@@ -84,7 +84,7 @@ private:
     : outputh  bm tm - ;
     : get-size  ( -- cols rows )  outputw outputh fw fh 2/ 2i ;
     : scroll
-        write-rgba blend>  output @ onto  0 -1 rows at  output @ blit
+        write-rgba blend>  output @ onto  0 -1 rows at  untinted  output @ blit
         \ lm bm 1 rows - at   outputw 1 rows output @ clear
         -1 rows cursor y +!
     ;
@@ -106,7 +106,8 @@ private:
         : ?type  ?dup if type else 2drop then ;
     fixed
     : attribute  s>p 4 cells * attributes +  cursor colour  4 imove ;
-    : page  output @ onto  0 0 0 backdrop  0 0 at-xy ;
+
+    : wipe  output @ onto  0 0 0 0 4af al_clear_to_color  0 0 at-xy ;
 
     : zero  0 ;
 
@@ -119,7 +120,7 @@ private:
       ' type , \ TYPE      ( addr len -- )
       ' ?type , \ ?TYPE     ( addr len -- )
       ' cr , \ CR        ( -- )
-      ' page , \ PAGE      ( -- )
+      ' wipe , \ PAGE      ( -- )
       ' attribute , \ ATTRIBUTE ( n -- )
       ' zero , \ KEY       ( -- char )  \ not yet supported
       ' zero , \ KEY?      ( -- flag )  \ not yet supported
@@ -206,6 +207,11 @@ public:
 : step>  ( -- <code> )  r> to 'idestep  step>  ?clearkb 'idestep call ;
 
 \ --------------------------------------------------------------------------------------------------
+global
+    : wipe  page ;
+    : /s  S0 @ SP! ;
+ide:
+\ --------------------------------------------------------------------------------------------------
 \ "API"
 
 function: al_load_ttf_font  ( zfilename size flags -- font )
@@ -219,7 +225,6 @@ function: al_load_ttf_font  ( zfilename size flags -- font )
     get-xy 2>r  at@ cursor x 2v!  bar  scrolling off  .s2  cr  .idiom  .cmdbuf  scrolling on   2r> at-xy
     r> output !
 ;
-: /s  S0 @ SP! ;
 : /cmdline
     /s
     \ z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
