@@ -14,21 +14,25 @@ stage0 value stage   \ just a container
 : be  " to me" evaluate ; immediate
 : as>  r>  me >r  swap to me  call  r> to me ;
 : 's  \ turns "smart" fields into xfields
-  state @ if
-    " me >r  to me " evaluate  bl parse evaluate  " r> to me" evaluate
-  else
-    " me swap to me " evaluate  bl parse evaluate  " swap to me" evaluate
-  then
+    state @ if
+        " me >r  to me " evaluate  bl parse evaluate  " r> to me" evaluate
+    else
+        " me swap to me " evaluate  bl parse evaluate  " swap to me" evaluate
+    then
 ; immediate
+
 [defined] dev [if]
-: field  create over , + does> @ me + ;
+    : field  create over , + does> @ me + ;
 [else]
-: field  create over , + immediate does> @ " me ?lit + " evaluate ;  \ faster but less debuggable version
+    : field  create over , + immediate does> @ " me ?lit + " evaluate ;  \ faster but less debuggable version
 [then]
+
 : var  cell field ;
+
 : flag  ( offset bitmask -- <name> offset bitmask<<1 )  ( -- bitmask adr )
     create dup , over , 1 <<
     does>  dup @ swap cell+ @ me + ;
+
 : set?   @ and 0<> ;
 : set    dup @ rot or swap ! ;
 : unset  dup @ rot invert and swap ! ;
