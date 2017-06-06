@@ -175,7 +175,7 @@ defer /only
     !order  /only
     >in @  defined  if
         nip  >body  importing @ if
-            cr dup body> >name count 2dup upcase #1 - type ."  already loaded, skipping... "
+            \ cr dup body> >name count 2dup upcase #1 - type ."  already loaded, skipping... "
             declared !  \\  true
             exit             \ already defined, importing     => cancel compilation
         else  set-idiom  public:  false exit
