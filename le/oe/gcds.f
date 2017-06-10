@@ -1,1 +1,0 @@
-\ Global collection detection system
