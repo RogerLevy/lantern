@@ -1,4 +1,4 @@
-\ private game object idioms
+\ Private game object idioms
 le:
 
 quality script   \ game object's private idiom, automatically created when you subclass
