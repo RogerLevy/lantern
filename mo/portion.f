@@ -10,13 +10,17 @@ private:
 \ [undefined] /portion [if] 64 cells constant /portion [then]
 \ [undefined] /heap [if] 8 megs constant /heap [then]
 \ /heap /portion / constant #portions
-    64 cells constant /portion
+    128 cells constant /portion
     16 megs constant /heap
     /heap /portion / constant #portions
     #portions cellstack free-portions
 public:
-\ Maybe later make this ALLOCATE'd so it doesn't take up disk space?
-create heap /heap allot \ SwiftForth's /allot can't handle counts that are too large!
+decimal
+
+here /portion + #1 - dup /portion mod -
+    dup h !    /heap allot \ SwiftForth's /allot can't handle counts that are too large!
+constant heap
+
 : reset-heap  ( heap -- )  drop
     free-portions vacate  heap  #portions 0 do  dup free-portions push  /portion +  loop  drop ;
 : portion  ( heap -- adr )  drop  free-portions pop ;
