@@ -43,8 +43,8 @@ used @ value parms
 container instance objects
 : render  en @ hide @ 0 = and if  x 2@ at disp @ ?call  then ;
 : step  beha @ ?call ;
-: adv  en @ if  step  vx 2@ y +! x +! then ;
-: each>  r> objects first @ begin  dup while  dup next @ >r  me!  dup >r  call  r>  r> repeat  2drop ;
+: adv  en @ if  step  vx 2@ x 2+! then ;
+: each>  ( container -- <code> )  r> swap first @ begin  dup while  dup next @ >r  me!  dup >r  call  r>  r> repeat  2drop ;
 : /obj  heap dims drop ;
 : enable  me /obj erase  en on  hide on ;
 : init   me objects pushnode  enable  at@ x 2! ;
