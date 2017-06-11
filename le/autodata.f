@@ -20,12 +20,12 @@ private:
     : path>imagename  -path -ext " .image" strjoin sanitize ;
     : path>sfxname  " *" s[  -path -ext +s  " *" +s ]s sanitize ;
 
-    : .evaluate  cr 2dup type evaluate ;
+    : .evaluate  evaluate ; \ cr 2dup type evaluate ;
 
     : *image  ( path count -- )
-        2>r  " image "  2r@ path>imagename  strjoin  "  " strjoin  2r> strjoin  .evaluate ;
+        2>r  "  image "  2r@ path>imagename  strjoin  "  " strjoin  2r> strjoin  .evaluate ;
     : *sfx  ( path count -- )
-        2>r  " sfx "  2r@ path>sfxname  strjoin  "  " strjoin  2r> strjoin  .evaluate ;
+        2>r  "  sfx "  2r@ path>sfxname  strjoin  "  " strjoin  2r> strjoin  .evaluate ;
 
     : uncount  s[ ]s drop #1 - ;
     : lookup   -trailing uncount find 0= if  " Asset symbol not found.  Exiting..." alert bye  then ;
