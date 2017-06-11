@@ -19,12 +19,12 @@ create fore 4 cells allot
 \ Bitmaps, backbuffer
 : onto  pop  al_get_target_bitmap push  swap al_set_target_bitmap  call  pop al_set_target_bitmap ;
 : movebmp  ( src sx sy w h ) write-rgba blend>  at@ 0 al_draw_bitmap ;
-: bmp   ( w h -- bmp ) 2i al_create_bitmap ;
+: *bmp   ( w h -- bmp ) 2i al_create_bitmap ;
 : clearbmp  ( r g b a bmp )  onto 4af al_clear_to_color ;
 : backbuf  display al_get_backbuffer ;
 : loadbmp  zstring al_load_bitmap ;
 : savebmp  push zstring pop al_save_bitmap ;
-: subbmp   ( bmp w h ) at@ 2i 2swap 2i al_create_sub_bitmap ;
+\ : *subbmp   ( bmp w h ) at@ 2i 2swap 2i al_create_sub_bitmap ;
 : backdrop  color@af al_clear_to_color ;
 
 \ Predefined Colors
