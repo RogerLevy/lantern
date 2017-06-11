@@ -20,7 +20,7 @@ private:
     : path>imagename  -path -ext " .image" strjoin sanitize ;
     : path>sfxname  " *" s[  -path -ext +s  " *" +s ]s sanitize ;
 
-    : .evaluate  evaluate ; \ cr 2dup type evaluate ;
+    : .evaluate  cr 2dup type evaluate ;
 
     : *image  ( path count -- )
         2>r  "  image "  2r@ path>imagename  strjoin  "  " strjoin  2r> strjoin  .evaluate ;
