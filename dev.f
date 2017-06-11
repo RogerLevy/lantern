@@ -13,4 +13,4 @@ defined dev 0<> nip not [if]
 
 include bu/core/core.f  >ide
 gild
-include autoexec.f
+ld dev/sf/ide2  go
