@@ -220,8 +220,10 @@ defer /only
   r> set-current ;
 
 : empty
-    previous-personality @ dup if  close-personality  then  global empty
-        if open-personality then ;
+\    'personality @ dup if  close-personality  then
+    global empty
+\        if open-personality then
+;
 
 : privates  @privates ;
 : publics   @publics ;
