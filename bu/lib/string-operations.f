@@ -53,8 +53,10 @@ variable >out
 
 \ intent: counted string to zstring conversion
 \ usage: <string> zstring
+create zbuf 1024 allot
 : zstring  ( addr c - zaddr )  \ convert string to zero-terminated string
-  >out @ $outbufs + zplace  >out @ $outbufs +  >out @ 256 + 16383 and >out ! ;
+    zbuf zplace  zbuf ;
+  \ >out @ $outbufs + zplace  >out @ $outbufs +  >out @ 256 + 16383 and >out ! ;
 
 \ intent: append a character to the end of a counted string
 \ usage: <character> <addr> cappend

@@ -1,7 +1,7 @@
 \ Simpler IDE, library-style.
-\  This is a one-way street.  A default piston is configured, but from now on TYPE and friends
-\   are redefined.  (For now, we're using SwiftForth's PERSONALITY facility to save
-\   time.  Later, a complete replacement for all text output words will need to be implemented...)
+\  This is a semi-one-way street.
+\  (For now, we're using SwiftForth's PERSONALITY facility to save
+\       time.  Later, a complete replacement for all text output words will need to be implemented...)
 
 \ go> words:
 \   REPL  ( -- )  processes commandline events.
@@ -33,7 +33,6 @@ variable scrolling  scrolling on
 create cmdbuf #256 /allot
 create history  #256 /allot
 create ch  0 c, 0 c,
-create margins  0 , 0 , 0 , 0 ,   \ margins for the command history. (rectangle)
 create attributes
   1 , 1 , 1 , 1 ,      \ white
   0 , 0 , 0 ,     1 ,  \ black
@@ -42,7 +41,11 @@ create attributes
   0 , 1 , 1 ,     1 ,  \ cyan
 transform baseline
 variable output   \ output bitmap
+
+bu:
+create margins  0 , 0 , 0 , 0 ,   \ margins for the command history. (rectangle)
 variable interact   \ if on, cmdline will receive keys.  check if false before doing game input, if needed.
+ide:
 
 \ --------------------------------------------------------------------------------------------------
 \ low-level stuff
@@ -96,13 +99,13 @@ private:
     ;
     : (emit)
         ch c!
-        cmdfont @ font>  cursor colour 4@ color  cursor x 2v@ at  ch #1 print
+        cursor x 2v@ at  ch #1 print
         fw cursor x +!
         cursor x @ rm >= if  cr  then
     ;
-    : emit  output @ onto  write-rgba blend>  (emit) ;
     decimal
-        : type  output @ onto  write-rgba blend>  bounds  do  i c@ (emit)  loop ;
+        : emit  output @ onto  write-rgba blend>  cmdfont @ font>  cursor colour 4@ color  (emit) ;
+        : type  output @ onto  write-rgba blend>  cmdfont @ font>  cursor colour 4@ color  bounds  do  i c@ (emit)  loop ;
         : ?type  ?dup if type else 2drop then ;
     fixed
     : attribute  s>p 4 cells * attributes +  cursor colour  4 imove ;
@@ -243,6 +246,6 @@ private:
     : rasa-overlay  interact @ if  0 0 at  .output  then  bottom at  .cmdline ;
 public:
 : rasa  ['] rasa-system  is  ?system  ['] rasa-overlay  is ?overlay ;
-: go  /cmdline  rasa  " autoexec.f" included  begin ok again ;
+: go  /cmdline  rasa  " autoexec.f" ['] included catch drop  begin ok again ;
 
 gild

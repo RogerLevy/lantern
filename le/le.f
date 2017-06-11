@@ -1,4 +1,4 @@
-" lady engine" .notice
+" lantern engine" .notice
 
 \ Lady Engine for Bubble
 bu: idiom le:

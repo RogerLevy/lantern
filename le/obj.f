@@ -18,12 +18,13 @@ bu: idiom obj:
     import mo/pen
     import mo/porpoise
 
+: 2@  2v@ ;
+: 2!  2v! ;
+: 2+!  2v+! ;
+
 private:
     32 cellstack stack
     variable used  node sizeof @ used !  \ field counter
-    : 2@  2v@ ;
-    : 2!  2v! ;
-    : 2+!  2v+! ;
     : ?call  ?dup -exit call ;
 public:
 
@@ -47,7 +48,7 @@ container instance objects
 : /obj  heap dims drop ;
 : enable  me /obj erase  en on  hide on ;
 : init   me objects pushnode  enable  at@ x 2! ;
-: single  ( -- <name> )  create here me!  /obj allot  init  nam on ;
+: named  ( -- <name> )  me value  nam on ;
 : one    heap portion me!  init ;
 : draw>  r> disp !  hide off  ;
 : act>   r> beha ! ;
@@ -64,13 +65,12 @@ container instance objects
 : scene  objects each> delete ;  \ this word is kind of meant to be redefined
 
 \ Private idioms for game objects
-: role  parms used !  obj: idiom ;
-
-
+: role  parms used !  private: ;
 
 \ Test
 [defined] dev [if]
     import mo/draw
+    private:
     : *thingy  one draw> 50 50 red rectf ;
     : world  dblue backdrop objects each> render ;
     : physics  objects each> adv ;
