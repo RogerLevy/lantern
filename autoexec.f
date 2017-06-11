@@ -1,1 +1,3 @@
-ld dev/sf/ide2
+ld le/obj
+ld le/om/spr
+
