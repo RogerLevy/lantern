@@ -96,13 +96,13 @@ private:
     ;
     : (emit)
         ch c!
-        cmdfont @ font>  cursor colour 4@ color  cursor x 2v@ at  ch #1 print
+        cursor x 2v@ at  ch #1 print
         fw cursor x +!
         cursor x @ rm >= if  cr  then
     ;
-    : emit  output @ onto  write-rgba blend>  (emit) ;
     decimal
-        : type  output @ onto  write-rgba blend>  bounds  do  i c@ (emit)  loop ;
+        : emit  output @ onto  write-rgba blend>  cmdfont @ font>  cursor colour 4@ color  (emit) ;
+        : type  output @ onto  write-rgba blend>  cmdfont @ font>  cursor colour 4@ color  bounds  do  i c@ (emit)  loop ;
         : ?type  ?dup if type else 2drop then ;
     fixed
     : attribute  s>p 4 cells * attributes +  cursor colour  4 imove ;
@@ -243,6 +243,6 @@ private:
     : rasa-overlay  interact @ if  0 0 at  .output  then  bottom at  .cmdline ;
 public:
 : rasa  ['] rasa-system  is  ?system  ['] rasa-overlay  is ?overlay ;
-: go  /cmdline  rasa  " autoexec.f" included  begin ok again ;
+: go  /cmdline  rasa  " autoexec.f" ['] included catch drop  begin ok again ;
 
 gild
