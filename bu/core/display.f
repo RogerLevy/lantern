@@ -133,7 +133,9 @@ create native  /ALLEGRO_DISPLAY_MODE /allot
 
 : nativew   native x@ s>p ;
 : nativeh   native y@ s>p ;
+: nativewh  nativew nativeh ;
 : displayw  display al_get_display_width s>p ;
 : displayh  display al_get_display_height s>p ;
+: displaywh  displayw displayh ;
 
 +display

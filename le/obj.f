@@ -11,7 +11,6 @@
 \      But it's still better than an across-the-board variable because that complicates writing
 \        rendering routines. You DON'T need this variable all the time.
 
-
 bu: idiom obj:
     import mo/portion
     import mo/cellstack
@@ -33,14 +32,14 @@ public:
 : {    me stack push ;
 : }    stack pop to me ;
 : ofs  create ,  does> @ me + ;
-: field  used @ ofs  swap used +! ;
+: field  used @ ofs  used +! ;
 : var   cell field ;
 : 's    " me swap to me " evaluate  bl parse evaluate  " swap to me" evaluate ; immediate
-
 
 var en var nam var x var y var vx var vy var hide var disp var beha
 used @ value parms
 container instance objects
+
 : render  en @ hide @ 0 = and if  x 2@ at disp @ ?call  then ;
 : step  beha @ ?call ;
 : adv  en @ if  step  vx 2@ x 2+! then ;
@@ -55,25 +54,29 @@ container instance objects
 : from   ( x y -- x y )  x 2@ 2+ ;
 : flash  #frames 2 and hide ! ;
 
+
 \ "external" words
 : place   ( x y obj -- )  { me!  x 2! } ;
-: delete  ( obj -- )  as>  me remove  nam @ not if  me heap recycle  then ;
+: delete  ( obj -- )  {  me remove  nam @ not if  me heap recycle  then  } ;
+\ -----
 
 : end  me delete ;
+: scene  objects each> delete ;  \ this word is kind of meant to be redefined
 
 \ Private idioms for game objects
 : role  parms used !  obj: idiom ;
 
 
 
-\ Text
-
+\ Test
 [defined] dev [if]
     import mo/draw
     : *thingy  one draw> 50 50 red rectf ;
-    : world  dblue backdrop each> render ;
-    : physics  each> adv ;
+    : world  dblue backdrop objects each> render ;
+    : physics  objects each> adv ;
     : test  go> render> world step> physics ;
-    100 100 at  *thingy  named thingy
+    scene  100 100 at  *thingy  me value thingy
     test
 [then]
+
+
