@@ -4,6 +4,7 @@ A 2D game engine for Bubble, a game development platform for ANS Forth.
 
 ## Features
 
+- Currently only runs on SwiftForth / Windows 7 and up
 - Suitable for 2D games
 - Integrated interactive REPL (commandline)
 - Adaptive display resolution (optional)
