@@ -5,7 +5,7 @@
 bu: idiom portion:
     import mo/cellstack
 
-private: decimal
+\ ----------------------------------------- not API -----------------------------------------------
 \ I was going to make these compile-time configurable but for simplicity's sake they are fixed. 6/5/2017
 \ [undefined] /portion [if] 64 cells constant /portion [then]
 \ [undefined] /heap [if] 8 megs constant /heap [then]
@@ -14,7 +14,8 @@ private: decimal
     16.0 megs constant /heap
     /heap /portion / constant #portions
     #portions s>p cellstack free-portions
-public: decimal
+\ -------------------------------------------------------------------------------------------------
+decimal
 
 here /portion + #1 - dup /portion mod -
     dup h !    /heap allot \ SwiftForth's /allot can't handle counts that are too large!

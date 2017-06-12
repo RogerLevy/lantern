@@ -25,7 +25,6 @@ subclass array2d-class
 : dims  ( array2d -- numcols numrows )  numcols 2v@ ;
 : count2d ( array2d -- data #cells )  dup data swap numcols 2v@ * ;
 
-private:
 : (clamp)  ( col row array2d -- same )
   >r  0 0 r@ numcols 2v@ 2clamp  r> ;
 
@@ -34,7 +33,6 @@ private:
 : (clip)   ( col row #cols #rows array2d -- same )
   dims 1 1 2- clip ;
 
-public
 : addr  ( col row array2d -- addr )
   (clamp) >r  r@ numcols @ * +  cells  r> data + ;
 
