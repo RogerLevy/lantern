@@ -186,22 +186,20 @@ public:
 
 \ --------------------------------------------------------------------------------------------------
 \ Rendering
-private:
-    : .S2 ( ? -- ? )
-      #3 attribute
-      DEPTH 0> IF DEPTH s>p  0 ?DO S0 @ I 1 + CELLS - @ . LOOP THEN
-      DEPTH 0< ABORT" Underflow"
-      FDEPTH ?DUP IF
-        ."  F: "
-        0  DO  I' I - #1 - FPICK N.  #1 +LOOP
-      THEN ;
-    : +blinker interact @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
-    : .idiom   'idiom @ ?dup if  #4 attribute  body> >name count #1 - type  then  [char] > emit ;
-    : .cmdbuf  #0 attribute  cmdfont @ font>  white  cmdbuf count +blinker print ;
-    : bar      outputw  displayh bm -  black  output @ fill ;
-    : .output  untinted  output @ blit ;
+: .S2 ( ? -- ? )
+  #3 attribute
+  DEPTH 0> IF DEPTH s>p  0 ?DO S0 @ I 1 + CELLS - @ . LOOP THEN
+  DEPTH 0< ABORT" Underflow"
+  FDEPTH ?DUP IF
+    ."  F: "
+    0  DO  I' I - #1 - FPICK N.  #1 +LOOP
+  THEN ;
+: +blinker interact @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
+: .idiom   'idiom @ ?dup if  #4 attribute  body> >name count #1 - type  then  [char] > emit ;
+: .cmdbuf  #0 attribute  cmdfont @ font>  white  cmdbuf count +blinker print ;
+: bar      outputw  displayh bm -  black  output @ fill ;
+: .output  untinted  output @ blit ;
 
-public:
 
 \ --------------------------------------------------------------------------------------------------
 \ redefined STEP> ... makes keyboard state be automatically cleared every frame when interact is on.
@@ -241,10 +239,8 @@ function: al_load_ttf_font  ( zfilename size flags -- font )
     console-personality open-personality
 ;
 : ?repl  idekeys ;
-private:
-    : rasa-system  idekeys ;
-    : rasa-overlay  interact @ if  0 0 at  .output  then  bottom at  .cmdline ;
-public:
+: rasa-system  idekeys ;
+: rasa-overlay  interact @ if  0 0 at  .output  then  bottom at  .cmdline ;
 : rasa  ['] rasa-system  is  ?system  ['] rasa-overlay  is ?overlay ;
 : go  /cmdline  rasa  " autoexec.f" ['] included catch drop  begin ok again ;
 

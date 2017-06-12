@@ -28,9 +28,7 @@ public: : /cbox /cbox ;
 : 4@  ( cbox -- x1 y1 x2 y2 ) dup 2v@ rot cell+ cell+ 2v@ ;
 
 private:
-
   #8 #12 + constant bitshift
-
 public:
 256 constant sectw
 256 constant secth

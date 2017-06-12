@@ -45,34 +45,32 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
 [then]
     : try  dup -exit call 0 ;
 
-private:
-    \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
-    : std
-      etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
-        -timer  display al_acknowledge_resize  +timer  \ we have to turn off the timer to avoid a race condition
-                                                       \ where bitmaps aren't recreated before trying to draw to them
-      then
-      etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  -audio  then
-      etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer   +audio  false to alt?  then
-      etype ALLEGRO_EVENT_DISPLAY_CLOSE = if  0 ExitProcess  then
-      etype ALLEGRO_EVENT_KEY_DOWN = if
-        e ALLEGRO_KEYBOARD_EVENT-keycode @ case
-          <alt>    of  true to alt?  endof
-          <altgr>  of  true to alt?  endof
-          <enter>  of  alt? -exit  fs toggle  endof
-          <f4>     of  alt? -exit  0 ExitProcess endof
-          <f5>     of  refresh  endof
-          <f12>    of  break  endof
-          <tilde>  of  alt? -exit  info toggle  endof
-        endcase
-      then
-      etype ALLEGRO_EVENT_KEY_UP = if
-        e ALLEGRO_KEYBOARD_EVENT-keycode @ case
-          <alt>    of  false to alt?  endof
-          <altgr>  of  false to alt?  endof
-        endcase
-      then ;
-public:
+\ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
+: std
+  etype ALLEGRO_EVENT_DISPLAY_RESIZE = if
+    -timer  display al_acknowledge_resize  +timer  \ we have to turn off the timer to avoid a race condition
+                                                   \ where bitmaps aren't recreated before trying to draw to them
+  then
+  etype ALLEGRO_EVENT_DISPLAY_SWITCH_OUT = if  -timer  -audio  then
+  etype ALLEGRO_EVENT_DISPLAY_SWITCH_IN = if  clearkb  +timer   +audio  false to alt?  then
+  etype ALLEGRO_EVENT_DISPLAY_CLOSE = if  0 ExitProcess  then
+  etype ALLEGRO_EVENT_KEY_DOWN = if
+    e ALLEGRO_KEYBOARD_EVENT-keycode @ case
+      <alt>    of  true to alt?  endof
+      <altgr>  of  true to alt?  endof
+      <enter>  of  alt? -exit  fs toggle  endof
+      <f4>     of  alt? -exit  0 ExitProcess endof
+      <f5>     of  refresh  endof
+      <f12>    of  break  endof
+      <tilde>  of  alt? -exit  info toggle  endof
+    endcase
+  then
+  etype ALLEGRO_EVENT_KEY_UP = if
+    e ALLEGRO_KEYBOARD_EVENT-keycode @ case
+      <alt>    of  false to alt?  endof
+      <altgr>  of  false to alt?  endof
+    endcase
+  then ;
 
 
 : fsflag  fs @ allowwin @ not or ;
@@ -96,12 +94,14 @@ variable newfs
 defer ?overlay  ' noop is ?overlay  \ render ide
 defer ?system   ' noop is ?system   \ system events
 
+: render  unmount  'render try to renderr ;
+: step  'step try to steperr ;
 private:
     : update?  timer? if  lag dup -exit drop  then  eventq al_is_event_queue_empty  lag 4 >= or ;
     : wait  eventq e al_wait_for_event ;
-    : render  ?fs  unmount  'render try to renderr  unmount  ?overlay  al_flip_display  0 to lag ;
-    : ?render  update? -exit  1 +to #frames  render ;
-    : ?step  etype ALLEGRO_EVENT_TIMER = if  poll  1 +to lag   'step try to steperr  then ;
+    : ?render  update? -exit  1 +to #frames  ?fs  render  unmount  ?overlay  al_flip_display
+        0 to lag ;
+    : ?step  etype ALLEGRO_EVENT_TIMER = if  1 +to lag   poll  step  then ;
     : /ok  resetkb  -break  >display  +timer  render ;
     : ok/  eventq al_flush_event_queue -timer  >ide  -break ;
 public:
