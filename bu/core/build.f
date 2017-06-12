@@ -13,7 +13,7 @@ private:
     get-order  dup cellstack Order  set-order
 public:
 : save-order  get-order s>p Order swap pushes ;
-: recall-order  order length -exit  Order dup length >r r@ pops  r> 1i set-order ;
+: recall-order  order @length -exit  Order dup @length >r r@ pops  r> 1i set-order ;
 variable 'boot
 create buildname  256 allot
 private:
