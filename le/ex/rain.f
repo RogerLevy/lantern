@@ -1,21 +1,25 @@
-\ TODO
+empty
+include le/le
+le: idiom rain:
+import mo/tilegame
+image tiles.img le/ex/tiles.png
+tiles.img 20 20 loadtiles drop
 
-320 240 fullscreen
-" data\tiles.bmp" 0 loadtiles
+role  var ic  var sy  var c  \ sy=starting y  c=counter
+: h2o  objects one  y @ sy !  draw> ic @ tile blit ;
+: icon  ic ! ;
+: gravity  0.125 vy +! ;
+: lasting  c !  act>  c @ 0 = if  me delete  exit then  c -- ;
+: hop  0.91 rnd 2 - vy !  1.526 rnd negate 0.763 + 0.833 * vx ! ;
+: past  sy @ + y @ swap > ;
+: droplet  h2o  4 icon  hop  act>  gravity  0 past if  me delete  then ;
+: splash  me delete  h2o  3 icon  { 4 0 do  droplet  loop }  3 lasting ;
+: fall  gravity  displayh past if  { 0 0 from  splash }  then ;
+: waterdrop  h2o  2 icon  act> fall ;
 
-1000 group water class field ic field sy field c
-: h2o water add y @ sy ! draw ic @ tile sprite ;
-: icon ic ! ;
-: gravity [ 1 8 1*/ ] literal vy +! ;
-: lasting c ! do c @ 0 = if remove then c -- ;
-: hop 30000 rand -2 flit + vy ! 50000 rand - 25000 + 5 6 */ vx ! ;
-: past sy @ + y @ swap > ;
-: droplet h2o 4 icon hop do gravity 0 past if remove then ;
-: splash remove h2o 3 icon { 4 for droplet loop } 3 lasting ;
-: fall gravity 320 past if { generate splash } then ;
-: waterdrop h2o 2 icon do fall ;
-
-
-: gen ( inkey 255 and 13 = ) <enter> key if 3 for randpos -280 + 5 3 */ -10 u+ at waterdrop loop then ;
-: rain just 5 sleep gen grey screen all ;  rain go
+: randpos  displaywh 2rnd ;
+: gen  3 0 do  randpos 10 displayh 2-  at  waterdrop  loop ;
+: world  dmagenta backdrop objects each> render ;
+: physics  objects each> adv ;
+: rain  go>  render>  world  step>  gen  physics ;  objects scene \ rain
 
