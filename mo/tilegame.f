@@ -14,6 +14,6 @@ import mo/cellstack
 
 4096 cellstack tiles
 : tile  4095 and tiles [] @ ;
-: +tiles  tiles length swap  dup subcount @ 0 do  i over imgsubbmp  tiles push  loop  drop ;
+: +tiles  tiles @length swap  dup subcount @ 0 do  i over imgsubbmp  tiles push  loop  drop ;
 : loadtiles ( image tilew tileh -- firstn ) third subdivide  +tiles ;
 
