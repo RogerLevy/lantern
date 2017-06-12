@@ -17,6 +17,7 @@ bu: idiom obj:
     import mo/node
     import mo/pen
     import mo/porpoise
+    import mo/draw
 
 : 2@  2v@ ;
 : 2!  2v! ;
@@ -41,7 +42,7 @@ var en var nam var x var y var vx var vy var hide var disp var beha
 used @ value parms
 container instance objects
 
-: render  en @ hide @ 0 = and if  x 2@ at disp @ ?call  then ;
+: draw  en @ hide @ 0 = and if  x 2@ at  white  disp @ ?call  then ;
 : step  beha @ ?call ;
 : adv  en @ if  step  vx 2@ x 2+! then ;
 : each>  ( container -- <code> )  r> swap first @ begin  dup while  dup next @ >r  me!  dup >r  call  r>  r> repeat  2drop ;
@@ -69,7 +70,7 @@ container instance objects
     import mo/draw
     private:
     : *thingy  objects one draw> 50 50 red rectf ;
-    : world  dblue backdrop objects each> render ;
+    : world  dblue backdrop objects each> draw ;
     : physics  objects each> adv ;
     : test  go> render> world step> physics ;
     objects scene  100 100 at  *thingy  me value thingy

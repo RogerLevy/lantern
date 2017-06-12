@@ -18,8 +18,8 @@ role  var ic  var sy  var c  \ sy=starting y  c=counter
 : waterdrop  h2o  2 icon  act> fall ;
 
 : randpos  displaywh 2rnd ;
-: gen  3 0 do  randpos 10 displayh 2-  at  waterdrop  loop ;
-: world  dmagenta backdrop objects each> render ;
+: gen  6 0 do  randpos 10 displayh 2-  at  waterdrop  loop ;
+: world  dmagenta backdrop  hold>  objects each> draw ;
 : physics  objects each> adv ;
 : rain  go>  render>  world  step>  gen  physics ;  objects scene \ rain
 
