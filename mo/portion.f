@@ -11,9 +11,9 @@ private: decimal
 \ [undefined] /heap [if] 8 megs constant /heap [then]
 \ /heap /portion / constant #portions
     128 cells constant /portion
-    16 megs constant /heap
+    16.0 megs constant /heap
     /heap /portion / constant #portions
-    #portions cellstack free-portions
+    #portions s>p cellstack free-portions
 public: decimal
 
 here /portion + #1 - dup /portion mod -

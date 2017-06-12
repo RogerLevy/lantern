@@ -30,8 +30,8 @@ public:
 
 0 value me
 : me!  to me ;
-: {    me stack push ;
-: }    stack pop to me ;
+: {    " me >r" evaluate ; immediate     \ me stack push ;
+: }    " r> to me" evaluate ; immediate  \ stack pop to me ;
 : ofs  create ,  does> @ me + ;
 : field  used @ ofs  used +! ;
 : var   cell field ;
@@ -46,23 +46,20 @@ container instance objects
 : adv  en @ if  step  vx 2@ x 2+! then ;
 : each>  ( container -- <code> )  r> swap first @ begin  dup while  dup next @ >r  me!  dup >r  call  r>  r> repeat  2drop ;
 : /obj  heap dims drop ;
-: enable  me /obj erase  en on  hide on ;
-: init   me objects pushnode  enable  at@ x 2! ;
+: init  me /obj erase  en on  hide on  at@ x 2! ;
 : named  ( -- <name> )  me value  nam on ;
-: one    heap portion me!  init ;
+: one    ( container -- )  heap portion me!  init  me swap pushnode ;
 : draw>  r> disp !  hide off  ;
 : act>   r> beha ! ;
-: from   ( x y -- x y )  x 2@ 2+ ;
+: from   ( x y -- )  x 2@ 2+ at ;
 : flash  #frames 2 and hide ! ;
-
 
 \ "external" words
 : place   ( x y obj -- )  { me!  x 2! } ;
-: delete  ( obj -- )  {  me remove  nam @ not if  me heap recycle  then  } ;
+: delete  ( obj -- )  { me !  me remove  nam @ not if  me heap recycle  then  } ;
 \ -----
 
-: end  me delete ;
-: scene  objects each> delete ;  \ this word is kind of meant to be redefined
+: scene  ( container -- ) each> me delete ;  \ this word is kind of meant to be redefined
 
 \ Private idioms for game objects
 : role  parms used !  private: ;
@@ -71,11 +68,11 @@ container instance objects
 [defined] dev [if]
     import mo/draw
     private:
-    : *thingy  one draw> 50 50 red rectf ;
+    : *thingy  objects one draw> 50 50 red rectf ;
     : world  dblue backdrop objects each> render ;
     : physics  objects each> adv ;
     : test  go> render> world step> physics ;
-    scene  100 100 at  *thingy  me value thingy
+    objects scene  100 100 at  *thingy  me value thingy
     test
 [then]
 

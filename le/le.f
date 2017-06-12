@@ -19,3 +19,4 @@ include le/audio
 include le/autodata
 include le/kb
 include le/joy
+import le/obj

@@ -1,3 +1,2 @@
-ld le/obj
-ld le/om/spr
-
+\ ld le/obj
+ld le/ex/rain
