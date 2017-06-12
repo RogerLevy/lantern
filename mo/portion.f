@@ -22,7 +22,7 @@ here /portion + #1 - dup /portion mod -
 constant heap
 
 : reset-heap  ( heap -- )  drop
-    free-portions vacate  heap  #portions 0 do  dup free-portions push  /portion +  loop  drop ;
+    free-portions vacate  heap  #portions 1i 0 do  dup free-portions push  /portion +  loop  drop ;
 : portion  ( heap -- adr )  drop  free-portions pop ;
 : recycle  ( adr heap -- )  drop  free-portions push ;
 : dims  ( heap -- /portion #portions ) drop  /portion  #portions ;
