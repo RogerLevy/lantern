@@ -1,8 +1,7 @@
 \ Basic graphics wordset
-bu:
-    import mo/pen    \ by doing this, the Pen module is available to Bubble with no extra work
-                     \ (and Draw inherits the imported Pen.)
-    idiom draw:
+import mo/pen        \ parent should also import the pen in order to use this package.
+bu: idiom draw:      \ do this first so early-out works
+import mo/pen        \ don't remove this.  parent may be different from bu:
 
 private:
     : push postpone >r ; immediate
@@ -20,13 +19,13 @@ create fore 4 cells allot
 \ Bitmaps, backbuffer
 : onto  pop  al_get_target_bitmap push  swap al_set_target_bitmap  call  pop al_set_target_bitmap ;
 : movebmp  ( src sx sy w h ) write-rgba blend>  at@ 0 al_draw_bitmap ;
-: bmp   ( w h -- bmp ) 2i al_create_bitmap ;
+: *bmp   ( w h -- bmp ) 2i al_create_bitmap ;
 : clearbmp  ( r g b a bmp )  onto 4af al_clear_to_color ;
 : backbuf  display al_get_backbuffer ;
 : loadbmp  zstring al_load_bitmap ;
 : savebmp  push zstring pop al_save_bitmap ;
-: subbmp   ( bmp w h ) at@ 2i 2swap 2i al_create_sub_bitmap ;
-: backdrop  backbuf onto  color@af al_clear_to_color ;
+\ : *subbmp   ( bmp w h ) at@ 2i 2swap 2i al_create_sub_bitmap ;
+: backdrop  color@af al_clear_to_color ;
 
 \ Predefined Colors
 fixed
@@ -59,24 +58,25 @@ fixed
 \  After each call to one of these words, the current color is reset to white.
 
 : blitf  ( bmp flip )  push  color@af  at@ 2af  pop al_draw_tinted_bitmap  white ;
-: rblitf ( bmp ang flip )
+: >center  bmpwh 0.5 0.5 2* ;
+: crblitf ( bmp ang flip )
     locals| flip ang bmp |
-    bmp  color@af  0 0 ang 3af  flip  al_draw_tinted_rotated_bitmap  white ;
+    bmp  color@af  bmp >center  ang 3af  flip  al_draw_tinted_rotated_bitmap  white ;
 : sblitf  ( bmp dw dh flip )
-    locals| flip dh dw bmp |
-    bmp  color@af  0 0 bmp bmpwh 4af  at@ dw dh 4af  flip  al_draw_tinted_scaled_bitmap white ;
-: srblitf ( bmp sx sy ang flip )
+    locals| flip dh dw |
+    ( bmp )  color@af  at@ dw dh 4af  flip  al_draw_tinted_scaled_bitmap white ;
+: csrblitf ( bmp sx sy ang flip )
     locals| flip ang sy sx bmp |
-    bmp  0 0 bmp bmpwh 4af  color@af  0 0 at@ 4af  sx sy ang 3af  flip  al_draw_tinted_scaled_rotated_bitmap  white ;
+    bmp  color@af  bmp >center  at@  4af  sx sy ang 3af  flip  al_draw_tinted_scaled_rotated_bitmap  white ;
 : ublitf  ( bmp scale flip )
     locals| flip scale bmp |
-    bmp  color@af  0 0 bmp bmpwh 4af  at@ bmp bmpwh scale dup 2* 4af  flip  al_draw_tinted_scaled_bitmap  white ;
+    bmp  color@af  at@ bmp bmpwh scale dup 2* 4af  flip  al_draw_tinted_scaled_bitmap  white ;
 
 : blit   ( bmp ) 0 blitf ;
-: rblit  ( bmp ang )  0 rblitf ;
+: crblit  ( bmp ang )  0 crblitf ;
 : sblit  ( bmp dw dh )  0 sblitf ;
-: srblit  ( bmp sx sy ang )  0 srblitf ;
-: nublit  ( bmp sx sy )  0 dup srblitf ;
+: csrblit  ( bmp sx sy ang )  0 csrblitf ;
+: nublit  ( bmp sx sy )  0 dup csrblitf ;  \ what does n stand for???
 : ublit  ( bmp scale )  0 ublitf ;
 
 \ Text

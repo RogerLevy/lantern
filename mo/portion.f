@@ -5,24 +5,25 @@
 bu: idiom portion:
     import mo/cellstack
 
-public:
-
-\ I was going to make these configurable but for simplicity's and future enhancements' sake
-\ they are now going to be fixed. 4/2/2017
+\ ----------------------------------------- not API -----------------------------------------------
+\ I was going to make these compile-time configurable but for simplicity's sake they are fixed. 6/5/2017
 \ [undefined] /portion [if] 64 cells constant /portion [then]
 \ [undefined] /heap [if] 8 megs constant /heap [then]
 \ /heap /portion / constant #portions
-private:
     128 cells constant /portion
-    16 megs constant /heap
+    16.0 megs constant /heap
     /heap /portion / constant #portions
-    #portions cellstack free-portions
-public:
+    #portions s>p cellstack free-portions
+\ -------------------------------------------------------------------------------------------------
+decimal
 
-\ Maybe later make this ALLOCATE'd so it doesn't take up disk space?
-create heap /heap /allot
+here /portion + #1 - dup /portion mod -
+    dup h !    /heap allot \ SwiftForth's /allot can't handle counts that are too large!
+constant heap
+
 : reset-heap  ( heap -- )  drop
-    free-portions vacate  heap  #portions 0 do  dup free-portions push  /portion +  loop  drop ;
+    free-portions vacate  heap  #portions 1i 0 do  dup free-portions push  /portion +  loop  drop ;
 : portion  ( heap -- adr )  drop  free-portions pop ;
 : recycle  ( adr heap -- )  drop  free-portions push ;
+: dims  ( heap -- /portion #portions ) drop  /portion  #portions ;
 heap reset-heap

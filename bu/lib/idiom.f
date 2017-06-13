@@ -79,6 +79,8 @@
 \    extend the idiom.
 
 
+\ : wl  wordlist create , does> @ ;  \ enables us to see idiom names with ORDER
+
 \ : ?relative  over c@ [char] $ = if including dup if -name 2swap s" $" replace else 2drop [char] . third c! then then ;
 : included  -trailing ( ?relative ) default.ext included ;
 : include  bl word count included ;
@@ -148,7 +150,7 @@ defer onSetIdiom  ' noop is onSetIdiom
   ?dup 0= if global exit then
   only forth
   'idiom !  'idiom @ wordlists+
-  @publics -order  @privates +order  @publics +order
+  @publics -order  @publics +order  @privates +order   \ PRIVATES TAKE PRECEDENCE!!!
   public:
   onSetIdiom ;
 
@@ -173,7 +175,7 @@ defer /only
     !order  /only
     >in @  defined  if
         nip  >body  importing @ if
-            cr dup body> >name count 2dup upcase #1 - type ."  already loaded, skipping... "
+            \ cr dup body> >name count 2dup upcase #1 - type ."  already loaded, skipping... "
             declared !  \\  true
             exit             \ already defined, importing     => cancel compilation
         else  set-idiom  public:  false exit
@@ -217,7 +219,11 @@ defer /only
   get-current >r  @parent >publics set-current  constant
   r> set-current ;
 
-: empty  global empty ;
+: empty
+\    'personality @ dup if  close-personality  then
+    global empty
+\        if open-personality then
+;
 
 : privates  @privates ;
 : publics   @publics ;

@@ -1,3 +1,17 @@
+\ Multitasking for game objects
+
+\ The following words should only be used within a task:
+\  YIELD END FRAMES SECS
+\ The following words should never be used within a task:
+\  - External calls
+\  - Console output (when the Bubble IDE is not loaded)
+\  - EXIT or ; from the "root" of a task (the definition containing PERFORM> )
+
+obj:
+var sp  var rp  8 cells field ds  8 cells field rs
+used @ to parms
+single main  \ proxy for the Forth data and return stacks
+
 : perform> ( n -- <code> )
     ds 7 cells + !
     ds 6 cells + sp !
@@ -6,14 +20,13 @@
 ;
 
 : perform  ( xt n actor -- )
-    me >r be
+    { me!
     ds 7 cells + !
     ds 6 cells + sp !
     >code rs 7 cells + !
     rs 7 cells + rp !
-    r> be
+    }
 ;
-
 
 \ important: this word must not CALL anything or use the return stack until the bottom part.
 : yield
@@ -22,18 +35,15 @@
     sp@ sp !
     rp@ rp !
     \ look for next task/actor.  rp=0 means no task.  end of list = jump to main task and resume that
-    begin  me next @ be  me if  rp @  else  main be  true  then  until
+    begin  me next @ me!  me if  rp @  else  main me!  true  then  until
     \ restore state
     rp @ rp!
     sp @ sp!
     drop \ ensure TOS is in TOS register
 ;
 
-
 : end  0 rp! yield ;
-
 : frames  0 do yield loop ;
-
 : secs  60 * frames ;
 
 : multi
@@ -42,18 +52,16 @@
     stage first @ main next !
     sp@ main 's sp !
     rp@ main 's rp !
-    main be
+    main me!
     ['] yield catch
     ?dup if
-        main as
+        main me!
         rp @ rp!
         sp @ sp!
         drop
         throw
     then
     drop
-    r> be
+    r> me!
 ;
 
-\ : :proc  actor single :noname 'act ! ;
-\ : :task  actor single :noname 0 me perform ;

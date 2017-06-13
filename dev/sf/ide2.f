@@ -1,7 +1,7 @@
 \ Simpler IDE, library-style.
-\  This is a one-way street.  A default piston is configured, but from now on TYPE and friends
-\   are redefined.  (For now, we're using SwiftForth's PERSONALITY facility to save
-\   time.  Later, a complete replacement for all text output words will need to be implemented...)
+\  This is a semi-one-way street.
+\  (For now, we're using SwiftForth's PERSONALITY facility to save
+\       time.  Later, a complete replacement for all text output words will need to be implemented...)
 
 \ go> words:
 \   REPL  ( -- )  processes commandline events.
@@ -15,9 +15,11 @@
 \   /CMDLINE  ( -- )  initializes the commandline.  is called by GO
 \   MARGINS  ( -- rect )  dimensions for the command history.  defaults to the entire screen, minus 3 rows at the bottom
 \       you can redefine them by direct manipulation, just make sure to also do it at resize and fullscreen events.
-\   TABBED  ( -- adr )  variable, when set to ON, the commandline is active.
+\   interact  ( -- variable )  variable, when set to ON, the commandline is active.
+\   OUTPUT  ( -- variable )  variable that stores the bitmap to draw text output onto.
+\   /S  reset the Forth stack
 
-bu: idiom ide2:
+bu: idiom ide:
 [defined] linux [if]  [else]  include bu/lib/win-clipboard.f  [then]
 import mo/draw
 import mo/rect
@@ -31,7 +33,6 @@ variable scrolling  scrolling on
 create cmdbuf #256 /allot
 create history  #256 /allot
 create ch  0 c, 0 c,
-create margins  0 , 0 , 0 , 0 ,   \ margins for the command history
 create attributes
   1 , 1 , 1 , 1 ,      \ white
   0 , 0 , 0 ,     1 ,  \ black
@@ -40,7 +41,11 @@ create attributes
   0 , 1 , 1 ,     1 ,  \ cyan
 transform baseline
 variable output   \ output bitmap
-variable tabbed   \ if on, cmdline will receive keys.  check if false before doing game input, if needed.
+
+bu:
+create margins  0 , 0 , 0 , 0 ,   \ margins for the command history. (rectangle)
+variable interact   \ if on, cmdline will receive keys.  check if false before doing game input, if needed.
+ide:
 
 \ --------------------------------------------------------------------------------------------------
 \ low-level stuff
@@ -80,8 +85,9 @@ private:
     : clear  ( w h bitmap -- )  0 0 0 0 color  fill ;
     : outputw  rm lm - ;
     : outputh  bm tm - ;
+    : get-size  ( -- cols rows )  outputw outputh fw fh 2/ 2i ;
     : scroll
-        write-rgba blend>  output @ onto  0 -1 rows at  output @ blit
+        write-rgba blend>  output @ onto  0 -1 rows at  untinted  output @ blit
         \ lm bm 1 rows - at   outputw 1 rows output @ clear
         -1 rows cursor y +!
     ;
@@ -93,17 +99,20 @@ private:
     ;
     : (emit)
         ch c!
-        cmdfont @ font>  cursor colour 4@ color  cursor x 2v@ at  ch #1 print
+        cursor x 2v@ at  ch #1 print
         fw cursor x +!
         cursor x @ rm >= if  cr  then
     ;
-    : emit  output @ onto  (emit) ;
     decimal
-        : type  output @ onto  bounds  do  i c@ (emit)  loop ;
+        : emit  output @ onto  write-rgba blend>  cmdfont @ font>  cursor colour 4@ color  (emit) ;
+        : type  output @ onto  write-rgba blend>  cmdfont @ font>  cursor colour 4@ color  bounds  do  i c@ (emit)  loop ;
         : ?type  ?dup if type else 2drop then ;
     fixed
     : attribute  s>p 4 cells * attributes +  cursor colour  4 imove ;
-    : page  output @ onto  0 0 0 backdrop  0 0 at-xy ;
+
+    : wipe  output @ onto  0 0 0 0 4af al_clear_to_color  0 0 at-xy ;
+
+    : zero  0 ;
 
     create console-personality
       4 cells , #19 , 0 , 0 ,
@@ -114,17 +123,17 @@ private:
       ' type , \ TYPE      ( addr len -- )
       ' ?type , \ ?TYPE     ( addr len -- )
       ' cr , \ CR        ( -- )
-      ' page , \ PAGE      ( -- )
+      ' wipe , \ PAGE      ( -- )
       ' attribute , \ ATTRIBUTE ( n -- )
-      ' dup , \ KEY       ( -- char )  \ not yet supported
-      ' dup , \ KEY?      ( -- flag )  \ not yet supported
-      ' dup , \ EKEY      ( -- echar ) \ not yet supported
-      ' dup , \ EKEY?     ( -- flag )  \ not yet supported
-      ' dup , \ AKEY      ( -- char )  \ not yet supported
+      ' zero , \ KEY       ( -- char )  \ not yet supported
+      ' zero , \ KEY?      ( -- flag )  \ not yet supported
+      ' zero , \ EKEY      ( -- echar ) \ not yet supported
+      ' zero , \ EKEY?     ( -- flag )  \ not yet supported
+      ' zero , \ AKEY      ( -- char )  \ not yet supported
       ' 2drop , \ PUSHTEXT  ( addr len -- )  \ not yet supported
       ' at-xy ,  \ AT-XY     ( x y -- )
       ' get-xy , \ GET-XY    ( -- x y )
-      ' 2dup , \ GET-SIZE  ( -- x y )
+      ' get-size , \ GET-SIZE  ( -- x y )
       ' drop , \ ACCEPT    ( addr u1 -- u2)  \ not yet supported
 public:
 
@@ -152,12 +161,12 @@ public:
     etype ALLEGRO_EVENT_KEY_DOWN = if
         keycode dup #37 < if  drop exit  then
             case
-                <tab> of  tabbed toggle  endof
+                <tab> of  interact toggle  endof
             endcase
     then
 
-    \ only when cmdline has tabbed...
-    tabbed @ -exit
+    \ only when cmdline has interact...
+    interact @ -exit
     etype ALLEGRO_EVENT_KEY_CHAR = if
         ctrl? if
             unichar $60 + special
@@ -177,29 +186,32 @@ public:
 
 \ --------------------------------------------------------------------------------------------------
 \ Rendering
-private:
-    : .S2 ( ? -- ? )
-      #3 attribute
-      DEPTH 0> IF DEPTH s>p  0 ?DO S0 @ I 1 + CELLS - @ . LOOP THEN
-      DEPTH 0< ABORT" Underflow"
-      FDEPTH ?DUP IF
-        ."  F: "
-        0  DO  I' I - #1 - FPICK N.  #1 +LOOP
-      THEN ;
-    : +blinker tabbed @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
-    : .idiom   #4 attribute  'idiom @ body> >name count #1 - type  [char] > emit ;
-    : .cmdbuf  #0 attribute  cmdfont @ font>  white  cmdbuf count +blinker print ;
-    : bar      outputw  displayh bm -  black  output @ fill ;
-    : .output  untinted  output @ blit ;
+: .S2 ( ? -- ? )
+  #3 attribute
+  DEPTH 0> IF DEPTH s>p  0 ?DO S0 @ I 1 + CELLS - @ . LOOP THEN
+  DEPTH 0< ABORT" Underflow"
+  FDEPTH ?DUP IF
+    ."  F: "
+    0  DO  I' I - #1 - FPICK N.  #1 +LOOP
+  THEN ;
+: +blinker interact @ -exit  #frames 16 and -exit  s[ [char] _ c+s ]s ;
+: .idiom   'idiom @ ?dup if  #4 attribute  body> >name count #1 - type  then  [char] > emit ;
+: .cmdbuf  #0 attribute  cmdfont @ font>  white  cmdbuf count +blinker print ;
+: bar      outputw  displayh bm -  black  output @ fill ;
+: .output  untinted  output @ blit ;
 
-public:
 
 \ --------------------------------------------------------------------------------------------------
-\ redefined STEP> ... makes keyboard state be automatically cleared every frame when TABBED is on.
+\ redefined STEP> ... makes keyboard state be automatically cleared every frame when interact is on.
 0 value 'idestep
-: ?clearkb  tabbed @ if clearkb then ;
+: ?clearkb  interact @ if clearkb then ;
 : step>  ( -- <code> )  r> to 'idestep  step>  ?clearkb 'idestep call ;
 
+\ --------------------------------------------------------------------------------------------------
+global
+    : wipe  page ;
+    : /s  S0 @ SP! ;
+ide:
 \ --------------------------------------------------------------------------------------------------
 \ "API"
 
@@ -215,14 +227,21 @@ function: al_load_ttf_font  ( zfilename size flags -- font )
     r> output !
 ;
 : /cmdline
+    /s
     \ z" dev/data/dev/consolas16.png" al_load_bitmap_font  consolas !
+    soft
     z" dev/data/dev/consolab.ttf" #20 ALLEGRO_TTF_NO_KERNING al_load_ttf_font  consolas !
     /output
     1 1 1 1 cursor colour 4!
     /margins
     ['] >display is >ide  \ >IDE is redefined to take us to the display
-    tabbed on
+    interact on
+    console-personality open-personality
 ;
-: repl  idekeys ;
-: rasa  go>  repl  render>  dblue backdrop  0 0 at  .output   bottom at  .cmdline ;
-: go  /cmdline  console-personality open-personality  rasa  begin ok again ;
+: ?repl  idekeys ;
+    : rasa-system  idekeys ;
+    : rasa-overlay  interact @ if  0 0 at  .output  bottom at  .cmdline  then  ;
+: rasa  ['] rasa-system  is  ?system  ['] rasa-overlay  is ?overlay ;
+: go  /cmdline  rasa  " autoexec.f" ['] included catch drop  begin ok again ;
+
+gild

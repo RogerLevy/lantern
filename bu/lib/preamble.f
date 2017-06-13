@@ -20,8 +20,8 @@ s" preamble" .notice
 : reverse   ( ... count -- ... ) 1+ 1 max 1 ?do i 1- roll loop ;
 
 \ Idioms
+: included  sp@ >r  included  r> sp@ cell- <> ?dup if  .s abort" STACK DEPTH CHANGED" then ;
 include bu/lib/idiom
-: include  sp@ >r  include  r> sp@ cell+ <> ?dup if  .s abort" STACK DEPTH CHANGED" then ;
   
 \ ffl DOM
 include bu/lib/ffl-0.8.0/ffl.f
