@@ -43,7 +43,6 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
 [else]
     : try  dup -exit call 0 ;
 [then]
-    : try  dup -exit call 0 ;
 
 \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
 : std
