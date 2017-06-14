@@ -28,7 +28,7 @@ create ues  32 cells /allot  \ user event source
 : +audio
     #16 al_reserve_samples not if  " Allegro: Error reserving samples." alert -1 abort  then
     al_get_default_mixer to mixer
-    mixer al_get_default_voice al_attach_mixer_to_voice drop
+    \ mixer al_get_default_voice al_attach_mixer_to_voice drop
     mixer #1 al_set_mixer_playing drop
     cr ." Audio enabled"
 ;
