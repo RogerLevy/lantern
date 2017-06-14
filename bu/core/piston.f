@@ -5,7 +5,7 @@
 \    it regains focus.
 \  The loop has some common controls:
 \    F12 - break the loop
-\    F4 - quit the process
+\    ALT-F4 - quit the process
 \    ALT-ENTER - toggle fullscreen
 \    TILDE - toggles a flag called INFO, doesn't do anything on its own.
 
