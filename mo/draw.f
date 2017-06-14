@@ -80,6 +80,12 @@ fixed
 : ublit  ( bmp scale )  0 ublitf ;
 
 \ Text
+private:
+create zbuf 1024 allot
+: zstring  ( addr c - zaddr )  \ convert string to zero-terminated string
+    zbuf zplace  zbuf ;
+public:
+
 variable fnt  default-font fnt ! 
 : fontw  z" A" al_get_text_width s>p ;
 : textw  ;
