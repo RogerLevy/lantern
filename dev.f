@@ -18,15 +18,6 @@ defined dev 0<> nip not [if]
     gild
 [then]
 
-pushpath
-decimal
-al_init
-al_init_acodec_addon
-al_install_audio
-z" temp/asdf.ogg" al_load_sample
-z" temp/mus_mode.ogg" al_load_sample
-z" temp/palmroad.wav" al_load_sample constant palmroad
-
 include bu/core/core.f  >ide
 gild
 ld dev/sf/ide2
