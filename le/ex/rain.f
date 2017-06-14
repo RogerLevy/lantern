@@ -1,3 +1,6 @@
+\ Rain.f
+\ Based on 10+ year old code written for RetroForth
+
 empty
 include le/le
 le: idiom rain:
