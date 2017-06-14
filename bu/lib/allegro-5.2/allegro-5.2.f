@@ -49,7 +49,7 @@ decimal
 [else]
     cd bu/lib/allegro-5.2
     : linux-library  0 parse 2drop ;
-    [defined] allegro5-debug [if]
+    [defined] allegro-debug [if]
       library allegro_monolith-debug-5.2.dll
     [else]
       library allegro_monolith-5.2.dll
