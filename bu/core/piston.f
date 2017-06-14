@@ -38,8 +38,8 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
     display al_set_target_backbuffer ;
 
 [defined] dev [if]
-    variable (sp)
-    : try  dup -exit  sp@ >r  ['] call catch (sp) !  r> sp!  (sp) @ ;
+    variable (catch)
+    : try  dup -exit  sp@ cell+ >r  code> catch (catch) !  r> sp!  (catch) @ ;
 [else]
     : try  dup -exit call 0 ;
 [then]
