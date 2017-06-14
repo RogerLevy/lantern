@@ -18,6 +18,10 @@ defined dev 0<> nip not [if]
     gild
 [then]
 
-include bu/core/core.f  >ide
+include bu/core/core.f
 gild
-ld dev/sf/ide2  go
+[defined] host-ide [if]
+    >ide
+[else]
+    ld dev/sf/ide2  go
+[then]
