@@ -8,9 +8,9 @@
 \  - EXIT or ; from the "root" of a task (the definition containing PERFORM> )
 
 obj:
-var sp  var rp  8 cells field ds  8 cells field rs
+var sp  var rp  8 cells field ds  16 cells field rs  used @ to parms
 used @ to parms
-single main  \ proxy for the Forth data and return stacks
+objects one named main  \ proxy for the Forth data and return stacks
 
 : perform> ( n -- <code> )
     ds 7 cells + !
@@ -43,13 +43,13 @@ single main  \ proxy for the Forth data and return stacks
 ;
 
 : end  0 rp! yield ;
-: frames  0 do yield loop ;
-: secs  60 * frames ;
+: yields  0 do yield loop ;
+: secs  fps * yields ;  \ not meant for precision timing
 
-: multi
+: multi  ( container -- )
     me >r
+    first @ main next !
     dup
-    stage first @ main next !
     sp@ main 's sp !
     rp@ main 's rp !
     main me!

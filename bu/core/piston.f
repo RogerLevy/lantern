@@ -5,7 +5,7 @@
 \    it regains focus.
 \  The loop has some common controls:
 \    F12 - break the loop
-\    F4 - quit the process
+\    ALT-F4 - quit the process
 \    ALT-ENTER - toggle fullscreen
 \    TILDE - toggles a flag called INFO, doesn't do anything on its own.
 
@@ -38,12 +38,11 @@ create fse  /ALLEGRO_ANY_EVENT /allot  \ fullscreen event
     display al_set_target_backbuffer ;
 
 [defined] dev [if]
-    variable (sp)
-    : try  dup -exit  sp@ >r  ['] call catch (sp) !  r> sp!  (sp) @ ;
+    variable (catch)
+    : try  dup -exit  sp@ cell+ >r  code> catch (catch) !  r> sp!  (catch) @ ;
 [else]
     : try  dup -exit call 0 ;
 [then]
-    : try  dup -exit call 0 ;
 
 \ : alt?  e ALLEGRO_KEYBOARD_EVENT-modifiers @ ALLEGRO_KEYMOD_ALT and ;
 : std

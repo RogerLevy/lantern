@@ -38,7 +38,7 @@ public:
 : var   cell field ;
 : 's    " me swap to me " evaluate  bl parse evaluate  " swap to me" evaluate ; immediate
 
-var en var nam var x var y var vx var vy var hide var disp var beha
+var en var nam var x var y var vx var vy var hide var disp var beha var marked
 used @ value parms
 container instance objects
 
@@ -57,13 +57,16 @@ container instance objects
 
 \ "external" words
 : place   ( x y obj -- )  { me!  x 2! } ;
-: delete  ( obj -- )  { me !  me remove  nam @ not if  me heap recycle  then  } ;
+: delete  ( obj -- )  { me!  marked on } ;
 \ -----
-
-: scene  ( container -- ) each> me delete ;  \ this word is kind of meant to be redefined
 
 \ Private idioms for game objects
 : role  parms used !  private: ;
+
+\ Removal
+: sweep  ( collection -- ) each>  marked @ -exit  me remove  nam @ not if  me heap recycle  then ;
+: delete-all  each> me delete ;
+: scene  ( container -- ) dup delete-all sweep ;  \ this word is kind of meant to be redefined
 
 \ Test
 [defined] dev [if]
@@ -71,8 +74,8 @@ container instance objects
     private:
     : *thingy  objects one draw> 50 50 red rectf ;
     : world  dblue backdrop objects each> draw ;
-    : physics  objects each> adv ;
-    : test  go> render> world step> physics ;
+    : physics  each> adv ;
+    : test  go> render> world step>  objects physics ;
     objects scene  100 100 at  *thingy  me value thingy
     test
 [then]

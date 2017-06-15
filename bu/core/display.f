@@ -22,19 +22,20 @@ create ues  32 cells /allot  \ user event source
 : -audio
     mixer 0 al_set_mixer_playing drop
     0 al_set_default_voice drop
-    \ cr ." Audio disabled"
+    cr ." Audio disabled"
 ;
 
 : +audio
     #16 al_reserve_samples not if  " Allegro: Error reserving samples." alert -1 abort  then
     al_get_default_mixer to mixer
+    \ mixer al_get_default_voice al_attach_mixer_to_voice drop
     mixer #1 al_set_mixer_playing drop
-    \ cr ." Audio enabled"
+    cr ." Audio enabled"
 ;
 
 : init-audio
-    al_install_audio not if  " Allegro: Couldn't initialize audio." alert -1 abort  then
     al_init_acodec_addon not if  " Allegro: Couldn't initialize audio codec addon." alert -1 abort  then
+    al_install_audio not if  " Allegro: Couldn't initialize audio." alert -1 abort  then
     +audio
 ;
 

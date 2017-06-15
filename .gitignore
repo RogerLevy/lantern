@@ -1,2 +1,4 @@
 *.komodoproject
 temp
+envconfig.f
+allegro.log

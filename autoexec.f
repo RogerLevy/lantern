@@ -1,2 +1,2 @@
-\ ld le/obj
-ld le/ex/rain
+fs on ?fs
+ld le/ex/fruitflies
