@@ -24,5 +24,8 @@ role  var ic  var sy  var c  \ sy=starting y  c=counter
 : gen  6 0 do  randpos 10 displayh 2-  at  waterdrop  loop ;
 : world  dmagenta backdrop  hold>  objects each> draw ;
 : physics  objects each> adv ;
-: rain  go>  render>  world  step>  gen  physics ;  objects scene \ rain
+: rain  go>  render>  world  step>  gen  physics  objects sweep ;
+
+objects scene
+rain
 
