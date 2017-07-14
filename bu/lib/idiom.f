@@ -29,8 +29,8 @@
 \     one.
 \  `breadth` the value that stores the maximum # of accesory idioms the next
 \     idiom can have.
-\  `public` - set current wordlist for defining to current idiom's "publics"
-\  `private` - set current wordlist for defining to current idiom's "privates"
+\  `public:` - set current wordlist for defining to current idiom's "publics"
+\  `private:` - set current wordlist for defining to current idiom's "privates"
 
 \ Cheatsheet:
 \  Create:

@@ -38,8 +38,11 @@ object inherit  xvar length  xvar first  xvar tail   subclass container
   then
   r> tail ! ;
 
+
+private:
 0 value cxt
 0 value c
+public:
 : thru>  ( ... client-xt first-item -- <advance-code> ... )  ( ... item -- ... next-item|0 )  ( ... item -- ... )
   r>  cxt >r  c >r   to c  swap to cxt
   begin  dup while  dup c call >r  cxt execute  r> repeat
@@ -72,7 +75,7 @@ object inherit  xvar length  xvar first  xvar tail   subclass container
 
 \ --- test ---
 
-
+private:
 marker dispose
 create a node instance,
 create b node instance,
