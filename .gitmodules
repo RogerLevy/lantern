@@ -1,0 +1,3 @@
+[submodule "bu"]
+	path = bu
+	url = https://github.com/RogerLevy/bu.git
