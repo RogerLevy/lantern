@@ -4,3 +4,6 @@
 [submodule "le"]
 	path = le
 	url = https://github.com/RogerLevy/le.git
+[submodule "ws"]
+	path = ws
+	url = https://github.com/RogerLevy/ws.git
