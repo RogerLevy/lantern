@@ -107,7 +107,7 @@ public:
 
 : render>  r>  to 'render ;  ( -- <code> )  ( -- )
 : step>  r>  to 'step ;  ( -- <code> )  ( -- )
-: go>  r> to 'go   0 to 'step ;  ( -- <code> )  ( -- )
+: go>  r> to 'go  0 to 'step ;  ( -- <code> )  ( -- )
 
 : ok
     /ok
@@ -122,4 +122,5 @@ public:
 
 : wait  -timer  1 to lag ;  \ broken??
 
-:noname  0 0 0.5 clear-to-color ; >code  to 'render
+: -go  go>  noop  render> 0 0 0.5 clear-to-color  step> noop ; -go
+: empty  -go  empty ;

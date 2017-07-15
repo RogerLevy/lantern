@@ -2,8 +2,10 @@
 \ For now, only supports one memory allocation size and one heap (with a fixed size of 4MB).
 \ Later you'll be able to have more than one heap each with a different allocation size.
 
+
 bu: idiom portion:
     import mo/cellstack
+
 
 \ ----------------------------------------- not API -----------------------------------------------
 \ I was going to make these compile-time configurable but for simplicity's sake they are fixed. 6/5/2017
