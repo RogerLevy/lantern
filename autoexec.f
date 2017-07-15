@@ -1,2 +1,2 @@
 fs on ?fs
-ld le/ex/fruitflies
+ld ex/le/fruitflies

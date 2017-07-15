@@ -13,7 +13,7 @@ defined dev 0<> nip not [if]
         include envconfig.f
     [then]
     include bu/lib/preamble         \ base dependencies, incl. Allegro, loaded once per session
-    include dev/ld
+    include bu/dev/ld
     true constant dev
     gild
 [then]
@@ -23,5 +23,5 @@ gild
 [defined] host-ide [if]
     >ide
 [else]
-    ld dev/sf/ide2  go
+    ld bu/dev/sf/ide2  go
 [then]

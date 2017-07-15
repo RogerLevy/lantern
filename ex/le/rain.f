@@ -4,7 +4,7 @@
 empty
 include le/le
 le: idiom rain:
-import mo/tilegame
+import bu/mo/tilegame
 image tiles.img le/ex/tiles.png
 tiles.img 20 20 loadtiles drop
 
