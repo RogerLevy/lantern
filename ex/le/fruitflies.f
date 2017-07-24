@@ -27,8 +27,6 @@ var life  var r  var g  var b  var a   var s  \ s=size
 : twitch  0 perform>  begin  apples randmove oranges randmove ?bore ?die  again ;
 :noname  [ is *fly ]  objects one  mortal  twitch  green @color r 4!  draw>  r 4@ color  s @ circlef ;
 
-: fruitflies  step>  multi-world  step-world  sweep-world  adv-world ;
-scene objects gas
+scene
 displaywh 0.5 0.5 2* at  *fly  named og
-fruitflies
 :noname  black backdrop ; is prerender

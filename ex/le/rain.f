@@ -3,12 +3,13 @@
 
 empty
 include le/le
-le: idiom rain:
-import bu/mo/tilegame
-image tiles.img le/ex/tiles.png
+le: role rain:
+    import bu/mo/tilegame
+
+image tiles.img ex/le/tiles.png
 tiles.img 20 20 loadtiles drop
 
-role  var ic  var sy  var c  \ sy=starting y  c=counter
+var ic  var sy  var c  \ sy=starting y  c=counter
 : h2o  objects one  y @ sy !  draw> ic @ tile blit ;
 : icon  ic ! ;
 : gravity  0.125 vy +! ;
@@ -22,10 +23,7 @@ role  var ic  var sy  var c  \ sy=starting y  c=counter
 
 : randpos  displaywh 2rnd ;
 : gen  6 0 do  randpos 10 displayh 2-  at  waterdrop  loop ;
-: world  dmagenta backdrop  hold>  objects each> draw ;
-: physics  objects each> adv ;
-: rain  go>  render>  world  step>  gen  physics  objects sweep ;
+: rain  pre> gen ;
 
-objects scene
 rain
 
