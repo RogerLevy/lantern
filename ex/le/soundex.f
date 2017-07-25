@@ -2,14 +2,19 @@ empty
 include le/le
 include le/oe/task
 
-\ sfx *test* ex/le/asdf.ogg
-\ *test*
+sfx *link* ex/le/link.wav
+
+: nextpart
+    drop  cr ." Streaming an Impulse Tracker module..."
+    " ex/le/mountain.xm" play ;
+
+: task  objects one ;
+
+: do-this  task 0 perform> 5 secs  bgm  0 ['] nextpart later  end ;
+: do-that  task 0 perform> begin  ['] *link* later0  1 secs  again ;
+
 " ex/le/asdf.ogg" play
-cr ." Streaming audio for 5 seconds .... "
+\ " ex/le/bgm006.it" play
 
-
-: (stop)  later> stop ;
-: do-it  objects one 0 perform> 5 secs  bgm  ['] stop later  end ;
-
-
-do-it
+cr .( Streaming ogg audio for 5 seconds and playing a sound effect once a second...)
+do-this do-that
