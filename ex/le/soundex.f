@@ -5,7 +5,7 @@ include le/oe/task
 sfx *link* ex/le/link.wav
 
 : nextpart
-    drop  cr ." Streaming an Impulse Tracker module..."
+    cr ." Streaming an Impulse Tracker module..."
     " ex/le/mountain.xm" play ;
 
 : task  objects one ;
