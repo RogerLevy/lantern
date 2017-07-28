@@ -70,12 +70,16 @@ npc cat   ' cat-down , ' cat-up , ' cat-left , ' cat-left ,
 : compiled  ( addr -- addr cells )  here over - cell/ s>p ;
 
 \ Depthsort by Y position
-: drawem  ( addr cells -- )  cells bounds do  i @ me!  draw  cell +loop ;
 \ : zdepth@  's zdepth @ ;
 : objy@  's y @ ;
 : sort  ['] objy@ rsort ;
+
+\ Not sure if I need to factor any of this or just copy and paste.
+: drawem  ( addr cells -- )  cells bounds do  i @ me!  draw  cell +loop ;
 : enqueue  objects each>  hide @ ?exit  me , ;
 : draw-sorted  here dup  enqueue  compiled  2dup sort  drawem  reclaim ;
+
+
 
 \ Random walking logic; doing it without tasks to avoid unnecessary coupling
 \ quick n' dirty !!!
@@ -115,10 +119,10 @@ create roster  ' girl , ' man , ' cat ,
 
 \ 3X scaling
 transform m0  m0 3 3 2af  al_scale_transform
-: 3x  grey backdrop  m0 al_use_transform  ;
+: magnified  grey backdrop  m0 al_use_transform  ;
 
 
 \ Do it
-' 3x is prerender
+' magnified is prerender
 ' draw-sorted is render
 250 sprinkle
