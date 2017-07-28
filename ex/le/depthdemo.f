@@ -58,13 +58,13 @@ flipbook: cat-up     alfador.image  , 10 , 11 , 12 , 13 , ;
     does>  objects one  data !  DIR_DOWN turn  draw> npc-sprite ;
 
 npc girl  ' girl-down , ' girl-up , ' girl-left , ' girl-left ,
-                            0 ,         0 ,      FLIP_H ,           0 ,
+                    0 ,         0 ,      FLIP_H ,           0 ,
 
 npc man   ' man-down , ' man-up , ' man-left , ' man-left ,
-                            0 ,         0 ,      FLIP_H ,           0 ,
+                   0 ,        0 ,     FLIP_H ,          0 ,
 
 npc cat   ' cat-down , ' cat-up , ' cat-left , ' cat-left ,
-                            0 ,         0 ,      FLIP_H ,           0 ,
+                   0 ,        0 ,     FLIP_H ,          0 ,
 
 
 : compiled  ( addr -- addr cells )  here over - cell/ s>p ;
@@ -121,4 +121,4 @@ transform m0  m0 3 3 2af  al_scale_transform
 \ Do it
 ' 3x is prerender
 ' draw-sorted is render
-250 sprinkle  me mem
+250 sprinkle
