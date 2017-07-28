@@ -1,3 +1,4 @@
+
 empty
 include le/le
 import bu/mo/rsort
@@ -50,7 +51,8 @@ flipbook: cat-up     alfador.image  , 10 , 11 , 12 , 13 , ;
 : sprite  ( dir -- )   pfloor data@ execute ;
 : turn    ( dir -- )   pfloor dup dir !  sprite ;
 : flip@  dir @ flipdata@ ;
-: npc-sprite  16 animate @ img @ afsubimg  at@ 2af  flip@  al_draw_bitmap_region ;
+: >feet  ( y -- y )  img @ subh @ - 4 + ;
+: npc-sprite  16 animate @ img @ afsubimg  at@ >feet 2af  flip@  al_draw_bitmap_region ;
 : npc   ( -- <name> )  ( -- me=newobj )    create
     does>  objects one  data !  DIR_DOWN turn  draw> npc-sprite ;
 
@@ -63,13 +65,29 @@ npc man   ' man-down , ' man-up , ' man-left , ' man-left ,
 npc cat   ' cat-down , ' cat-up , ' cat-left , ' cat-left ,
                             0 ,         0 ,      FLIP_H ,           0 ,
 
-create roster  ' girl , ' man , ' cat ,
 
+: compiled  ( addr -- addr cells )  here over - cell/ s>p ;
+
+\ Depthsort by Y position
+: drawem  ( addr cells -- )  cells bounds do  i @ me!  draw  cell +loop ;
+\ : zdepth@  's zdepth @ ;
+: objy@  's y @ ;
+: sort  ['] objy@ rsort ;
+: enqueue  objects each>  hide @ ?exit  me , ;
+: draw-sorted  here dup  enqueue  compiled  2dup sort  drawem  reclaim ;
+
+
+\ Create a bunch of randomized NPC's
+create roster  ' girl , ' man , ' cat ,
 : someone   3 rnd cells roster + @  execute ;
 : sprinkle  0 do  displaywh 3 3 2/ 2rnd at  someone  4 rnd turn  loop ;
 
+\ 3X scaling
 transform m0  m0 3 3 2af  al_scale_transform
 : 3x  grey backdrop  m0 al_use_transform  ;
-' 3x is prerender
 
+
+\ Do it
+' 3x is prerender
+' draw-sorted is render
 250 sprinkle
