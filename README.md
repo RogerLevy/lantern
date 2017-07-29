@@ -2,7 +2,9 @@
 
 A 2D game engine in Forth built on [Bubble.](https://github.com/RogerLevy/bubble)
 
-Lantern is designed to be simple to use and modular.  With its modular design, it should be easy to swap out implementations and add enhancements and any needed capabilities or platform support.  Thanks to being powered by the Allegro 5 library, it takes advantage of hardware graphics acceleration for decent performance.
+Lantern is designed to be simple to use and modular.  With its modular design, it should be easy to swap out implementations and add enhancements and any needed capabilities or platform support.  
+
+Lantern is powered by the Allegro 5 library, leveraging hardware graphics acceleration, allowing you to animate thousands of sprites.
 
 ## Features
 
