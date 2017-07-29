@@ -12,14 +12,16 @@ Lantern is powered by the Allegro 5 library, leveraging hardware graphics accele
 - Designed for 2D games
 - Integrated interactive REPL (part of Bubble)
 - Idiom-based object system (like OOP but simpler)
-- Multitasking scripts, enabling more complex AI
+- Multitasking, enabling more complex game objects scripts with less effort
 - Automatic static asset loading - no need to declare assets in source
-- Basic sound support with samples and background music streaming
+- Basic sound support with samples and background music streaming (powered by FMOD or Allegro)
+- Fast depth sorting
+- Basic TMX ([Tiled](http://www.mapeditor.org/)) file support (just objects and rectangles)
 
 ## Planned for 1.0
-- Fast depth sorting
 - Tilemap support with collision detection
-- [Tiled](http://www.mapeditor.org/) map format support
+- Full TMX ([Tiled](http://www.mapeditor.org/)) file support
+- Intersection tests powered by [tinyc2](https://github.com/RandyGaul/tinyheaders)
 
 ## Shelved features (probably in 2018 or 2019)
 - Fast ABAB / "Early Phase" collision detection
@@ -29,5 +31,5 @@ Lantern is powered by the Allegro 5 library, leveraging hardware graphics accele
 - Shader support
 - GUI system for tool-building based on new "Workspaces" paradigm
 - Object parenting / multiple object list management
-- Adaptive display resolution (optional)
+- Adaptive display resolution
 
