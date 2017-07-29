@@ -1,3 +1,6 @@
+\ Could probably speed things up by not using a counter var but
+\ replace it with a time threshold var so we're referencing the single #FRAMES counter
+
 empty
 include le/le
 import bu/mo/rsort
