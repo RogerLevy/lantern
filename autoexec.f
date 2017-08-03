@@ -1,5 +1,5 @@
 fs on ?fs
 \ ld ex/le/fruitflies
-\ ld ex/le/rain
+ld ex/le/rain
 \ ld ex/le/soundex
-ld ex/le/depthdemo
+\ ld ex/le/depthdemo

@@ -7,7 +7,7 @@ le: role rain:
     import bu/mo/tilegame
 
 image tiles.img ex/le/tiles.png
-tiles.img 20 20 loadtiles drop
+tiles.img 20 20 add-tiles drop
 
 var ic  var sy  var c  \ sy=starting y  c=counter
 : h2o  objects one  y @ sy !  draw> ic @ tile blit ;
