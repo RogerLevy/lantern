@@ -1,6 +1,6 @@
 empty
 include le/le
-include le/oe/task
+import le/oe/task
 
 sfx *link* ex/le/link.wav
 
@@ -10,8 +10,8 @@ sfx *link* ex/le/link.wav
 
 : task  objects one ;
 
-: do-this  task 0 perform>  5 secs  ['] nextpart later0  end ;
-: do-that  task 0 perform>  begin  ['] *link* later0  1 secs  again ;
+: do-this  task 0 perform>  5 secs  ['] nextpart 0 later ;
+: do-that  task 0 perform>  begin  ['] *link* 0 later  1 secs  again ;
 
 " ex/le/asdf.ogg" play
 
