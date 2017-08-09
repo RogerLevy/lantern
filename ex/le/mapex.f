@@ -16,7 +16,18 @@ var sx var sy
 
 : chest  draw>  2 tile blit ;
 
-: tilemap  draw>  0 0 320 240 scaled clip>  0 0 tilebuf addr  2048 cells  draw-tilemap ;
+: scroll  ( scrollx scrolly tilew tileh pen=xy -- col row pen=offsetted )
+    2over 2over 2mod 2negate +at   2/ 2pfloor ;
+
+: @pitch  ( array2d -- /pitch )  numcols @ cells ;
+
+: tilemap
+    act>
+        <up> kstate if -1 sy +! then
+        <down> kstate if  1 sy +! then
+        <left> kstate if -1 sx +! then
+        <right> kstate if  1 sx +! then
+    draw>  0 0 320 240 scaled clip>  sx 2v@ 20 20 scroll tilebuf addr  tilebuf @pitch  draw-tilemap-bg ;
 
 \ 3X scaling
 transform m0  m0 3 3 2af  al_scale_transform
