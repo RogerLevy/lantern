@@ -57,8 +57,8 @@ flipbook: cat-up     alfador.image  , 10 , 11 , 12 , 13 , ;
 : chrh  16 ;
 : >feet  ( y -- y )  sprh - 4 + ;
 : npc-sprite  16 animate @ img @ afsubimg  at@ >feet 2af  flip@  al_draw_bitmap_region ;
-: npc   ( -- <name> )  ( -- me=newobj )    create
-    does>  objects one  data !  DIR_DOWN turn  draw> npc-sprite ;
+: npc   ( -- <name> )  ( me=obj -- )    create
+    does>  data !  DIR_DOWN turn  draw> npc-sprite ;
 
 npc girl  ' girl-down , ' girl-up , ' girl-left , ' girl-left ,
                     0 ,         0 ,      FLIP_H ,           0 ,
@@ -118,7 +118,7 @@ defer walk
 \ Create a bunch of randomized NPC's
 create roster  ' girl , ' man , ' cat ,
 : someone   3 rnd cells roster + @  execute ;
-: sprinkle  0 do  displaywh 3 3 2/ 2rnd at  someone  ?turn  wander  loop ;
+: sprinkle  0 do  displaywh 3 3 2/ 2rnd at  one  someone  ?turn  wander  loop ;
 
 \ 3X scaling
 transform m0  m0 3 3 2af  al_scale_transform

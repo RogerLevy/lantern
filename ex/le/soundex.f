@@ -8,7 +8,7 @@ sfx *link* ex/le/link.wav
     cr ." Streaming an Impulse Tracker module..."
     " ex/le/mountain.xm" play ;
 
-: task  objects one ;
+: task  one ;
 
 : do-this  task 0 perform>  5 secs  ['] nextpart 0 later ;
 : do-that  task 0 perform>  begin  ['] *link* 0 later  1 secs  again ;

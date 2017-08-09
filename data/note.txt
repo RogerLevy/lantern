@@ -1,0 +1,6 @@
+Put all your game data here.  Recommended file structure:
+
+data/images - image files
+data/sounds - sound effects
+data/bgm    - streaming music files
+data/maps   - map data
