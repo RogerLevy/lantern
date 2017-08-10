@@ -5,6 +5,7 @@ include le/le
 \ le: idiom mapex:
 import le/mo/loadtmx
 
+320 240 *bmp value framebuf
 " ex/le/lk/test.tmx" opentmx
 load-tiles
 2048 2048 array2d tilebuf 
@@ -27,14 +28,18 @@ var sx var sy
         <down> kstate if  1 sy +! then
         <left> kstate if -1 sx +! then
         <right> kstate if  1 sx +! then
-    draw>  0 0 320 240 scaled clip>  sx 2v@ 20 20 scroll tilebuf addr  tilebuf @pitch  draw-tilemap-bg ;
+    draw>
+        0 0 at
+        at@ 320 240 scaled clip>
+        sx 2v@ 20 20 scroll tilebuf addr  tilebuf @pitch  draw-tilemap-bg ;
 
-\ 3X scaling
-transform m0  m0 3 3 2af  al_scale_transform
-: magnified  grey backdrop  m0 al_use_transform  ;
-
+: pre-mag   grey backdrop  framebuf onto  black backdrop ;
+: mag       framebuf onto  draw-world ;
+: post-mag  0 0 at  white  framebuf dup bmpwh 3 3 2* sblit ;
 scene
-' magnified is prerender
+' pre-mag is prerender
+' mag is render
+' post-mag is postrender
 50 50 at one chest
 0 0 at one tilemap named mytm
 
