@@ -5,9 +5,9 @@ include le/le
 \ le: idiom mapex:
 import le/mo/loadtmx
 
-320 240 *bmp value framebuf
+soft  320 240 *bmp value framebuf
 " ex/le/lk/test.tmx" opentmx
-load-tiles
+crisp  load-tiles
 2048 2048 array2d tilebuf 
 0 layer[]  0 0 tilebuf addr  2048 cells  extract   \ extract tilemap.  we assume layer 0 exists.
 tilebuf convert-map
@@ -15,7 +15,7 @@ scene  0 objgroup[]  load-objects
 
 var sx var sy
 
-: chest  draw>  2 tile blit ;
+: chest  draw>  2 tile 3 ublit ;
 
 : scroll  ( scrollx scrolly tilew tileh pen=xy -- col row pen=offsetted )
     2over 2over 2mod 2negate +at   2/ 2pfloor ;
@@ -28,6 +28,7 @@ var sx var sy
         <down> kstate if  1 sy +! then
         <left> kstate if -1 sx +! then
         <right> kstate if  1 sx +! then
+        sx 2v@ 0 0 2max sx 2v!
     draw>
         0 0 at
         at@ 320 240 scaled clip>
