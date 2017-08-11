@@ -30,11 +30,10 @@ var data   \ static NPC data, like animation pointers
     anm @ if  1 ctr +!  ctr @ spd @ >= if  0 ctr !  cell anm +!  ?anmloop  then  anm @
     else  0  then ;
 
-variable loopdest
-: flipbook:  ( -- <name> [data] )  \ first cell should be an image
-    create  here cell+ loopdest !  [char] ; parse evaluate  -1 , loopdest @ ,
+: flipbook:  ( -- <name> [data] loopdest )  \ first cell should be an image
+    create  here cell+ ( loopdest )  [char] ; parse evaluate  -1 ,  ( loopdest ) ,
     does>   @+  img !  anm !  ;
-: [loop]  here loopdest ! ;
+: [loop]  drop here ;
 
 flipbook: girl-down  fairgirl.image , 0 , 1 , 0 , 2 , ;
 flipbook: girl-left  fairgirl.image , 3 , 4 , 3 , 4 , ;
