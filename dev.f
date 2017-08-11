@@ -21,7 +21,7 @@ defined dev 0<> nip not [if]
 include bu/core/core.f
 gild
 [defined] host-ide [if]
-    >ide
+    >ide  ld autoexec
 [else]
     ld bu/dev/sf/ide2  go
 [then]
