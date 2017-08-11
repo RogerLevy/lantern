@@ -5,6 +5,7 @@ include le/le
 import le/mo/loadtmx
 
 soft  320 240 *bmp value framebuf
+
 " ex/le/lk/test.tmx" opentmx
 crisp  load-tiles
 2048 2048 array2d tilebuf 
