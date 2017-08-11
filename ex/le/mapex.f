@@ -2,13 +2,10 @@
 
 empty
 include le/le
-import le/mo/tilemap
+include le/oe/tiled
 
 soft  320 240 *bmp value framebuf
 map testmap ex/le/lk/test.tmx
-
-crisp testmap open  0 layer[] 0 0 read
-scene  0 objgroup[]  load-objects
 
 : chest  draw>  2 tile 3 ublit ;
 
@@ -16,12 +13,14 @@ scene  0 objgroup[]  load-objects
 : mag       framebuf onto  draw-world ;
 : post-mag  0 0 at  white  framebuf dup bmpwh 3 3 2* sblit ;
 
-scene
+devoid scene
+crisp testmap open  0 layer[] 0 0 read
+
 ' pre-mag is prerender
 ' mag is render
 ' post-mag is postrender
 
-50 50 at one chest
+150 100 at one chest
 
 0 0 at one tilemap named mytm
     tilemap: 320 240 mw 2v!
@@ -33,4 +32,4 @@ scene
         <right> kstate if  1 sx +! then
         sx 2v@ 0 0 2max sx 2v! ; scroll
 
-
+0 objgroup[]  load-objects
