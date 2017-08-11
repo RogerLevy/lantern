@@ -11,7 +11,7 @@ map testmap ex/le/lk/test.tmx
 
 : pre-mag   grey backdrop  framebuf onto  black backdrop ;
 : mag       framebuf onto  draw-world ;
-: post-mag  0 0 at  white  framebuf dup bmpwh 3 3 2* sblit ;
+: post-mag  displayw 320 3 * - 0 at  white  framebuf dup bmpwh 3 3 2* sblit ;
 
 devoid scene
 crisp testmap open  0 layer[] 0 0 read
