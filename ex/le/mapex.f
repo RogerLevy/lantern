@@ -2,25 +2,19 @@
 
 empty
 include le/le
-\ le: idiom mapex:
 import le/mo/loadtmx
 
 soft  320 240 *bmp value framebuf
 " ex/le/lk/test.tmx" opentmx
 crisp  load-tiles
 2048 2048 array2d tilebuf 
-0 layer[]  0 0 tilebuf addr  2048 cells  extract   \ extract tilemap.  we assume layer 0 exists.
-tilebuf convert-map
+0 layer[]  0 0 tilebuf addr-pitch  extract   \ extract tilemap.  we assume layer 0 exists.
+0 0 1024 1024 tilebuf convert-tilemap
 scene  0 objgroup[]  load-objects
 
 var sx var sy
 
 : chest  draw>  2 tile 3 ublit ;
-
-: scroll  ( scrollx scrolly tilew tileh pen=xy -- col row pen=offsetted )
-    2over 2over 2mod 2negate +at   2/ 2pfloor ;
-
-: @pitch  ( array2d -- /pitch )  numcols @ cells ;
 
 : tilemap
     act>
