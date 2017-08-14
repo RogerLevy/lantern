@@ -1,13 +1,16 @@
-\ [x] - A way to convert tiles on extraction
+\ Platforming example!  Based on mapex.f, which just loads and displays a tilemap.  This goes
+\ to the next logical step.
 
 empty
 include le/le
 include le/oe/tiled
 
+le: idiom platformex:
+    import ex/le/lk/kevin
+    import le/mo/tilcd
+    
 soft  320 240 *bmp value framebuf
 map testmap ex/le/lk/test.tmx
-
-: chest  draw>  2 tile 3 ublit ;
 
 : pre-mag   grey backdrop  framebuf onto  black backdrop ;
 : mag       framebuf onto  draw-world ;
@@ -20,10 +23,16 @@ crisp testmap open  0 layer[] 0 0 get
 ' mag is render
 ' post-mag is postrender
 
-150 100 at one chest
+0 0 at one tilemap named mytm  tilemap: 320 240 mw 2v!
 
-0 0 at one tilemap named mytm
-    tilemap: 320 240 mw 2v!
-    : scroll  act>  1 sx udlr  sx 2v@ 0 0 2max sx 2v! ; scroll
+platformex:
+20 20 at  one kevin named p1
 
-0 objgroup[]  load-objects
+
+: ck  p1 me!  20 20 20 ['] . collide-map ;
+:is poststep
+    ck
+;
+
+
+\\
