@@ -28,8 +28,8 @@ crisp testmap open  0 layer[] 0 0 get
 platformex:
 20 20 at  one kevin named p1
 
-
-: ck  p1 me!  20 20 20 ['] . collide-map ;
+: test  drop  ;
+: ck  p1 me!  20 20 20 ['] test collide-map ;
 :is poststep
     ck
 ;
