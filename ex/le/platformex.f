@@ -23,16 +23,13 @@ crisp testmap open  0 layer[] 0 0 get
 ' mag is render
 ' post-mag is postrender
 
+
 0 0 at one tilemap named mytm  tilemap: 320 240 mw 2v!
 
 platformex:
 20 20 at  one kevin named p1
 
-: test  drop  ;
-: ck  p1 me!  20 20 20 ['] test collide-map ;
-:is poststep
-    ck
-;
 
+:noname [ is poststep ] eachlist> 20 collide-objects-map ;
 
-\\
+interact off
