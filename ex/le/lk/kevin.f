@@ -41,10 +41,8 @@ role kevin:
     defer land  ' noop is land
 
     : in-air?  inair @ ;
-
     : faceleft  DIR_LEFT dir ! ;
     : faceright  DIR_RIGHT dir ! ;
-
     : can-jump   <jump> kpressed if jump then ;
     : can-walk   <left> kstate if walkL then   <right> kstate if walkR then ;
     : can-squat   <squat> kstate if squat then ;
@@ -72,9 +70,7 @@ role kevin:
     : walkAccelL   vx @ 0.14 - walkSpeed @ negate max dup vx ! movelegs ;
 
     : ctrl  idle.anm 1 animate  act>  0 0 vx 2v!  2 vx udlr ;
-
     : draw-kevin  @anm+ img @ afsubimg  at@ 2af  flip@  al_draw_bitmap_region ;
-
     : animthru   animate  begin  pause  end-of-anm? until ;
 
     :is jump
@@ -101,7 +97,6 @@ role kevin:
     : (fall)   inair on  falling @ not  vy @ 0 >= and  if  falling on  fall  then ;
     : (land)   falling off  land  inair off  ;
     : hitmap  floor? not if  (fall)  else  in-air? if  (land)  then  then ;
-
     :is fall  (fall)  0 perform>  jump.anm 1 animate   begin  control-in-air   pause  again ;
     :is land  idle ;
 
@@ -109,10 +104,9 @@ role kevin:
         3 1 mbx 2v!
         14 19 mbw 2v!
         1.6 walkspeed !
-        3 jumppower !
-        0.1015 risepower !
+        2.75 jumppower !
+        0.1022 risepower !
         act>  0.15 vy +!  onhitmap> drop  hitmap ;
 
 public:
-
 : kevin  ( ctrl )  fall  conf  draw>  draw-kevin ;
