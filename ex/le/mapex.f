@@ -1,4 +1,4 @@
-\ [ ] - A way to convert tiles on extraction
+\ [x] - A way to convert tiles on extraction
 
 empty
 include le/le
@@ -14,7 +14,7 @@ map testmap ex/le/lk/test.tmx
 : post-mag  displayw 320 3 * - 0 at  white  framebuf dup bmpwh 3 3 2* sblit ;
 
 devoid scene
-crisp testmap open  0 layer[] 0 0 read
+crisp testmap open  0 layer[] 0 0 get
 
 ' pre-mag is prerender
 ' mag is render
@@ -24,12 +24,6 @@ crisp testmap open  0 layer[] 0 0 read
 
 0 0 at one tilemap named mytm
     tilemap: 320 240 mw 2v!
-    : scroll
-        act>
-        <up> kstate if -1 sy +! then
-        <down> kstate if  1 sy +! then
-        <left> kstate if -1 sx +! then
-        <right> kstate if  1 sx +! then
-        sx 2v@ 0 0 2max sx 2v! ; scroll
+    : scroll  act>  1 sx udlr  sx 2v@ 0 0 2max sx 2v! ; scroll
 
 0 objgroup[]  load-objects

@@ -10,8 +10,8 @@ sfx *link* ex/le/link.wav
 
 : task  one ;
 
-: do-this  task 0 perform>  5 secs  ['] nextpart 0 later ;
-: do-that  task 0 perform>  begin  ['] *link* 0 later  1 secs  again ;
+: do-this  task 0 perform>  5 secs  0 ['] nextpart later ;
+: do-that  task 0 perform>  begin  0 ['] *link* later  1 secs  again ;
 
 " ex/le/asdf.ogg" play
 
