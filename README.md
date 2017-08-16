@@ -16,12 +16,14 @@ Lantern is powered by the Allegro 5 library, leveraging hardware graphics accele
 - Automatic static asset loading - no need to declare assets in source
 - Basic sound support with samples and background music streaming (powered by FMOD or Allegro)
 - Fast depth sorting
-- Basic TMX ([Tiled](http://www.mapeditor.org/)) file support (just objects and rectangles)
+- Partial TMX ([Tiled](http://www.mapeditor.org/)) file support (tilemaps, external tilesets, objects, and rectangles)
+- Tilemap support with collision detection
 
 ## Planned for 1.0
-- Tilemap support with collision detection
+
 - Full TMX ([Tiled](http://www.mapeditor.org/)) file support
 - Intersection tests powered by [tinyc2](https://github.com/RandyGaul/tinyheaders)
+- Easy-to-use dialog and cutscene systems
 
 ## Shelved features (probably in 2018 or 2019)
 - Fast ABAB / "Early Phase" collision detection
@@ -32,4 +34,3 @@ Lantern is powered by the Allegro 5 library, leveraging hardware graphics accele
 - GUI system for tool-building based on new "Workspaces" paradigm
 - Object parenting / multiple object list management
 - Adaptive display resolution
-
