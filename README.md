@@ -8,7 +8,7 @@ Lantern is powered by the Allegro 5 library, leveraging hardware graphics accele
 
 ## Demos
 
-There is a YouTube channel where I've posted videos of examples of the engine in action, [here](https://www.youtube.com/channel/UCggbaEbb_qEGCvVnAHA_j6A).
+There is a YouTube playlist where I've posted videos of examples of the engine in action, [here](https://www.youtube.com/watch?v=od6t-ivFAak&list=PLO8m1cHe8erpbejS5yZVJAsQNI4Lmpo_Y).
 
 ## Features
 
