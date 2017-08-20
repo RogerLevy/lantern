@@ -6,6 +6,10 @@ Lantern is designed to be simple to use and modular.  With its modular design, i
 
 Lantern is powered by the Allegro 5 library, leveraging hardware graphics acceleration, allowing you to animate thousands of sprites.
 
+## Demos
+
+There is a YouTube channel where I've posted videos of examples of the engine in action, [here](https://www.youtube.com/channel/UCggbaEbb_qEGCvVnAHA_j6A).
+
 ## Features
 
 - Currently runs on SwiftForth / Windows 7 and up
