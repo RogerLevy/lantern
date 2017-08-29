@@ -23,5 +23,5 @@ gild
 [defined] host-ide [if]
     >ide  ld autoexec
 [else]
-    ld bu/dev/sf/ide2  go
+    ld bu/dev/sf/ide  go
 [then]
