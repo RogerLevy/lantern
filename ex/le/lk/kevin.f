@@ -43,7 +43,7 @@ role kevin:
     : in-air?  inair @ ;
     : faceleft  DIR_LEFT dir ! ;
     : faceright  DIR_RIGHT dir ! ;
-    : can-jump   <jump> kpressed if jump then ;
+    : can-jump   vy @ 0> ?exit  <jump> kpressed if jump then ;
     : can-walk   <left> kstate if walkL then   <right> kstate if walkR then ;
     : can-squat   <squat> kstate if squat then ;
     : can-die ;
@@ -67,7 +67,7 @@ role kevin:
     : animthru   animate  begin  pause  end-of-anm? until ;
 
     :is jump
-       0 perform>   jump.anm 1 animate   jumppower @ negate dup vy !   y +!
+       0 perform>   jump.anm 1 animate   jumppower @ negate vy !
        risepower @ negate
        begin   vy @ 0<  <jump> kstate  and
        while   dup vy +!  control-in-air   pause   repeat
@@ -75,12 +75,14 @@ role kevin:
 
     :is walkl
        0 perform>  faceleft  walk.anm 1 animate
-       begin <left> kstate while  walkAccelL can-squat can-jump can-die   pause  repeat
+       begin <left> kstate in-air? not and  while
+            walkAccelL can-squat can-jump can-die   pause  repeat
        idle ;
 
     :is walkr
        0 perform>  faceright  walk.anm 1 animate
-       begin <right> kstate while  walkAccelR can-squat can-jump can-die   pause   repeat
+       begin <right> kstate in-air? not and  while
+            walkAccelR can-squat can-jump can-die   pause   repeat
        idle ;
 
     :is idle
@@ -88,7 +90,7 @@ role kevin:
         begin  to-a-stop  can-walk  can-squat  can-die  can-jump  pause   again ;
 
     : (fall)   inair on  falling @ not  vy @ 0 >= and  if  falling on  fall  then ;
-    : (land)   falling off  land  inair off  ;
+    : (land)   falling off  inair off  land  ;
     : hitmap  floor? not if  (fall)  else  in-air? if  (land)  then  then ;
     :is fall  (fall)  0 perform>  jump.anm 1 animate   begin  control-in-air   pause  again ;
     :is land  idle ;
