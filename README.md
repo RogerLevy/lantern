@@ -1,3 +1,14 @@
+THIS PROJECT IS DEPRECATED.  
+
+It is being superceded by [RAMEN](https://github.com/RogerLevy/RAMEN) 
+
+Bubble is in turn being superceded by [AllegroForthKit](https://github.com/RogerLevy/AllegroForthKit)
+
+Both are far easier to understand, cleaner, and more portable.  I have discarded the Idioms feature and the semi-classical OO.
+
+Functionality is regressed but will be gradually added back.
+
+
 # Lantern Engine
 
 A 2D game engine in Forth built on [Bubble.](https://github.com/RogerLevy/bubble)
