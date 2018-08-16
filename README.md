@@ -1,6 +1,6 @@
 THIS PROJECT IS DEPRECATED.  
 
-It is being superceded by [RAMEN](https://github.com/RogerLevy/RAMEN) 
+It has been superceded by [RAMEN](https://github.com/RogerLevy/RAMEN) 
 
 Bubble is in turn being superceded by [AllegroForthKit](https://github.com/RogerLevy/AllegroForthKit)
 
